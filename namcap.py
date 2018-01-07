@@ -31,12 +31,12 @@ def usage():
     print("")
     print("Options are:")
     print("    -L, --list                       : list available rules")
-    print("    -i                               : prints information (debug) responses from rules")
-    print("    -m                               : makes the output parseable (machine-readable)")
+    print("    -i, --info                       : prints information (debug) responses from rules")
+    print("    -m, --machine-readable           : makes the output parseable (machine-readable)")
     print("    -e rulelist, --exclude=rulelist  : don't apply RULELIST rules to the package")
     print("    -r rulelist, --rules=rulelist    : only apply RULELIST rules to the package")
-    print("    -t tags                          : use a custom tag file")
-    print("    -v version                       : print version and exit")
+    print("    -t tags, --tags=tags             : use a custom tag file")
+    print("    -v, --version                    : print version and exit")
 
     sys.exit(2)
 
