@@ -1,10 +1,8 @@
 #!/usr/bin/env bash
 
-PATH="$PWD:$PATH"
-PARSE_PKGBUILD_PATH="$PWD"
-export PARSE_PKGBUILD_PATH
+namcapdir=$(cd "$(dirname "$0")" && pwd)
+PATH=$namcapdir:$PATH
+export PARSE_PKGBUILD_PATH=$namcapdir
+export PYTHONPATH=$namcapdir
 
-PYTHONPATH="$PWD"
-export PYTHONPATH
-
-./scripts/namcap -t namcap-tags "$@"
+"$namcapdir"/scripts/namcap -t "$namcapdir"/namcap-tags "$@"
