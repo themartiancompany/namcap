@@ -141,6 +141,16 @@ warnings we are expecting from the rules. The test suite
 is in Namcap/tests. The makepkg and pkgbuild_test submodules
 provide easy generic methods to test a rule.
 
+To run the test suite, run:
+
+env PARSE_PKGBUILD_PATH="$PWD" \
+    PATH="$PWD:$PATH" \
+    python setup.py test
+
+To run a single test, append e.g.
+"-s Namcap.tests.package.test_shebangdepends"
+to the command-line above.
+
 Here is an example testing the rule "pkgnameindesc"
 
 from Namcap.tests.pkgbuild_test import PkgbuildTest
