@@ -2,7 +2,7 @@
 # Copyright (C) 2003-2023 Namcap contributors, see AUTHORS for details.
 # SPDX-License-Identifier: GPL-2.0-or-later
 
-import getopt
+import argparse
 import os
 import sys
 import tarfile
@@ -26,26 +26,6 @@ def get_enabled_modules():
     return dict(filter(lambda x: x[1].enable, get_modules().items()))
 
 
-def usage():
-    """Display usage information"""
-
-    text = f"""
-    Usage: {sys.argv[0]} [OPTIONS] packages
-
-    Options are:
-        -L, --list                       : list available rules
-        -i, --info                       : prints information (debug) responses from rules
-        -m, --machine-readable           : makes the output parseable (machine-readable)
-        -e rulelist, --exclude=rulelist  : don't apply RULELIST rules to the package
-        -r rulelist, --rules=rulelist    : only apply RULELIST rules to the package
-        -t tags, --tags=tags             : use a custom tag file
-        -v, --version                    : print version and exit
-    """
-    print(dedent(text))
-
-    sys.exit(2)
-
-
 def open_package(filename):
     try:
         tar = tarfile.open(filename, "r")
@@ -57,18 +37,6 @@ def open_package(filename):
             tar.close()
         return None
     return tar
-
-
-def check_rules_exclude(optlist):
-    """Check if the -r (--rules) and the -r (--exclude) options
-    are being used at the same time"""
-    args_used = 0
-    for i in optlist:
-        if "-r" in i or "-e" in i:
-            args_used += 1
-        if "--rules" in i or "--exclude" in i:
-            args_used += 1
-    return args_used
 
 
 def show_messages(name, key, messages):
@@ -169,85 +137,64 @@ def process_pkgbuild(package, modules):
 
 # Main
 modules = get_modules()
-info_reporting = 0
-machine_readable = False
-filename = None
+# Let's handle those options!
+version = Namcap.version.get_version()
 
-# get our options and process them
-try:
-    optlist, args = getopt.getopt(
-        sys.argv[1:],
-        "ihmr:e:t:Lv",
-        [
-            "info",
-            "help",
-            "machine-readable",
-            "rules=",
-            "exclude=",
-            "tags=",
-            "list",
-            "version",
-        ],
-    )
-except getopt.GetoptError:
-    usage()
+parser = argparse.ArgumentParser()
+parser.add_argument("-L", "--list", action="store_true", help="List available rules")
+parser.add_argument(
+    "-i", "--info", action="store_const", const=1, default=0, help="Prints information (debug) responses from rules"
+)
+parser.add_argument(
+    "-m", "--machine-readable", action="store_true", help="Makes the output parseable (machine-readable)"
+)
+parser.add_argument("-t", "--tags", action="store", help="Use a custom tag file")
+parser.add_argument("packages", nargs="+")
+pargroup = parser.add_mutually_exclusive_group()
+pargroup.add_argument(
+    "-e", "--exclude", action="store", metavar="RULELIST", help="Don't apply RULELIST rules to the package"
+)
+pargroup.add_argument(
+    "-r", "--rules", action="store", metavar="RULELIST", help="Only apply RULELIST rules to the packag"
+)
+parser.add_argument("-v", "--version", action="version", version=version)
+args = parser.parse_args()
+
+# Do something with all these options
+if args.list:
+    print("-" * 20 + " Namcap rule list " + "-" * 20)
+    for j in sorted(modules):
+        print("%-20s: %s" % (j, modules[j].description))
+        parser.exit(2)
+
+info_reporting = args.info
+machine_readable = args.machine_readable
+filename = args.tags
+
+packages = args.packages
 
 active_modules = {}
 
-# Verifying if we are using the -r and -r options at same time
-if check_rules_exclude(optlist) > 1:
-    print("You cannot use '-r' (--rules) and '-e' (-exclude) options at same time")
-    usage()
+if args.rules:
+    module_list = args.rules
+    for j in module_list:
+        if j in modules:
+            active_modules[j] = modules[j]
+else:
+    print("Error: Rule '%s' does not exist" % j)
+    parser.exit(2)
 
-for i, k in optlist:
-    if i in ("-L", "--list"):
-        print("-" * 20 + " Namcap rule list " + "-" * 20)
-        for j in sorted(modules):
-            print("%-20s: %s" % (j, modules[j].description))
-        sys.exit(2)
-
-    if i in ("-r", "--rules"):
-        module_list = k.split(",")
-        for j in module_list:
-            if j in modules:
-                active_modules[j] = modules[j]
-            else:
-                print("Error: Rule '%s' does not exist" % j)
-                usage()
-
-    # Used to exclude some rules from the check
-    if i in ("-e", "--exclude"):
-        module_list = k.split(",")
-        active_modules.update(modules)
-        for j in module_list:
-            if j in modules:
-                active_modules.pop(j)
-            else:
-                print("Error: Rule '%s' does not exist" % j)
-                usage()
-
-    if i in ("-i", "--info"):
-        info_reporting = 1
-
-    if i in ("-h", "--help"):
-        usage()
-    if i in ("-m", "--machine-readable"):
-        machine_readable = True
-
-    if i in ("-t", "--tags"):
-        filename = k
-
-    if i in ("-v", "--version"):
-        print(Namcap.version.get_version())
-        sys.exit(0)
-
-# If there are no args, print usage
-if args == []:
-    usage()
+if args.exclude:
+    module_list = args.exclude
+    active_modules.update(modules)
+    for j in module_list:
+        if j in modules:
+            active_modules.pop(j)
+else:
+    print("Error: Rule '%s' does not exist" % j)
+    parser.exit(2)
 
 Namcap.tags.load_tags(filename=filename, machine=machine_readable)
-
-packages = args
 
 # No rules selected?  Then use default selection
 if len(active_modules) == 0:
@@ -257,7 +204,7 @@ if len(active_modules) == 0:
 for package in packages:
     if not os.access(package, os.R_OK):
         print("Error: Problem reading %s" % package)
-        usage()
+        parser.print_usage()
 
     if os.path.isfile(package) and tarfile.is_tarfile(package):
         process_realpackage(package, active_modules)
