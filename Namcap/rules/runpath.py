@@ -17,9 +17,7 @@ def get_runpaths(fileobj):
     for section in elffile.iter_sections():
         if not isinstance(section, DynamicSection):
             continue
-        for tag in section.iter_tags():
-            if tag.entry.d_tag != "DT_RUNPATH":
-                continue
+        for tag in section.iter_tags("DT_RUNPATH"):
             for path in tag.runpath.split(":"):
                 yield path
 

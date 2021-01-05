@@ -14,9 +14,8 @@ def get_soname(filename):
         for section in alpm.iter_sections():
             if not isinstance(section, DynamicSection):
                 continue
-            for tag in section.iter_tags():
-                if tag.entry.d_tag == "DT_SONAME":
-                    return tag.soname
+            for tag in section.iter_tags("DT_SONAME"):
+                return tag.soname
 
 
 class SoDependsTest(MakepkgTest):

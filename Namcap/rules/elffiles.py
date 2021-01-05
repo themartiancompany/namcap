@@ -73,7 +73,7 @@ class ELFTextRelocationRule(TarballRule):
             for section in elffile.iter_sections():
                 if not isinstance(section, DynamicSection):
                     continue
-                for tag in section.iter_tags():
+                for tag in section.iter_tags("DT_TEXTREL"):
                     if tag.entry.d_tag == "DT_TEXTREL":
                         files_with_textrel.append(entry_name)
 
@@ -191,7 +191,7 @@ class NoPIERule(TarballRule):
         for section in elffile.iter_sections():
             if not isinstance(section, DynamicSection):
                 continue
-            if any(tag.entry.d_tag == "DT_DEBUG" for tag in section.iter_tags()):
+            for _ in section.iter_tags("DT_DEBUG"):
                 return True
         return False
 

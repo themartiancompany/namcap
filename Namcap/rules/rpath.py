@@ -17,9 +17,7 @@ def get_rpaths(fileobj):
     for section in elffile.iter_sections():
         if not isinstance(section, DynamicSection):
             continue
-        for tag in section.iter_tags():
-            if tag.entry.d_tag != "DT_RPATH":
-                continue
+        for tag in section.iter_tags("DT_RPATH"):
             rpaths = tag.rpath
             rpaths = rpaths.split(":")
             for path in rpaths:
