@@ -17,6 +17,20 @@
 #   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 # 
 
+# List of licenses that are ubiquitous enough to quality as standard instead of
+# custom but still need to have their license files packaged to properly
+# identify their respective copyright or reserved name clauses. See also
+# https://wiki.archlinux.org/title/PKGBUILD#license
+special_licenses = [
+	"bsd",
+	"isc",
+	"libpng",
+	"ofl",
+	"mit",
+	"python",
+	"zlib"
+]
+
 import os.path
 from Namcap.ruleclass import *
 
@@ -33,7 +47,7 @@ class package(TarballRule):
 		# Check all licenses for validity
 		for license in pkginfo["license"]:
 			lowerlicense, _, sublicense = license.lower().partition(':')
-			if lowerlicense.startswith('custom') or lowerlicense in ("bsd", "mit", "isc", "python", "zlib", "libpng"):
+			if lowerlicense.startswith('custom') or lowerlicense in special_licenses:
 				if pkginfo["name"] not in licensedirs:
 					self.errors.append(("missing-custom-license-dir usr/share/licenses/%s", pkginfo["name"]))
 				elif len(licensefiles) == 0:
