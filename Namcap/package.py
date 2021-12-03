@@ -46,7 +46,7 @@ def strip_depend_info(value):
 		raise ValueError("Invalid dependency specification")
 	return m.group(1)
 
-class PacmanPackage(collections.MutableMapping):
+class PacmanPackage(collections.abc.MutableMapping):
 	strings = ['base', 'name', 'version', 'desc', 'url', 'builddate',
 			'packager', 'install', 'filename', 'csize', 'isize',
 			'pkgfunction']
