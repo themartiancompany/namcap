@@ -161,6 +161,8 @@ class ELFGnuRelroRule(TarballRule):
 			fp = tar.extractfile(entry)
 			if not is_elf(fp):
 				continue
+			if '.debug' in entry.name:
+				continue
 			elffile = ELFFile(fp)
 			if any(seg['p_type'] == 'PT_GNU_RELRO' for seg in elffile.iter_segments()):
 				if self.has_bind_now(elffile):
@@ -228,7 +230,7 @@ class NoPIERule(TarballRule):
 		for entry in tar:
 			if not entry.isfile():
 				continue
-			if '.so' in entry.name:
+			if any(x in entry.name for x in ['.so', '.debug']):
 				continue
 			fp = tar.extractfile(entry)
 			if not is_elf(fp):
