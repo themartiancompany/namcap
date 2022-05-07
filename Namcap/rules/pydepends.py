@@ -36,8 +36,6 @@ def finddepends(liblist):
 	"""
 	dependlist = defaultdict(set)
 
-	pymatches = {}
-
 	knownlibs = set(liblist)
 	foundlibs = set()
 
@@ -53,6 +51,7 @@ def finddepends(liblist):
 			for k in knownlibs:
 				if j.endswith("site-packages/" + k + "/") or j.endswith("site-packages/" + k + ".py") or \
 						j.endswith("site-packages/" + k + ".so") or \
+						j.endswith("site-packages/" + k + ".abi3.so") or \
 						j.endswith("site-packages/" + k + sysconfig.get_config_var('EXT_SUFFIX')) or \
 						j.endswith("lib-dynload/" + k + sysconfig.get_config_var('EXT_SUFFIX')) or \
 						j.count("/") == 3 and j.endswith("/" + k + ".py") or \
