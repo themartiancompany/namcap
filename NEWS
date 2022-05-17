@@ -1,18 +1,18 @@
 namcap (3.2.10)
-	- make tests pass by fixing the version in the manpage
+    - make tests pass by fixing the version in the manpage
 
 namcap (3.2.9)
-	- warn for duplicated source filenames
-	- improved split package handling
-	- warn if depends duplicated in makedeps
-	- improved VCS handling
-	- improved architecture specific var handling
-	- remove warnings handled by hooks (FS#56898)
-	- add warning for unneeded hook deps
-	- new compression methods in pacman 5.2 (FS#64570)
+    - warn for duplicated source filenames
+    - improved split package handling
+    - warn if depends duplicated in makedeps
+    - improved VCS handling
+    - improved architecture specific var handling
+    - remove warnings handled by hooks (FS#56898)
+    - add warning for unneeded hook deps
+    - new compression methods in pacman 5.2 (FS#64570)
 
 namcap (3.2.8)
-	- fix java-runtime handling (FS#24296)
+    - fix java-runtime handling (FS#24296)
     - stricter shebang parsing (FS#49733)
     - /usr/src is okay (FS#49889)
     - fix API changes in pyelftools 0.24 (FS#50428)
@@ -29,39 +29,39 @@ namcap (3.2.8)
     - many updates to variables/hooks
 
 namcap (3.2.7)
-	- improved carch depends (FS#47862)
-	- better multilib dependencies
-	- detects bad py/pyc/pyo mtimes
-	- detects when an install file shouldn't be used
-	- removed old install file rules
+    - improved carch depends (FS#47862)
+    - better multilib dependencies
+    - detects bad py/pyc/pyo mtimes
+    - detects when an install file shouldn't be used
+    - removed old install file rules
 
 namcap (3.2.6)
-	- better mingw support (FS#43552)
-	- lrz/lzo compression (FS#44900)
-	- handle validpgpkeys warnings
-	- improved carch-specific depends (FS#45455, FS#45456)
-	- test for overlinking
+    - better mingw support (FS#43552)
+    - lrz/lzo compression (FS#44900)
+    - handle validpgpkeys warnings
+    - improved carch-specific depends (FS#45455, FS#45456)
+    - test for overlinking
 
 namcap (3.2.5)
-	- support "SKIP" in checksums (FS#34647)
-	- export CARCH correctly to parsepkgbuild (FS#32568)
-	- recognize .MTREE as package metadata (FS#34591)
+    - support "SKIP" in checksums (FS#34647)
+    - export CARCH correctly to parsepkgbuild (FS#32568)
+    - recognize .MTREE as package metadata (FS#34591)
 
 namcap (3.2.4)
-	- update fhs rules for new guidelines (/usr move).
+    - update fhs rules for new guidelines (/usr move).
 
 namcap (3.2.3)
-	- add pyelftools as a dependency, drop prelink.
-	- add rubypaths rule warning against use of site_ruby
-	- modify elfexecstack rule to use elftools
-	- add test case for elfexecstack
+    - add pyelftools as a dependency, drop prelink.
+    - add rubypaths rule warning against use of site_ruby
+    - modify elfexecstack rule to use elftools
+    - add test case for elfexecstack
 
 namcap (3.2.2)
-	- fix: unwanted warning when testing database is not found (FS#27973)
-	- fix: Creative Commons licenses not recognized (FS#27489)
-	- rename elffiles rule to elfpaths
-	- add elftextrel rule to detect text relocations (FS#26434)
-	- add elfexecstack rule to detect executable stacks (FS#26458)
+    - fix: unwanted warning when testing database is not found (FS#27973)
+    - fix: Creative Commons licenses not recognized (FS#27489)
+    - rename elffiles rule to elfpaths
+    - add elftextrel rule to detect text relocations (FS#26434)
+    - add elfexecstack rule to detect executable stacks (FS#26458)
 
 namcap (3.2.1)
     - fix: glibfiles rules ineffective because of wrong schema
@@ -75,104 +75,104 @@ namcap (3.2)
     - fix: refine glibfiles rules to avoid warnings in glib2 (FS#25829)
 
 namcap (3.1.1)
-	- fix: carch rule behavior
-	- various code cleanups
+    - fix: carch rule behavior
+    - various code cleanups
 
 namcap (3.1)
-	- add checks for files in temp. folders in fhs rule (FS#23539)
-	- add rule javafiles detecting Java class/jar files (FS#23521)
-	- fix: parsepkgbuild executing arbitrary commands from PKGBUILD (FS#23902)
-	- fix: extravars not knowing about $epoch (FS#23966)
-	- fix: mimedesktop rule crashing on packages with symlinks (FS#23952)
-	- fix: bug in script interpreter detection
-	- uses pyalpm to access pacman database
+    - add checks for files in temp. folders in fhs rule (FS#23539)
+    - add rule javafiles detecting Java class/jar files (FS#23521)
+    - fix: parsepkgbuild executing arbitrary commands from PKGBUILD (FS#23902)
+    - fix: extravars not knowing about $epoch (FS#23966)
+    - fix: mimedesktop rule crashing on packages with symlinks (FS#23952)
+    - fix: bug in script interpreter detection
+    - uses pyalpm to access pacman database
 
 namcap (3.0.6)
-	- depends check now prints reasons why a dependency is needed
-	- fix: inverted treatment of provides introduced by 3.0.5
-	- test: basic unit test for sodepends rule
-	- factored out tag formatting code
+    - depends check now prints reasons why a dependency is needed
+    - fix: inverted treatment of provides introduced by 3.0.5
+    - test: basic unit test for sodepends rule
+    - factored out tag formatting code
 
 namcap (3.0.5)
-	- fix: depends rule unreadable and broken (FS#23489)
-	- added a warning when a rule needs a dependency declared optional
+    - fix: depends rule unreadable and broken (FS#23489)
+    - added a warning when a rule needs a dependency declared optional
 
 namcap (3.0.4)
-	- run parsepkgbuild with a clean environment
-	- added checkdepends to the list of legit PKGBUILD variables
+    - run parsepkgbuild with a clean environment
+    - added checkdepends to the list of legit PKGBUILD variables
 
 namcap (3.0.3)
-	- fix: extravars rule having unstable behaviour
-	- fix: symlink rule not handling particular symlinks
+    - fix: extravars rule having unstable behaviour
+    - fix: symlink rule not handling particular symlinks
 
 namcap (3.0.2)
-	- extravars rule: reduce the amount of false positives
-	- fix crashes when running in non-English locales
+    - extravars rule: reduce the amount of false positives
+    - fix crashes when running in non-English locales
 
 namcap (3.0.1)
-	- fix the ChecksumsRule behaviour with no source array (FS#23258)
-	- correct old PacmanPackage interface usage (FS#23259, FS#23260)
+    - fix the ChecksumsRule behaviour with no source array (FS#23258)
+    - correct old PacmanPackage interface usage (FS#23259, FS#23260)
 
 namcap (3.0)
-	- switch to Python 3
-	- rework dependency analysis
-	- add split package parsing capabilities
-	- new rule checking whether info files are installed (FS#23003)
-	- new rule checking that glib schemas and gio modules are
-	  registered (FS#22881)
-	- new rule checking update-desktop-database is run (FS#22929)
-	- the permissions rule warns against setuid/setgid files (FS#18852)
-	- new rules for basic coherence of split packages (FS#15027)
-	- API: rework the implementation of rules
-	- API: give PacmanPackage a mapping-like interface
-	- fix: test suite ran with i686 architecture set
-	- fix: kdeprograms rule not seeing indirect dependencies
-	- fix: FS#15591 consistent hicolor-icon-theme messages
-	- fix: FS#17166 consistent shared-mime-info messages
-	- test: add unit test for the rpath rule
+    - switch to Python 3
+    - rework dependency analysis
+    - add split package parsing capabilities
+    - new rule checking whether info files are installed (FS#23003)
+    - new rule checking that glib schemas and gio modules are
+      registered (FS#22881)
+    - new rule checking update-desktop-database is run (FS#22929)
+    - the permissions rule warns against setuid/setgid files (FS#18852)
+    - new rules for basic coherence of split packages (FS#15027)
+    - API: rework the implementation of rules
+    - API: give PacmanPackage a mapping-like interface
+    - fix: test suite ran with i686 architecture set
+    - fix: kdeprograms rule not seeing indirect dependencies
+    - fix: FS#15591 consistent hicolor-icon-theme messages
+    - fix: FS#17166 consistent shared-mime-info messages
+    - test: add unit test for the rpath rule
 
 namcap (2.8.2)
-	- fix: extravars rule parses PKGBUILDs incorrectly
+    - fix: extravars rule parses PKGBUILDs incorrectly
 
 namcap (2.8.1)
-	- don't be restrictive in filenames rule
-	- fix: emptydirs rule was not working properly
-	- fix: kdeprograms rule was not working properly
-	- fix: extravars rule was not run
-	- fix: extravars rule did not know options variable
-	- the test suite covers all rules except "depends" and "rpath"
+    - don't be restrictive in filenames rule
+    - fix: emptydirs rule was not working properly
+    - fix: kdeprograms rule was not working properly
+    - fix: extravars rule was not run
+    - fix: extravars rule did not know options variable
+    - the test suite covers all rules except "depends" and "rpath"
 
 namcap (2.8)
-	- compatibility with changes in local DB format introduced by
-	  pacman 3.5
-	- New check for inexistent backup files
-	- New check for cross-directory hard links (FS#20314)
-	- New check for filenames with non-ASCII or non-printable
-	  characters (FS#20758)
-	- New check for kdebase-runtime dependency for KDE programs
-	  (FS#15110)
-	- introduce a basic test suite
-	- Correct handling of versioned provides (version is now ignored)
-	- Correct checksum checking to detect non-hexadecimal digits
+    - compatibility with changes in local DB format introduced by
+      pacman 3.5
+    - New check for inexistent backup files
+    - New check for cross-directory hard links (FS#20314)
+    - New check for filenames with non-ASCII or non-printable
+      characters (FS#20758)
+    - New check for kdebase-runtime dependency for KDE programs
+      (FS#15110)
+    - introduce a basic test suite
+    - Correct handling of versioned provides (version is now ignored)
+    - Correct checksum checking to detect non-hexadecimal digits
 
 namcap (2.7)
-	- parsepkgbuild: ensure return codes don't leak that aren't failures;
-	  actually check return code of script inside namcap
-	- Improved $startdir detection (braces and quotes)
-	- Improved script dependency detection
-	- Better handling of files marked unreadable inside package
-	- Be [multilib] friendly- allow use of /usr/lib32
-	- Use DBPath defined inside pacman.conf
-	- Check for packages that could be 'any' architecture
-	- Initial steps toward Python 3 compatibility
+    - parsepkgbuild: ensure return codes don't leak that aren't failures;
+      actually check return code of script inside namcap
+    - Improved $startdir detection (braces and quotes)
+    - Improved script dependency detection
+    - Better handling of files marked unreadable inside package
+    - Be [multilib] friendly- allow use of /usr/lib32
+    - Use DBPath defined inside pacman.conf
+    - Check for packages that could be 'any' architecture
+    - Initial steps toward Python 3 compatibility
 
 namcap (2.6)
-	- Add new 'anyelf' rule; should catch ELF files that end up in 'any'
-	  arch packages and cannot be arch-independent
-	- Allow checking of all checksum types (FS#17168)
-	- Code style and import cleanups
-	- Handle optdepends descriptions correctly (FS#18259)
-	- Make it an error to use $startdir in PKGBUILDs
+    - Add new 'anyelf' rule; should catch ELF files that end up in 'any'
+      arch packages and cannot be arch-independent
+    - Allow checking of all checksum types (FS#17168)
+    - Code style and import cleanups
+    - Handle optdepends descriptions correctly (FS#18259)
+    - Make it an error to use $startdir in PKGBUILDs
 
 namcap (2.5)
     - Turn namcap into a wrapper script that handles the compression;
