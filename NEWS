@@ -1,3 +1,13 @@
+namcap (3.3.0)
+    - Detect Python dependencies, Python extensions with limited ABIs
+    - Support Python 3.10
+    - Detect binaries that may execute code from shared RUNPATH
+    - Replace bzr with breezy
+    - Fix OFL license handling
+    - Handle debug packages (by ignoring some checks)
+    - Handle source array being empty
+    - Accommodate project development on case-insensitive filesystems
+
 namcap (3.2.10)
     - make tests pass by fixing the version in the manpage
 
