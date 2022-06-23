@@ -1,3 +1,6 @@
+namcap (3.3.1)
+    - Avoid failure when scanning dependencies in invalid Python files
+
 namcap (3.3.0)
     - Detect Python dependencies, Python extensions with limited ABIs
     - Support Python 3.10
