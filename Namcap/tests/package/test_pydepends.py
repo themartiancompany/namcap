@@ -38,6 +38,7 @@ source=()
 build() {
   cd "${srcdir}"
   echo "import six, pyalpm" > main.py
+  echo "(^y^)" > invalid.py
 }
 package() {
   install -D -m 755 "$srcdir/main.py" "$pkgdir/usr/bin/main.py"

@@ -65,7 +65,11 @@ def finddepends(liblist):
 
 
 def get_imports(file):
-	root = ast.parse(file.read())
+	try:
+		root = ast.parse(file.read())
+	except (SyntaxError, ValueError):
+		# ast.parse() uses compile(), which may raise SyntaxError or ValueError
+		return
 
 	for node in ast.walk(root):
 		if isinstance(node, ast.Import):
