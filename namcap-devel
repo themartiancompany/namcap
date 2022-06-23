@@ -6,4 +6,4 @@ export PARSE_PKGBUILD_PATH
 PYTHONPATH="$(pwd)"
 export PYTHONPATH
 
-./namcap -t namcap-tags $@
+./scripts/namcap -t namcap-tags $@
