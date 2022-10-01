@@ -34,7 +34,6 @@ from . import (
   hookdepends,
   infodirectory,
   javafiles,
-  kdeprograms,
   libtool,
   licensepkg,
   lotsofdocs,
