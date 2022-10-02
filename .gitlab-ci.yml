@@ -1,0 +1,21 @@
+---
+image: archlinux:base-devel
+
+stages:
+  - test
+
+test:
+  stage: test
+  needs: []
+  before_script:
+    - pacman -Syu --needed --noconfirm python python-pytest pyalpm python-pyelftools python-six
+    # makepkg does not like running as root
+    - useradd --home-dir / --no-create-home builduser
+  script:
+    # Use hard-coded $PATH as the shebangdepends rule is sensitive to $PATH,
+    # and the default $PATH in containers is different from the one in Arch.
+    # See: https://gitlab.archlinux.org/archlinux/archlinux-docker/-/issues/64
+    - |
+      sudo -u builduser PARSE_PKGBUILD_PATH="$PWD" \
+                        PATH="$PWD/scripts:/usr/local/sbin:/usr/local/bin:/usr/bin" \
+                        pytest
