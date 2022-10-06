@@ -8,7 +8,7 @@ test:
   stage: test
   needs: []
   before_script:
-    - pacman -Syu --needed --noconfirm python python-pytest pyalpm python-pyelftools python-six
+    - pacman -Syu --needed --noconfirm python python-pytest python-pytest-cov pyalpm python-pyelftools python-six
     # makepkg does not like running as root
     - useradd --home-dir / --no-create-home builduser
   script:
@@ -18,4 +18,12 @@ test:
     - |
       sudo -u builduser PARSE_PKGBUILD_PATH="$PWD" \
                         PATH="$PWD/scripts:/usr/local/sbin:/usr/local/bin:/usr/bin" \
-                        pytest
+                        coverage run -m pytest
+    - coverage report
+    - coverage xml
+  coverage: '/(?i)total.*? (100(?:\.0+)?\%|[1-9]?\d(?:\.\d+)?\%)$/'
+  artifacts:
+    reports:
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
