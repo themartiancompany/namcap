@@ -102,7 +102,7 @@ class ShebangDependsRule(TarballRule):
 			self.infos.append(("script-link-detected %s in %s", (i, str(files))))
 
 		# Handle "no package associated" errors
-		self.warnings.extend([("library-no-package-associated %s", i)
+		self.warnings.extend([("library-no-package-associated %s %s", (i, str(list(scriptlist[i]))))
 			for i in orphans])
 
 		# Check for packages in testing

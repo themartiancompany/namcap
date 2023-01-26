@@ -158,7 +158,7 @@ class SharedLibsRule(TarballRule):
 		dependlist, orphans = finddepends(liblist)
 
 		# Handle "no package associated" errors
-		self.warnings.extend([("library-no-package-associated %s", i)
+		self.warnings.extend([("library-no-package-associated %s %s", (i, str(list(liblist[i]))))
 			for i in orphans])
 
 		# Print link-level deps

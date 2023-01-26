@@ -46,7 +46,7 @@ info-dir-file-present %s :: Info directory file (%s) should not be present
 insecure-rpath %s %s :: Insecure RPATH '%s' in file ('%s')
 insecure-runpath %s %s :: Insecure RUNPATH '%s' in file ('%s')
 libtool-file-present %s :: File (%s) is a libtool file
-library-no-package-associated %s :: Referenced library '%s' is an uninstalled dependency
+library-no-package-associated %s %s :: Referenced library '%s' is an uninstalled dependency (needed in files %s)
 link-level-dependence %s in %s :: Link-level dependence (%s) in file %s
 lots-of-docs %f :: Package was %.0f%% docs by size; maybe you should split out a docs package
 makepkg-function-used %s :: PKGBUILD uses internal makepkg '%s' subroutine
