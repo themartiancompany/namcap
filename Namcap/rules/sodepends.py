@@ -35,20 +35,17 @@ from elftools.elf.dynamic import DynamicSection
 
 libcache = {'i686': {}, 'x86-64': {}}
 
-def scanlibs(fileobj, filename, custom_libs):
+def scanlibs(fileobj, filename, custom_libs, sharedlibs):
 	"""
 	Find shared libraries in a file-like binary object
 
 	If it depends on a library, store that library's path.
-
-	returns: a dictionary { library => set(ELF files using that library) }
 	"""
 
 	if not is_elf(fileobj):
 		return {}
 
 	elffile = ELFFile(fileobj)
-	sharedlibs = defaultdict(set)
 	for section in elffile.iter_sections():
 		if not isinstance(section, DynamicSection):
 			continue
@@ -69,7 +66,6 @@ def scanlibs(fileobj, filename, custom_libs):
 			except KeyError:
 				# We didn't know about the library, so add it for fail later
 				sharedlibs[libname].add(filename)
-	return sharedlibs
 
 def finddepends(liblist):
 	"""
@@ -133,7 +129,7 @@ class SharedLibsRule(TarballRule):
 	name = "sodepends"
 	description = "Checks dependencies caused by linked shared libraries"
 	def analyze(self, pkginfo, tar):
-		liblist = {}
+		liblist = defaultdict(set)
 		dependlist = {}
 		filllibcache()
 		os.environ['LC_ALL'] = 'C'
@@ -151,7 +147,7 @@ class SharedLibsRule(TarballRule):
 				for n in pkg_so_files:
 					if any(n.startswith(rp) for rp in rpaths):
 						rpath_files[os.path.basename(n)] = n
-			liblist.update(scanlibs(f, entry.name, rpath_files))
+			scanlibs(f, entry.name, rpath_files, liblist)
 			f.close()
 
 		# Ldd all the files and find all the link and script dependencies
