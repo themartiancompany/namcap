@@ -94,6 +94,12 @@ libprovides-satisfied %s %s :: Provided library '%s' is specified (provided by f
 libprovides-unsatisfied %s %s :: Provided library '%s' is not specified (provided by file %s)
 libprovides-missing %s :: Specified library '%s' is not provided by the package
 libprovides-by-namcap-sight provides=(%s) :: Provides as namcap sees them: provides=(%s)
+libdepends-missing-provides %s %s :: Soname '%s' is not specified as provides by %s yet, omitting it
+libdepends-detected-satisfied %s %s (%s) :: Soname dependency '%s' provided by %s is satisfied (needed in files %s)
+libdepends-detected-but-optional %s %s (%s) :: Soname dependency '%s' provided by %s detected but optional (needed in files %s)
+libdepends-detected-not-included %s %s (%s) :: Soname dependency '%s' provided by %s detected and not included (needed in files %s)
+libdepends-not-needed %s :: Soname dependency included, but may not needed ('%s')
+libdepends-by-namcap-sight depends=(%s) :: Soname depends as namcap sees them: depends=(%s)
 
 # dependency tags
 dependency-already-satisfied %s :: Dependency %s included but already satisfied

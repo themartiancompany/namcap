@@ -35,7 +35,7 @@ from elftools.elf.dynamic import DynamicSection
 
 libcache = {'i686': {}, 'x86-64': {}}
 
-def scanlibs(fileobj, filename, custom_libs, sharedlibs, libprovides):
+def scanlibs(fileobj, filename, custom_libs, liblist, libdepends, libprovides):
 	"""
 	Find shared libraries in a file-like binary object
 
@@ -60,16 +60,18 @@ def scanlibs(fileobj, filename, custom_libs, sharedlibs, libprovides):
 			bitsize = elffile.elfclass
 			architecture = {32:'i686', 64:'x86-64'}[bitsize]
 			libname = tag.needed
+			soname = libname.rsplit('.so', 1)[0] + '.so'
+			libdepends[soname].add(filename)
 			if libname in custom_libs:
-				sharedlibs[custom_libs[libname][1:]].add(filename)
+				liblist[custom_libs[libname][1:]].add(filename)
 				continue
 			try:
 				libpath = os.path.abspath(
 						libcache[architecture][libname])[1:]
-				sharedlibs[libpath].add(filename)
+				liblist[libpath].add(filename)
 			except KeyError:
 				# We didn't know about the library, so add it for fail later
-				sharedlibs[libname].add(filename)
+				liblist[libname].add(filename)
 
 def finddepends(liblist):
 	"""
@@ -77,9 +79,13 @@ def finddepends(liblist):
 
 	Returns:
 	  dependlist -- a dictionary { package => set(libraries) }
+	  libdependlist -- a dictionary { soname => package }
 	  orphans -- the list of libraries without owners
+	  missing_provides -- the list of sonames without providers
 	"""
 	dependlist = defaultdict(set)
+	libdependlist = {}
+	missing_provides = {}
 
 	somatches = {}
 	actualpath = {}
@@ -108,9 +114,16 @@ def finddepends(liblist):
 				if j == actualpath[k] or (j.startswith(actualpath[k]) and so_end.match(j[len(actualpath[k]):])):
 					dependlist[pkg.name].add(k)
 					foundlibs.add(k)
+					# Check if the dependency can be satisfied by soname
+					soname = os.path.basename(k).rsplit('.so', 1)[0] + '.so'
+					stripped_provides = [Namcap.package.strip_depend_info(d) for d in pkg.provides]
+					if soname in stripped_provides:
+						libdependlist[soname] = pkg.name
+					else:
+						missing_provides[soname] = pkg.name
 
 	orphans = list(knownlibs - foundlibs)
-	return dependlist, orphans
+	return dependlist, libdependlist, orphans, missing_provides
 
 def filllibcache():
 	var = subprocess.Popen('ldconfig -p', 
@@ -134,8 +147,11 @@ class SharedLibsRule(TarballRule):
 	description = "Checks dependencies caused by linked shared libraries"
 	def analyze(self, pkginfo, tar):
 		liblist = defaultdict(set)
+		libdepends = defaultdict(set)
 		libprovides = defaultdict(set)
 		dependlist = {}
+		libdependlist = {}
+		missing_provides = {}
 		filllibcache()
 		os.environ['LC_ALL'] = 'C'
 		pkg_so_files = ['/' + n for n in tar.getnames() if '.so' in n]
@@ -152,15 +168,19 @@ class SharedLibsRule(TarballRule):
 				for n in pkg_so_files:
 					if any(n.startswith(rp) for rp in rpaths):
 						rpath_files[os.path.basename(n)] = n
-			scanlibs(f, entry.name, rpath_files, liblist, libprovides)
+			scanlibs(f, entry.name, rpath_files, liblist, libdepends, libprovides)
 			f.close()
 
 		# Ldd all the files and find all the link and script dependencies
-		dependlist, orphans = finddepends(liblist)
+		dependlist, libdependlist, orphans, missing_provides = finddepends(liblist)
 
 		# Handle "no package associated" errors
 		self.warnings.extend([("library-no-package-associated %s", i)
 			for i in orphans])
+
+		# Hanle when a required soname does not provided by the associated package yet
+		self.infos.extend([("libdepends-missing-provides %s %s", (i, missing_provides[i]))
+			for i in missing_provides])
 
 		# Print link-level deps
 		for pkg, libraries in dependlist.items():
@@ -173,6 +193,24 @@ class SharedLibsRule(TarballRule):
 					(str(files), str(list(needing)))
 					))
 				self.infos.append(("link-level-dependence %s in %s", (pkg, str(files))))
+
+		# Check for soname dependencies, filter out internal dependencies
+		libdependlist = dict(filter(lambda elem: elem[1] != pkginfo["name"], libdependlist.items()))
+
+		for i in libdependlist:
+			if i in pkginfo["depends"]:
+				self.infos.append(("libdepends-detected-satisfied %s %s (%s)", (i, libdependlist[i], str(list(libdepends[i])))))
+				continue
+			if i in pkginfo["optdepends"]:
+				self.warnings.append(("libdepends-detected-but-optional %s %s (%s)", (i, libdependlist[i], str(list(libdepends[i])))))
+				continue
+			self.warnings.append(("libdepends-detected-not-included %s %s (%s)", (i, libdependlist[i], str(list(libdepends[i])))))
+
+		for i in pkginfo["depends"]:
+			if i.endswith('.so') and i not in libdependlist:
+				self.warnings.append(("libdepends-not-needed %s", i))
+
+		self.infos.append(("libdepends-by-namcap-sight depends=(%s)", ' '.join(libdependlist) ))
 
 		# Check provided libraries
 		for i in libprovides:
