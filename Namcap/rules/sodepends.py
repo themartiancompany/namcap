@@ -35,11 +35,11 @@ from elftools.elf.dynamic import DynamicSection
 
 libcache = {'i686': {}, 'x86-64': {}}
 
-def scanlibs(fileobj, filename, custom_libs, sharedlibs):
+def scanlibs(fileobj, filename, custom_libs, sharedlibs, libprovides):
 	"""
 	Find shared libraries in a file-like binary object
 
-	If it depends on a library, store that library's path.
+	If it depends on a library or provides one, store that library's path.
 	"""
 
 	if not is_elf(fileobj):
@@ -50,6 +50,10 @@ def scanlibs(fileobj, filename, custom_libs, sharedlibs):
 		if not isinstance(section, DynamicSection):
 			continue
 		for tag in section.iter_tags():
+			# DT_SONAME means it provides a library; ignore unversioned (mostly internal) libraries
+			if tag.entry.d_tag == 'DT_SONAME' and not tag.soname.endswith('.so'):
+				soname = tag.soname.rsplit('.so', 1)[0] + '.so'
+				libprovides[soname].add(filename)
 			# DT_NEEDED means shared library
 			if tag.entry.d_tag != 'DT_NEEDED':
 				continue
@@ -130,6 +134,7 @@ class SharedLibsRule(TarballRule):
 	description = "Checks dependencies caused by linked shared libraries"
 	def analyze(self, pkginfo, tar):
 		liblist = defaultdict(set)
+		libprovides = defaultdict(set)
 		dependlist = {}
 		filllibcache()
 		os.environ['LC_ALL'] = 'C'
@@ -147,7 +152,7 @@ class SharedLibsRule(TarballRule):
 				for n in pkg_so_files:
 					if any(n.startswith(rp) for rp in rpaths):
 						rpath_files[os.path.basename(n)] = n
-			scanlibs(f, entry.name, rpath_files, liblist)
+			scanlibs(f, entry.name, rpath_files, liblist, libprovides)
 			f.close()
 
 		# Ldd all the files and find all the link and script dependencies
@@ -168,6 +173,19 @@ class SharedLibsRule(TarballRule):
 					(str(files), str(list(needing)))
 					))
 				self.infos.append(("link-level-dependence %s in %s", (pkg, str(files))))
+
+		# Check provided libraries
+		for i in libprovides:
+			if i in pkginfo["provides"]:
+				self.infos.append(("libprovides-satisfied %s %s", (i, str(list(libprovides[i])))))
+				continue
+			self.warnings.append(("libprovides-unsatisfied %s %s", (i, str(list(libprovides[i])))))
+
+		for i in pkginfo["provides"]:
+			if i.endswith('.so') and i not in libprovides:
+				self.errors.append(("libprovides-missing %s", i))
+
+		self.infos.append(("libprovides-by-namcap-sight provides=(%s)", ' '.join(libprovides) ))
 
 		# Check for packages in testing
 		for i in dependlist.keys():

@@ -90,6 +90,10 @@ use-pkgdir :: Use $pkgdir instead of $startdir/pkg
 use-srcdir :: Use $srcdir instead of $startdir/src
 using-dl-sourceforge :: Attempting to use dl sourceforge domain, use downloads.sourceforge.net instead
 variable-not-array %s :: Variable %s is not an array.
+libprovides-satisfied %s %s :: Provided library '%s' is specified (provided by file %s)
+libprovides-unsatisfied %s %s :: Provided library '%s' is not specified (provided by file %s)
+libprovides-missing %s :: Specified library '%s' is not provided by the package
+libprovides-by-namcap-sight provides=(%s) :: Provides as namcap sees them: provides=(%s)
 
 # dependency tags
 dependency-already-satisfied %s :: Dependency %s included but already satisfied
