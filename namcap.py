@@ -73,8 +73,12 @@ def check_rules_exclude(optlist):
 	return args_used
 
 def show_messages(name, key, messages):
+	colored_key = {'E': '\033[91mE\033[00m', 'W': '\033[93mW\033[00m', 'I': '\033[92mI\033[00m'}
 	for msg in messages:
-		print("%s %s: %s" % (name, key, Namcap.tags.format_message(msg)))
+		if sys.stdout.isatty():
+			print("%s %s: %s" % (name, colored_key[key], Namcap.tags.format_message(msg)))
+		else:
+			print("%s %s: %s" % (name, key, Namcap.tags.format_message(msg)))
 
 def process_realpackage(package, modules):
 	"""Runs namcap checks over a package tarball"""
