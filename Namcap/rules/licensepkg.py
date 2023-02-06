@@ -76,14 +76,19 @@ class package(TarballRule):
 		# Check all licenses for validity
 		for license in pkginfo["license"]:
 			lowerlicense, _, sublicense = license.lower().partition(':')
-			if lowerlicense.startswith('custom') or lowerlicense in special_licenses:
+
+			is_custom_license = lowerlicense.startswith('custom')
+			is_special_license = lowerlicense in special_licenses
+			is_common_license = lowerlicense in commonlicenses
+
+			# Custom licenses and licenses listed in special_licenses always need to ship a license file
+			if is_custom_license or is_special_license:
 				if pkginfo["name"] not in licensedirs:
 					self.errors.append(("missing-custom-license-dir usr/share/licenses/%s", pkginfo["name"]))
 				elif not has_license_files(licensepaths):
 					self.errors.append(("missing-custom-license-file usr/share/licenses/%s/*", pkginfo["name"]))
-			# A common license
-			else:
-				if lowerlicense not in commonlicenses:
-					self.errors.append(("not-a-common-license %s", license))
+			# Flag licenses that aren't in common/ and not marked as `custom`
+			elif not is_common_license:
+				self.errors.append(("not-a-common-license %s", license))
 
 # vim: set ts=4 sw=4 noet:
