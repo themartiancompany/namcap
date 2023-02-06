@@ -35,29 +35,54 @@ import os.path
 from Namcap.ruleclass import *
 from Namcap.util import is_debug
 
+
+def pkg_has_licenses(pkginfo):
+	return "license" in pkginfo and len(pkginfo["license"]) > 0
+
+
+def list_pkg_license_contents(tar):
+	return [x for x in tar.getnames() if x.startswith('usr/share/licenses') and not x.endswith('/')]
+
+
+def has_license_files(licensepaths):
+	licensefiles = [os.path.split(x)[1] for x in licensepaths]
+	return len(licensefiles) > 0
+
+
+def list_license_directories(licensepaths):
+	return [os.path.split(os.path.split(x)[0])[1] for x in licensepaths]
+
+
+def list_common_licenses():
+	return [x.lower() for x in os.listdir('/usr/share/licenses/common')]
+
+
 class package(TarballRule):
 	name = "licensepkg"
 	description = "Verifies license is included in a package file"
+
 	def analyze(self, pkginfo, tar):
 		if is_debug(pkginfo):
 			return
-		if 'license' not in pkginfo or len(pkginfo["license"]) == 0:
+
+		if not pkg_has_licenses(pkginfo):
 			self.errors.append(("missing-license", ()))
 			return
-		licensepaths = [x for x in tar.getnames() if x.startswith('usr/share/licenses') and not x.endswith('/')]
-		licensedirs = [os.path.split(os.path.split(x)[0])[1] for x in licensepaths]
-		licensefiles = [os.path.split(x)[1] for x in licensepaths]
+
+		licensepaths = list_pkg_license_contents(tar)
+		licensedirs = list_license_directories(licensepaths)
+		commonlicenses = list_common_licenses()
+
 		# Check all licenses for validity
 		for license in pkginfo["license"]:
 			lowerlicense, _, sublicense = license.lower().partition(':')
 			if lowerlicense.startswith('custom') or lowerlicense in special_licenses:
 				if pkginfo["name"] not in licensedirs:
 					self.errors.append(("missing-custom-license-dir usr/share/licenses/%s", pkginfo["name"]))
-				elif len(licensefiles) == 0:
+				elif not has_license_files(licensepaths):
 					self.errors.append(("missing-custom-license-file usr/share/licenses/%s/*", pkginfo["name"]))
 			# A common license
 			else:
-				commonlicenses = [x.lower() for x in os.listdir('/usr/share/licenses/common')]
 				if lowerlicense not in commonlicenses:
 					self.errors.append(("not-a-common-license %s", license))
 
