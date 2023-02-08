@@ -36,10 +36,6 @@ from Namcap.ruleclass import *
 from Namcap.util import is_debug
 
 
-def pkg_has_licenses(pkginfo):
-	return "license" in pkginfo and len(pkginfo["license"]) > 0
-
-
 def list_pkg_license_contents(tar):
 	return [x for x in tar.getnames() if x.startswith('usr/share/licenses') and not x.endswith('/')]
 
@@ -65,7 +61,7 @@ class package(TarballRule):
 		if is_debug(pkginfo):
 			return
 
-		if not pkg_has_licenses(pkginfo):
+		if not pkginfo.get('license'):
 			self.errors.append(("missing-license", ()))
 			return
 
