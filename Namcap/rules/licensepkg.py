@@ -40,11 +40,6 @@ def list_pkg_license_contents(tar):
 	return [x for x in tar.getnames() if x.startswith('usr/share/licenses') and not x.endswith('/')]
 
 
-def has_license_files(license_paths):
-	licensefiles = [os.path.split(x)[1] for x in license_paths]
-	return len(licensefiles) > 0
-
-
 def list_license_directories(license_paths):
 	return [os.path.split(os.path.split(x)[0])[1] for x in license_paths]
 
@@ -81,7 +76,7 @@ class package(TarballRule):
 			if is_custom_license or is_special_license:
 				if pkginfo["name"] not in license_dirs:
 					self.errors.append(("missing-custom-license-dir usr/share/licenses/%s", pkginfo["name"]))
-				elif not has_license_files(license_paths):
+				elif not license_paths:
 					self.errors.append(("missing-custom-license-file usr/share/licenses/%s/*", pkginfo["name"]))
 			# Flag licenses that aren't in common/ and not marked as `custom`
 			elif not is_common_license:
