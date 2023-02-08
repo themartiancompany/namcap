@@ -32,6 +32,7 @@ special_licenses = [
 ]
 
 import os.path
+import pathlib
 from Namcap.ruleclass import *
 from Namcap.util import is_debug
 
@@ -41,7 +42,7 @@ def list_pkg_license_contents(tar):
 
 
 def list_license_directories(license_paths):
-	return [os.path.split(os.path.split(x)[0])[1] for x in license_paths]
+	return [pathlib.Path(x).parent.name for x in license_paths]
 
 
 def list_common_licenses():
