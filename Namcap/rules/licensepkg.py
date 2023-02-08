@@ -40,13 +40,13 @@ def list_pkg_license_contents(tar):
 	return [x for x in tar.getnames() if x.startswith('usr/share/licenses') and not x.endswith('/')]
 
 
-def has_license_files(licensepaths):
-	licensefiles = [os.path.split(x)[1] for x in licensepaths]
+def has_license_files(license_paths):
+	licensefiles = [os.path.split(x)[1] for x in license_paths]
 	return len(licensefiles) > 0
 
 
-def list_license_directories(licensepaths):
-	return [os.path.split(os.path.split(x)[0])[1] for x in licensepaths]
+def list_license_directories(license_paths):
+	return [os.path.split(os.path.split(x)[0])[1] for x in license_paths]
 
 
 def list_common_licenses():
@@ -65,9 +65,9 @@ class package(TarballRule):
 			self.errors.append(("missing-license", ()))
 			return
 
-		licensepaths = list_pkg_license_contents(tar)
-		licensedirs = list_license_directories(licensepaths)
-		commonlicenses = list_common_licenses()
+		license_paths = list_pkg_license_contents(tar)
+		license_dirs = list_license_directories(license_paths)
+		common_licenses = list_common_licenses()
 
 		# Check all licenses for validity
 		for license in pkginfo["license"]:
@@ -75,13 +75,13 @@ class package(TarballRule):
 
 			is_custom_license = lowerlicense.startswith('custom')
 			is_special_license = lowerlicense in special_licenses
-			is_common_license = lowerlicense in commonlicenses
+			is_common_license = lowerlicense in common_licenses
 
 			# Custom licenses and licenses listed in special_licenses always need to ship a license file
 			if is_custom_license or is_special_license:
-				if pkginfo["name"] not in licensedirs:
+				if pkginfo["name"] not in license_dirs:
 					self.errors.append(("missing-custom-license-dir usr/share/licenses/%s", pkginfo["name"]))
-				elif not has_license_files(licensepaths):
+				elif not has_license_files(license_paths):
 					self.errors.append(("missing-custom-license-file usr/share/licenses/%s/*", pkginfo["name"]))
 			# Flag licenses that aren't in common/ and not marked as `custom`
 			elif not is_common_license:
