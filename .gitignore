@@ -6,3 +6,6 @@ __pycache__/
 *.pyc
 *.swp
 *~
+.coverage
+coverage.xml
+htmlcov/
