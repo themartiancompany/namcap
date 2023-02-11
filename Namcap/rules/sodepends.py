@@ -92,9 +92,9 @@ def finddepends(liblist):
 	# Sometimes packages don't include all so .so, .so.1, .so.1.13, .so.1.13.19 files
 	# They rely on ldconfig to create all the symlinks
 	# So we will strip off the matching part of the files and use this regexp to match the rest
-	so_end = re.compile('(\.\d+)*')
+	so_end = re.compile(r'(\.\d+)*')
 	# Whether we should even look at a particular file
-	is_so = re.compile('\.so')
+	is_so = re.compile(r'\.so')
 
 	for pkg in Namcap.package.get_installed_packages():
 		for j, fsize, fmode in pkg.files:
@@ -118,7 +118,7 @@ def filllibcache():
 			shell=True,
 			stdout=subprocess.PIPE,
 			stderr=subprocess.PIPE).communicate()
-	libline = re.compile('\s*(.*) \((.*)\) => (.*)')
+	libline = re.compile(r'\s*(.*) \((.*)\) => (.*)')
 	for j in var[0].decode('ascii').splitlines():
 		g = libline.match(j)
 		if g != None:
