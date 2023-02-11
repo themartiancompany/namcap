@@ -29,6 +29,7 @@ import Namcap.package
 from Namcap.ruleclass import *
 from Namcap.util import is_elf
 from Namcap.rules.rpath import get_rpaths
+from Namcap.rules.runpath import get_runpaths
 
 from elftools.elf.elffile import ELFFile
 from elftools.elf.dynamic import DynamicSection
@@ -146,11 +147,13 @@ class SharedLibsRule(TarballRule):
 			# find anything that could be rpath related
 			rpath_files = {}
 			if is_elf(f):
-				rpaths = list(get_rpaths(f))
+				rpaths = list(get_rpaths(f)) + list(get_runpaths(f))
 				f.seek(0)
 				for n in pkg_so_files:
-					if any(n.startswith(rp) for rp in rpaths):
-						rpath_files[os.path.basename(n)] = n
+					for rp in rpaths:
+						rp = os.path.normpath(rp.replace('$ORIGIN', '/' + os.path.dirname(entry.path)))
+						if os.path.dirname(n) == rp:
+							rpath_files[os.path.basename(n)] = n
 			liblist.update(scanlibs(f, entry.name, rpath_files))
 			f.close()
 
