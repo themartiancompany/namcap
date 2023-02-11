@@ -19,6 +19,7 @@
 import os
 from Namcap.ruleclass import *
 from Namcap.package import load_from_db
+from Namcap.util import is_debug
 
 class package(TarballRule):
 	name = "symlink"
@@ -31,6 +32,13 @@ class package(TarballRule):
 			if not p:
 				continue
 			depfilenames |= set(name for name,_,_ in p['files'])
+		# debug package needs the corresponding binary packages
+		if is_debug(pkginfo):
+			for d in [pkginfo['name']] + pkginfo['provides']:
+				p = load_from_db(d[:-len('-debug')])
+				if not p:
+					continue
+				depfilenames |= set(name for name,_,_ in p['files'])
 		filenames |= depfilenames
 		for i in tar:
 			if i.issym():
