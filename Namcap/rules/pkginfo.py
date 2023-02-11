@@ -22,6 +22,7 @@
 import re
 import os
 from Namcap.ruleclass import PkgInfoRule,PkgbuildRule
+from Namcap.util import is_debug
 
 class CapsPkgnameRule(PkgInfoRule):
 	name = "capsnamespkg"
@@ -41,6 +42,8 @@ class LicenseRule(PkgInfoRule):
 	name = "license"
 	description = "Verifies license is included in a PKGBUILD"
 	def analyze(self, pkginfo, tar):
+		if is_debug(pkginfo):
+			return
 		if "license" not in pkginfo or len(pkginfo["license"]) == 0:
 			self.errors.append(("missing-license", ()))
 

@@ -191,6 +191,8 @@ class ELFUnstrippedRule(TarballRule):
 		for entry in tar:
 			if not entry.isfile():
 				continue
+			if '.debug' in entry.name:
+				continue
 			fp = tar.extractfile(entry)
 			if not is_elf(fp):
 				continue

@@ -33,11 +33,14 @@ special_licenses = [
 
 import os.path
 from Namcap.ruleclass import *
+from Namcap.util import is_debug
 
 class package(TarballRule):
 	name = "licensepkg"
 	description = "Verifies license is included in a package file"
 	def analyze(self, pkginfo, tar):
+		if is_debug(pkginfo):
+			return
 		if 'license' not in pkginfo or len(pkginfo["license"]) == 0:
 			self.errors.append(("missing-license", ()))
 			return

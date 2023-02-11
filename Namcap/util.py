@@ -60,4 +60,8 @@ def script_type(fileobj):
 		name = cmd[1]
 	return name
 
+def is_debug(pkginfo):
+	"Take pkginfo, checks if it's a debug package"
+	return pkginfo['pkgdesc'].startswith("Detached debugging symbols for ")
+
 # vim: set ts=4 sw=4 noet:
