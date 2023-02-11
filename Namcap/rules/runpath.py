@@ -22,8 +22,8 @@ from Namcap.ruleclass import TarballRule
 from elftools.elf.elffile import ELFFile
 from elftools.elf.dynamic import DynamicSection
 
-allowed = ('/usr/lib', '/usr/lib32', '/lib', '$ORIGIN', '${ORIGIN}')
-allowed_toplevels = (s + '/' for s in allowed)
+allowed = ['/usr/lib', '/usr/lib32', '/lib', '$ORIGIN', '${ORIGIN}']
+allowed_toplevels = [s + '/' for s in allowed]
 warn = ['/usr/local/lib']
 
 
