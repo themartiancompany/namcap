@@ -39,7 +39,8 @@ build() {
   cd "${srcdir}"
   echo "int main() { return 0; }" > main.c
   /usr/bin/gcc -o main.o -c main.c
-  /usr/bin/ld -o main --rpath /home/evil/lib main.o -lc
+  # core/binutils defaults to DT_RUNPATH since 2.39-4. Force old DT_RPATH here for testing.
+  /usr/bin/ld -o main --disable-new-dtags --rpath /home/evil/lib main.o -lc
 }
 package() {
   install -D -m 755 "$srcdir/main" "$pkgdir/usr/bin/evilprogram"
