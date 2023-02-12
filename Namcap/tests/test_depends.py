@@ -46,23 +46,22 @@ class DependsTests(unittest.TestCase):
 				[('depends-by-namcap-sight depends=(%s)', '')])
 
 	def test_satisfied(self):
-		# false positive test
+		# false negative test
 		self.pkginfo["depends"] = {"readline": []}
 		self.pkginfo.detected_deps = {"glibc": [], "readline": []}
 		e, w, i = Namcap.depends.analyze_depends(self.pkginfo)
-		unexpected_w = [('dependency-already-satisfied %s', 'readline')]
+		expected_w = [('dependency-implicitly-satisfied %s (%s)', ('glibc', ''))]
 		self.assertEqual(e, [])
-		self.assertEqual(w, [])
+		self.assertEqual(w, expected_w)
 		# info is verbose and beyond scope, skip it
 
 	def test_satisfied2(self):
-		# false negative test
+		# false positive test
 		self.pkginfo["depends"] = {"pyalpm": [], "python": []}
 		self.pkginfo.detected_deps = {"pyalpm": [], "python": []}
 		e, w, i = Namcap.depends.analyze_depends(self.pkginfo)
-		expected_w = [('dependency-already-satisfied %s', 'python')]
 		self.assertEqual(e, [])
-		self.assertEqual(w, expected_w)
+		self.assertEqual(w, [])
 		# info is verbose and beyond scope, skip it
 
 # vim: set ts=4 sw=4 noet:
