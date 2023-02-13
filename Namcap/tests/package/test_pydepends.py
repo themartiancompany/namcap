@@ -55,14 +55,14 @@ package() {
 				Namcap.rules.pydepends.PythonDependencyRule
 				)
 		self.assertEqual(pkg.detected_deps['pyalpm'], [
-			('libraries-needed %s %s',
+			('python-modules-needed %s %s',
 			 (str(["pyalpm"]), str(["usr/bin/main.py"])))
 			]
 		)
 		e, w, i = Namcap.depends.analyze_depends(pkg)
 		self.assertEqual(e, [
 			('dependency-detected-not-included %s (%s)',
-				('pyalpm', "libraries ['pyalpm'] needed in files ['usr/bin/main.py']"))
+				('pyalpm', "python modules ['pyalpm'] needed in files ['usr/bin/main.py']"))
 		])
 		self.assertEqual(w, [])
 

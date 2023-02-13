@@ -20,53 +20,83 @@
 
 from collections import defaultdict
 import ast
+import importlib
+import os
 import sys
 import sysconfig
 import Namcap.package
+from Namcap.util import is_script, script_type
 from Namcap.ruleclass import *
 
 
-def finddepends(liblist):
+def finddepends(pkgname, modules, gir_modules, gir_versions):
 	"""
 	Find packages owning a list of libraries
 
 	Returns:
 	  dependlist -- a dictionary { package => set(libraries) }
 	  orphans -- the list of libraries without owners
+	  gir_dependlist -- a dictionary { package => set(GIR libraries) }
+	  gir_orphans -- the list of GIR libraries without owners
 	"""
+	python_path = sysconfig.get_path('stdlib', scheme='posix_prefix')
+	site_packages_path = sysconfig.get_path('purelib', scheme='posix_prefix')
+
 	dependlist = defaultdict(set)
+	gir_dependlist = defaultdict(set)
 
-	knownlibs = set(liblist)
+	knownlibs = defaultdict(set)
+	missinglibs = set()
 	foundlibs = set()
+	gir_foundlibs = set()
 
-	workarounds = {
-		"python": sys.builtin_module_names
-	}
+	for module in modules:
+		# Check application-specific python modules
+		if importlib.machinery.PathFinder.find_spec(module.split('.')[0], ['/usr/lib/' + pkgname, '/usr/share/' + pkgname]):
+			dependlist[pkgname].add(module)
+			continue
+
+		# Check internal python modules
+		if module.split('.')[0] in sys.builtin_module_names or \
+			importlib.machinery.PathFinder.find_spec(module.split('.')[0], [python_path, python_path + '/lib-dynload']):
+				dependlist["python"].add(module)
+				continue
+
+		# Search external python modules
+		spec = importlib.machinery.PathFinder.find_spec(module.split('.')[0], [site_packages_path])
+		# Search namespaced python module
+		if spec and not spec.origin and spec.submodule_search_locations and len(module.split('.')) > 1:
+			spec = importlib.machinery.PathFinder.find_spec(module.split('.')[1], spec.submodule_search_locations)
+			if spec and not spec.origin and spec.submodule_search_locations and len(module.split('.')) > 2:
+				spec = importlib.machinery.PathFinder.find_spec(module.split('.')[2], spec.submodule_search_locations)
+		if spec and spec.origin:
+			knownlibs[module] = spec.origin
+		else:
+			missinglibs.add(module)
 
 	for pkg in Namcap.package.get_installed_packages():
 		for j, fsize, fmode in pkg.files:
-			if not j.startswith("usr/lib/python3"):
-				continue
+			if j.startswith(site_packages_path[1:]):
+				for k, path in knownlibs.items():
+					if j == path[1:]:
+						dependlist[pkg.name].add(k)
+						foundlibs.add(k)
 
-			for k in knownlibs:
-				if j.endswith("site-packages/" + k + "/") or j.endswith("site-packages/" + k + ".py") or \
-						j.endswith("site-packages/" + k + ".so") or \
-						j.endswith("site-packages/" + k + ".abi3.so") or \
-						j.endswith("site-packages/" + k + sysconfig.get_config_var('EXT_SUFFIX')) or \
-						j.endswith("lib-dynload/" + k + sysconfig.get_config_var('EXT_SUFFIX')) or \
-						j.count("/") == 3 and j.endswith("/" + k + ".py") or \
-						j.count("/") == 4 and j.endswith("/" + k + "/") or \
-						pkg.name in workarounds and k in workarounds[pkg.name]:
-					dependlist[pkg.name].add(k)
-					foundlibs.add(k)
+			if j.startswith('usr/lib/girepository-1.0/'):
+				for module in gir_modules:
+					gir_module = module.replace('gi.repository.', '')
+					if j.startswith('usr/lib/girepository-1.0/' + gir_module + '-' + gir_versions[gir_module]):
+						gir_dependlist[pkg.name].add(module)
+						gir_foundlibs.add(module)
 
-	orphans = list(knownlibs - foundlibs)
-	return dependlist, orphans
+	orphans = list(set(knownlibs.keys()).union(missinglibs) - foundlibs)
+	gir_orphans = list(set(gir_modules.keys()) - gir_foundlibs)
+	return dependlist, orphans, gir_dependlist, gir_orphans
 
 
-def get_imports(file):
+def get_imports(fileobj, filename, modules, gir_modules, gir_versions):
 	try:
-		root = ast.parse(file.read())
+		root = ast.parse(fileobj.read())
 	except (SyntaxError, ValueError):
 		# ast.parse() uses compile(), which may raise SyntaxError or ValueError
 		return
@@ -74,53 +104,74 @@ def get_imports(file):
 	for node in ast.walk(root):
 		if isinstance(node, ast.Import):
 			for module in node.names:
-				yield module.name.split('.')[0]
+				modules[module.name].add(filename)
+				if module.name.startswith("gi.repository."):
+					gir_modules[module.name].add(filename)
 		elif isinstance(node, ast.ImportFrom):
 			if node.module and node.level == 0:
-				yield node.module.split('.')[0]
+				for submodule in node.names:
+					modules[node.module + '.' + submodule.name].add(filename)
+					if node.module == "gi.repository":
+						gir_modules[node.module + '.' + submodule.name].add(filename)
+		elif isinstance(node, ast.Call) and \
+			isinstance(node.func, ast.Attribute) and \
+			isinstance(node.func.value, ast.Name) and \
+			node.func.value.id == 'gi' and \
+			node.func.attr == 'require_version':
+				if hasattr(node.args[0], 'value') and hasattr(node.args[1], 'value'):
+					gir_versions[node.args[0].value] = node.args[1].value
+		elif isinstance(node, ast.Call) and \
+			isinstance(node.func, ast.Attribute) and \
+			isinstance(node.func.value, ast.Name) and \
+			node.func.value.id == 'gi' and \
+			node.func.attr == 'require_versions':
+				for module, version in zip(node.args[0].keys, node.args[0].values):
+					if hasattr(module, 'value') and hasattr(version, 'value'):
+						gir_versions[module.value] = version.value
 
 
 class PythonDependencyRule(TarballRule):
 	name = "pydepends"
 	description = "Checks python dependencies"
 	def analyze(self, pkginfo, tar):
-		liblist = defaultdict(set)
-		own_liblist = set()
+		modules = defaultdict(set)
+		gir_modules = defaultdict(set)
+		gir_versions = defaultdict(str)
 
 		for entry in tar:
-			if not entry.isfile() or not entry.name.endswith('.py'):
+			if not entry.isfile():
 				continue
-			own_liblist.add(entry.name[:-3])
 			f = tar.extractfile(entry)
-			for module in get_imports(f):
-				liblist[module].add(entry.name)
+			if not entry.name.endswith('.py') and not is_script(f):
+				continue
+			if is_script(f) and script_type(f) not in ["python", "python3"]:
+				continue
+			get_imports(f, entry.name, modules, gir_modules, gir_versions)
 			f.close()
 
-		for lib in own_liblist:
-			liblist.pop(lib, None)
+		# If Gdk version is not defined, it should be the same as Gtk version
+		if not gir_versions['Gdk']:
+			gir_versions['Gdk'] = gir_versions['Gtk']
+		if not gir_versions['GdkX11']:
+			gir_versions['GdkX11'] = gir_versions['Gtk']
 
-		dependlist, orphans = finddepends(liblist)
+		dependlist, orphans, gir_dependlist, gir_orphans = finddepends(pkginfo['name'], modules, gir_modules, gir_versions)
+		liblist = modules | gir_modules
 
 		# Handle "no package associated" errors
-		self.warnings.extend([("library-no-package-associated %s %s", (i, str(list(liblist[i]))))
-			for i in orphans])
+		self.warnings.extend([("python-module-no-package-associated %s %s", (i, str(list(liblist[i]))))
+			for i in orphans + gir_orphans])
 
-		# Print link-level deps
-		for pkg, libraries in dependlist.items():
+		# Print python module deps
+		for pkg, libraries in (dependlist | gir_dependlist).items():
 			if isinstance(libraries, set):
 				files = list(libraries)
 				needing = set().union(*[liblist[lib] for lib in libraries])
 				reasons = pkginfo.detected_deps.setdefault(pkg, [])
 				reasons.append((
-					"libraries-needed %s %s",
+					"python-modules-needed %s %s",
 					(str(files), str(list(needing)))
 					))
-				self.infos.append(("link-level-dependence %s in %s", (pkg, str(files))))
+				self.infos.append(("python-module-dependence %s in %s", (pkg, str(files))))
 
-		# Check for packages in testing
-		for i in dependlist.keys():
-			p = Namcap.package.load_testing_package(i)
-			q = Namcap.package.load_from_db(i)
-			if p is not None and q is not None and p["version"] == q["version"] :
-				self.warnings.append(("dependency-is-testing-release %s", i))
 # vim: set ts=4 sw=4 noet:

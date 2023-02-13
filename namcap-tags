@@ -73,6 +73,8 @@ pkgconf-no-package-associated %s %s :: Referenced pkg-config file '%s' is an uni
 pkgname-in-description :: Description should not contain the package name.
 potential-non-fhs-info-page %s :: Potential non-FHS info page (%s) found.
 potential-non-fhs-man-page %s :: Potential non-FHS man page (%s) found.
+python-module-dependence %s in %s :: Python dependence (%s) on module %s
+python-module-no-package-associated %s %s :: Referenced python module '%s' is an uninstalled dependency (needed in files %s)
 py-mtime-mtree-warning :: Found .py file unnoticeably newer than associated .pyc/pyo.
 py-mtime-tar-error :: Found .py file newer than associated .pyc/pyo.
 py-mtime-file-name %s :: Python script (%s) is newer than associated .pyc/pyo.
@@ -125,3 +127,4 @@ java-runtime-needed %s :: found class files %s
 libraries-needed %s %s :: libraries %s needed in files %s
 pkgconf-needed %s %s :: pkg-config files %s needed in files %s
 programs-needed %s %s :: programs %s needed in scripts %s
+python-modules-needed %s %s :: python modules %s needed in files %s
