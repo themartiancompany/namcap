@@ -52,7 +52,8 @@ def scanlibs(fileobj, filename, custom_libs, liblist, libdepends, libprovides):
 			continue
 		for tag in section.iter_tags():
 			# DT_SONAME means it provides a library; ignore unversioned (mostly internal) libraries
-			if tag.entry.d_tag == 'DT_SONAME' and not tag.soname.endswith('.so'):
+			if tag.entry.d_tag == 'DT_SONAME' and '.so' in tag.soname and not tag.soname.endswith('.so') and \
+				os.path.dirname(filename) in ['usr/lib', 'usr/lib32']:
 				soname = tag.soname.rsplit('.so', 1)[0] + '.so'
 				libprovides[soname].add(filename)
 			# DT_NEEDED means shared library
@@ -177,6 +178,10 @@ class SharedLibsRule(TarballRule):
 		# Ldd all the files and find all the link and script dependencies
 		dependlist, libdependlist, orphans, missing_provides = finddepends(liblist)
 
+		# Filter out internal dependencies
+		libdependlist = dict(filter(lambda elem: elem[1] != pkginfo["name"], libdependlist.items()))
+		missing_provides = dict(filter(lambda elem: elem[1] != pkginfo["name"], missing_provides.items()))
+
 		# Handle "no package associated" errors
 		self.warnings.extend([("library-no-package-associated %s %s", (i, str(list(liblist[i]))))
 			for i in orphans])
@@ -197,9 +202,7 @@ class SharedLibsRule(TarballRule):
 					))
 				self.infos.append(("link-level-dependence %s in %s", (pkg, str(files))))
 
-		# Check for soname dependencies, filter out internal dependencies
-		libdependlist = dict(filter(lambda elem: elem[1] != pkginfo["name"], libdependlist.items()))
-
+		# Check for soname dependencies
 		for i in libdependlist:
 			if i in pkginfo["depends"]:
 				self.infos.append(("libdepends-detected-satisfied %s %s (%s)", (i, libdependlist[i], str(list(libdepends[i])))))
@@ -213,7 +216,7 @@ class SharedLibsRule(TarballRule):
 			if i.endswith('.so') and i not in libdependlist:
 				self.warnings.append(("libdepends-not-needed %s", i))
 
-		self.infos.append(("libdepends-by-namcap-sight depends=(%s)", ' '.join(libdependlist) ))
+		self.infos.append(("libdepends-by-namcap-sight depends=(%s)", ' '.join(sorted(set(libdependlist) | set(missing_provides.values()))) ))
 
 		# Check provided libraries
 		for i in libprovides:
@@ -224,7 +227,7 @@ class SharedLibsRule(TarballRule):
 
 		for i in pkginfo["provides"]:
 			if i.endswith('.so') and i not in libprovides:
-				self.errors.append(("libprovides-missing %s", i))
+				self.warnings.append(("libprovides-missing %s", i))
 
 		self.infos.append(("libprovides-by-namcap-sight provides=(%s)", ' '.join(libprovides) ))
 
