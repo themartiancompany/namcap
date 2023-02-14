@@ -102,6 +102,8 @@ package() {
 			])
 		self.assertEqual(r.warnings + w, [])
 		self.assertEqual(r.infos + i, [
+			('dependency-detected-satisfied %s (%s)',
+				('hicolor-icon-theme', 'needed for hicolor theme hierarchy')),
 			('depends-by-namcap-sight depends=(%s)', 'hicolor-icon-theme')
 			])
 

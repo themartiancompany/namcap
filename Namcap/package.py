@@ -259,7 +259,8 @@ def get_installed_packages():
 
 def lookup_provider(pkgname, db):
 	for pkg in db.pkgcache:
-		if pkgname in pkg.provides:
+		stripped_provides = [strip_depend_info(d) for d in pkg.provides]
+		if pkgname in stripped_provides:
 			return pkg
 
 def mtree_line(line):
