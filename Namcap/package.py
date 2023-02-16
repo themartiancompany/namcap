@@ -35,13 +35,17 @@ import pycman.config
 pyalpm_handle = pycman.config.init_with_config('/etc/pacman.conf')
 
 DEPENDS_RE = re.compile("([^<>=:]+)([<>]?=.*)?(: .*)?")
+SODEPENDS_RE = re.compile("([^:]+)(: .*)?")
 
 def strip_depend_info(value):
 	"""
-	Strip all the depend version info off ('neon>=0.25.5-4' => 'neon').
+	Strip all the depend version info off ('neon>=0.25.5-4' => 'neon'), keep soname versions.
 	Also remove any trailing description (for optdepends)
 	"""
-	m = DEPENDS_RE.match(value)
+	if '.so=' in value:
+		m = SODEPENDS_RE.match(value)
+	else:
+		m = DEPENDS_RE.match(value)
 	if m is None:
 		raise ValueError("Invalid dependency specification")
 	return m.group(1)
