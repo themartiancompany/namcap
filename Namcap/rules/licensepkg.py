@@ -32,21 +32,9 @@ special_licenses = [
 ]
 
 import os.path
-import pathlib
 from Namcap.ruleclass import *
+from Namcap.package import load_from_db
 from Namcap.util import is_debug
-
-
-def list_pkg_license_contents(tar):
-	return [x for x in tar.getnames() if x.startswith('usr/share/licenses') and not x.endswith('/')]
-
-
-def list_license_directories(license_paths):
-	return [pathlib.Path(x).parent.name for x in license_paths]
-
-
-def list_common_licenses():
-	return [x.lower() for x in os.listdir('/usr/share/licenses/common')]
 
 
 class package(TarballRule):
@@ -54,6 +42,9 @@ class package(TarballRule):
 	description = "Verifies license is included in a package file"
 
 	def analyze(self, pkginfo, tar):
+		common_licenses = [x.lower() for x in os.listdir('/usr/share/licenses/common')]
+		need_licensefile = False
+
 		if is_debug(pkginfo):
 			return
 
@@ -61,26 +52,36 @@ class package(TarballRule):
 			self.errors.append(("missing-license", ()))
 			return
 
-		license_paths = list_pkg_license_contents(tar)
-		license_dirs = list_license_directories(license_paths)
-		common_licenses = list_common_licenses()
-
 		# Check all licenses for validity
 		for license in pkginfo["license"]:
 			lowerlicense, _, sublicense = license.lower().partition(':')
-
-			is_custom_license = lowerlicense.startswith('custom')
-			is_special_license = lowerlicense in special_licenses
-			is_common_license = lowerlicense in common_licenses
-
 			# Custom licenses and licenses listed in special_licenses always need to ship a license file
-			if is_custom_license or is_special_license:
-				if pkginfo["name"] not in license_dirs:
-					self.errors.append(("missing-custom-license-dir usr/share/licenses/%s", pkginfo["name"]))
-				elif not license_paths:
-					self.errors.append(("missing-custom-license-file usr/share/licenses/%s/*", pkginfo["name"]))
+			if lowerlicense == 'custom' or lowerlicense in special_licenses:
+				need_licensefile = True
 			# Flag licenses that aren't in common/ and not marked as `custom`
-			elif not is_common_license:
+			elif lowerlicense not in common_licenses:
 				self.errors.append(("not-a-common-license %s", license))
+
+		if (need_licensefile):
+			# Check if license dir is a symlink
+			symlicensedir = next(filter((lambda f: f.name == 'usr/share/licenses/' + pkginfo["name"] and f.issym()), tar), None)
+			if symlicensedir:
+				linklead = os.path.dirname(symlicensedir.name)
+				# os.path.join drops the 1st arg if the 2nd one is absolute
+				linkdest = os.path.join(linklead, symlicensedir.linkname)
+				linkdest = os.path.normpath(linkdest).lstrip('/').rstrip('/')
+				linkpkgname = os.path.basename(linkdest)
+				# if the symlink points to licenses dir and the linked package is in depends, then search license file in it
+				if linkdest.startswith('usr/share/licenses/') and linkpkgname in pkginfo["depends"]:
+					linkpkginfo = load_from_db(linkpkgname)
+					if linkpkginfo:
+						pkginfo = linkpkginfo
+
+			filenames = set(name.rstrip('/') for name,_,_ in pkginfo['files'])
+
+			if not 'usr/share/licenses/' + pkginfo['name'] in filenames:
+				self.errors.append(("missing-custom-license-dir usr/share/licenses/%s", pkginfo['name']))
+			elif not any(filename.startswith('usr/share/licenses/' + pkginfo['name'] + '/') for filename in filenames):
+					self.errors.append(("missing-custom-license-file usr/share/licenses/%s/*", pkginfo['name']))
 
 # vim: set ts=4 sw=4 noet:
