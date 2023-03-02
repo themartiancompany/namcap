@@ -40,6 +40,7 @@ from . import (
   missingbackups,
   pathdepends,
   perllocal,
+  pcdepends,
   permissions,
   py_mtime,
   pydepends,
