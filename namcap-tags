@@ -92,13 +92,15 @@ using-dl-sourceforge :: Attempting to use dl sourceforge domain, use downloads.s
 variable-not-array %s :: Variable %s is not an array.
 libprovides-satisfied %s %s :: Provided library '%s' is specified (provided by file %s)
 libprovides-unsatisfied %s %s :: Provided library '%s' is not specified (provided by file %s)
-libprovides-missing %s :: Specified library '%s' is unversioned or not found in package
+libprovides-missing %s :: Specified library '%s' is not found in public libdirs of package
+libprovides-without-version %s :: Provided library %s specified without version number
 libprovides-by-namcap-sight provides=(%s) :: Provides as namcap sees them: provides=(%s)
-libdepends-missing-provides %s %s :: Soname '%s' is not specified as provides by %s yet, omitting it
+libdepends-missing-provides %s %s (%s) :: Soname '%s' is not specified as provides by %s yet (needed in files %s)
 libdepends-detected-satisfied %s %s (%s) :: Soname dependency '%s' provided by %s is satisfied (needed in files %s)
 libdepends-detected-but-optional %s %s (%s) :: Soname dependency '%s' provided by %s detected but optional (needed in files %s)
 libdepends-detected-not-included %s %s (%s) :: Soname dependency '%s' provided by %s detected and not included (needed in files %s)
 libdepends-not-needed %s :: Soname dependency included, but may not needed ('%s')
+libdepends-without-version %s :: Soname dependency %s specified without version number
 libdepends-by-namcap-sight depends=(%s) :: Soname depends as namcap sees them: depends=(%s)
 
 # dependency tags
@@ -106,10 +108,12 @@ dependency-covered-by-link-dependence %s :: Dependency covered by dependencies f
 dependency-detected-not-included %s (%s) :: Dependency %s detected and not included (%s)
 dependency-detected-but-optional %s (%s) :: Dependency %s detected but optional (%s)
 dependency-detected-satisfied %s (%s) :: Dependency %s detected and satisfied (%s)
+dependency-duplicated-optdepend %s :: Dependency %s specified in both depends and optdepends
 dependency-implicitly-satisfied %s (%s) :: Dependency %s detected and implicitly satisfied (%s)
 dependency-implicitly-satisfied-optional %s (%s) :: Dependency %s detected and implicitly satisfied but optional (%s)
 dependency-is-testing-release %s :: Dependency '%s' on your system is a testing release
 dependency-not-needed %s :: Dependency included, but may not needed ('%s')
+dependency-satisfied-optdepend %s :: Dependency %s specified in optdepends but implicitly satisfied by depends
 depends-by-namcap-sight depends=(%s) :: Depends as namcap sees them: depends=(%s)
 
 # dependency reasons

@@ -88,6 +88,10 @@ def analyze_depends(pkginfo):
 	for plist in smartprovides.values():
 		allprovides |= plist
 
+	# Common deps
+	[errors.append(("dependency-duplicated-optdepend %s", duplicated_optdepend)) for duplicated_optdepend in explicitdepend & optdepend]
+	[infos.append(("dependency-satisfied-optdepend %s", satisfied_optdepend)) for satisfied_optdepend in implicitdepend & optdepend]
+
 	# Do the actual message outputting stuff
 	for i in dependlist:
 		# compute dependency reason
