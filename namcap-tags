@@ -70,6 +70,8 @@ not-a-common-license %s :: %s is not a common license (it's not in /usr/share/li
 not-enough-checksums %s %i needed :: Not enough %s: %i needed
 package-name-in-uppercase :: No upper case letters in package names
 perllocal-pod-present %s :: perllocal.pod found in %s.
+pkgconf-dependence %s in %s :: pkg-config dependence (%s) in file %s
+pkgconf-no-package-associated %s %s :: Referenced pkg-config file '%s' is an uninstalled dependency (needed in files %s)
 pkgname-in-description :: Description should not contain the package name.
 potential-non-fhs-info-page %s :: Potential non-FHS info page (%s) found.
 potential-non-fhs-man-page %s :: Potential non-FHS man page (%s) found.
@@ -123,4 +125,5 @@ hicolor-icon-theme-needed-for-hicolor-dir :: needed for hicolor theme hierarchy
 kdebase-runtime-needed %s :: needed for programs %s
 java-runtime-needed %s :: found class files %s
 libraries-needed %s %s :: libraries %s needed in files %s
+pkgconf-needed %s %s :: pkg-config files %s needed in files %s
 programs-needed %s %s :: programs %s needed in scripts %s
