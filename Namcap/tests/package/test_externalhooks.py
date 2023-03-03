@@ -65,10 +65,10 @@ post_install() {
 				Namcap.rules.externalhooks.ExternalHooksRule
 				)
 		self.assertEqual(r.errors, [])
-		self.assertEqual(r.warnings, [('external-hooks-warning', ())])
-		self.assertEqual(r.infos,
-			[('external-hooks-name %s', 'update-desktop-database'),
-			('external-hooks-name %s', 'gtk-update-icon-cache')])
+		self.assertEqual(r.warnings,
+			[('external-hooks %s', 'update-desktop-database'),
+			('external-hooks %s', 'gtk-update-icon-cache')])
+		self.assertEqual(r.infos, [])
 	def test_good_install(self):
 		pkgfile = "__namcap_test_externalhooks-1.0-1-any.pkg.tar"
 		with open(os.path.join(self.tmpdir, "PKGBUILD"), "w") as f:

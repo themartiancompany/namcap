@@ -24,10 +24,8 @@ elffile-without-relro %s :: ELF file ('%s') lacks FULL RELRO, check LDFLAGS.
 elffile-unstripped %s :: ELF file ('%s') is unstripped.
 empty-directory %s :: Directory (%s) is empty
 error-running-rule %s :: Error running rule '%s'
-external-hooks-name %s :: .INSTALL file runs a command (%s) provided by hooks.
-external-hooks-warning :: .INSTALL file runs a command provided by hooks.
-external-hooks-unneeded-name %s :: unneeded dependency on a package (%s) run when needed by hooks.
-external-hooks-unneeded-warning :: unneeded dependency on a package run when needed by hooks.
+external-hooks %s :: .INSTALL file runs a command (%s) provided by hooks.
+external-hooks-unneeded %s :: unneeded dependency on a package (%s) run when needed by hooks.
 extra-var-begins-without-underscore %s :: Non standard variable '%s' doesn't start with an underscore
 file-in-non-standard-dir %s :: File (%s) exists in a non-standard directory.
 file-in-temporary-dir %s :: File (%s) is in a temporary directory.

@@ -46,7 +46,6 @@ class ExternalHooksRule(TarballRule):
 		f.close()
 		for command in self.hooked:
 			if command in text:
-				self.warnings = [('external-hooks-warning', ())]
-				self.infos.append(('external-hooks-name %s', command))
+				self.warnings.append(('external-hooks %s', command))
 
 # vim: set ts=4 sw=4 noet:
