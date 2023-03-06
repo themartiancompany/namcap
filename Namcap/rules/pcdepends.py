@@ -47,16 +47,17 @@ def scanpcfiles(pkg_pc_files, pclist):
 				stderr=subprocess.PIPE).communicate()
 		for j in var[0].decode('ascii').splitlines():
 			# Remove version numbers
-			g = j.split(' ', 1)[0]
-			if g != None:
-				dep = os.path.dirname(f) + '/' + g + '.pc'
-				anydep = 'usr/share/pkgconfig/' + g + '.pc'
-				if os.path.isfile('/' + dep):
-					pclist[dep].add(f)
-				elif os.path.isfile('/' + anydep):
-					pclist[anydep].add(f)
+			pc_pkg = j.split(' ', 1)[0]
+			if pc_pkg != None:
+				var = subprocess.Popen([pkgconfig_command, '--maximum-traverse-depth', '1', '--path',  pc_pkg],
+						env = {"LANG": "C"},
+						stdout=subprocess.PIPE,
+						stderr=subprocess.PIPE).communicate()
+				pc_path = var[0].decode('ascii').splitlines()
+				if pc_path:
+					pclist[pc_path[0][1:]].add(f)
 				else:
-					pclist[g + '.pc'].add(f)
+					pclist[pc_pkg + '.pc'].add(f)
 
 def finddepends(pclist):
 	"""
