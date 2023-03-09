@@ -2,13 +2,37 @@
 image: archlinux:base-devel
 
 stages:
+  - lint
   - test
 
-test:
+ruff:
+  stage: lint
+  needs: []
+  only:
+    - merge_requests
+  before_script:
+    - pacman -Syu --needed --noconfirm ruff
+  script:
+    - ruff -q .
+
+black:
+  stage: lint
+  needs: []
+  only:
+    - merge_requests
+  before_script:
+    - pacman -Syu --needed --noconfirm python-black
+  script:
+    - black --check .
+
+pytest:
   stage: test
   needs: []
+  only:
+    - branches
+    - merge_requests
   before_script:
-    - pacman -Syu --needed --noconfirm python python-pytest python-pytest-cov pyalpm python-pyelftools python-six
+    - pacman -Syu --needed --noconfirm python-pytest python-pytest-cov pyalpm python-pyelftools python-six
     # makepkg does not like running as root
     - useradd --home-dir / --no-create-home builduser
   script:

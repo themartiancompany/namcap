@@ -1,7 +1,7 @@
-# 
+#
 # namcap rules - pkgname
 # Copyright (C) 2009 Hugo Doria <hugo@archlinux.org>
-# 
+#
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation; either version 2 of the License, or
@@ -17,14 +17,17 @@
 #   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 
-from Namcap.ruleclass import *
+from Namcap.ruleclass import PkgInfoRule
+
 
 class package(PkgInfoRule):
-	name = "pkgnameindesc"
-	description = "Verifies if the package name is included on package description"
-	def analyze(self, pkginfo, tar):
-		if 'name' in pkginfo and 'desc' in pkginfo:
-			if pkginfo["name"].lower() in pkginfo["desc"].lower().split():
-				self.warnings.append(("pkgname-in-description", ()))
+    name = "pkgnameindesc"
+    description = "Verifies if the package name is included on package description"
+
+    def analyze(self, pkginfo, tar):
+        if "name" in pkginfo and "desc" in pkginfo:
+            if pkginfo["name"].lower() in pkginfo["desc"].lower().split():
+                self.warnings.append(("pkgname-in-description", ()))
+
 
 # vim: set ts=4 sw=4 noet:

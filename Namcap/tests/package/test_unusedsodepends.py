@@ -24,8 +24,9 @@ import os
 from Namcap.tests.makepkg import MakepkgTest
 import Namcap.rules.unusedsodepends
 
+
 class UnusedSodependsTest(MakepkgTest):
-	pkgbuild = """
+    pkgbuild = """
 pkgname=__namcap_test_unusedsodepends
 pkgver=1.0
 pkgrel=1
@@ -45,22 +46,17 @@ package() {
   install -D -m 755 "$srcdir/main" "$pkgdir/usr/bin/evilprogram"
 }
 """
-	def test_unusedsodepends_files(self):
-		"Package with binaries linking to unused shared libraries"
-		pkgfile = "__namcap_test_unusedsodepends-1.0-1-%(arch)s.pkg.tar" % { "arch": self.arch }
-		with open(os.path.join(self.tmpdir, "PKGBUILD"), "w") as f:
-			f.write(self.pkgbuild)
-		self.run_makepkg()
-		pkg, r = self.run_rule_on_tarball(
-				os.path.join(self.tmpdir, pkgfile),
-				Namcap.rules.unusedsodepends.package
-				)
-		self.assertEqual(r.errors, [])
-		self.assertEqual(r.warnings, [
-			("unused-sodepend %s %s",
-			("/usr/lib/libm.so.6", "usr/bin/evilprogram"))
-		])
-		self.assertEqual(r.infos, [])
+
+    def test_unusedsodepends_files(self):
+        "Package with binaries linking to unused shared libraries"
+        pkgfile = "__namcap_test_unusedsodepends-1.0-1-%(arch)s.pkg.tar" % {"arch": self.arch}
+        with open(os.path.join(self.tmpdir, "PKGBUILD"), "w") as f:
+            f.write(self.pkgbuild)
+        self.run_makepkg()
+        pkg, r = self.run_rule_on_tarball(os.path.join(self.tmpdir, pkgfile), Namcap.rules.unusedsodepends.package)
+        self.assertEqual(r.errors, [])
+        self.assertEqual(r.warnings, [("unused-sodepend %s %s", ("/usr/lib/libm.so.6", "usr/bin/evilprogram"))])
+        self.assertEqual(r.infos, [])
+
 
 # vim: set ts=4 sw=4 noet:
-

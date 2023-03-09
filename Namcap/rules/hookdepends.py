@@ -19,30 +19,32 @@
 #
 
 import re
-from Namcap.ruleclass import *
+from Namcap.ruleclass import TarballRule
+
 
 class HookDependsRule(TarballRule):
-	name = "hookdepends"
-	description = "Check for redundant hook dependencies"
-	subrules = [
-		{
-			'path': '^usr/share/applications/.*\.desktop$',
-			'dep': 'desktop-file-utils',
-		},
-		{
-			'path': '^usr/share/mime$',
-			'dep': 'shared-mime-info',
-		}
-	]
-	def analyze(self, pkginfo, tar):
-		names = [entry.name for entry in tar]
-		for subrule in self.subrules:
-			dep = subrule['dep']
-			if dep not in pkginfo['depends']:
-				continue
-			pattern = re.compile(subrule['path'])
-			if any(pattern.search(n) for n in names):
-				self.warnings.append(('external-hooks-unneeded %s', dep))
+    name = "hookdepends"
+    description = "Check for redundant hook dependencies"
+    subrules = [
+        {
+            "path": "^usr/share/applications/.*\.desktop$",
+            "dep": "desktop-file-utils",
+        },
+        {
+            "path": "^usr/share/mime$",
+            "dep": "shared-mime-info",
+        },
+    ]
+
+    def analyze(self, pkginfo, tar):
+        names = [entry.name for entry in tar]
+        for subrule in self.subrules:
+            dep = subrule["dep"]
+            if dep not in pkginfo["depends"]:
+                continue
+            pattern = re.compile(subrule["path"])
+            if any(pattern.search(n) for n in names):
+                self.warnings.append(("external-hooks-unneeded %s", dep))
 
 
 # vim: set ts=4 sw=4 noet:

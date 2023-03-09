@@ -2,7 +2,7 @@
 #
 # namcap tests - missingvars
 # Copyright (C) 2011 Rémy Oudompheng <remy@archlinux.org>
-# 
+#
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation; either version 2 of the License, or
@@ -17,13 +17,14 @@
 #   along with this program; if not, write to the Free Software
 #   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
 #   USA
-# 
+#
 
 from Namcap.tests.pkgbuild_test import PkgbuildTest
-from Namcap.rules.missingvars import *
+from Namcap.rules.missingvars import ChecksumsRule, TagsRule
+
 
 class NamcapChecksumTest(PkgbuildTest):
-	pkgbuild1 = """
+    pkgbuild1 = """
 # Maintainer: Arch Linux <archlinux@example.com>
 # Contributor: Arch Linux <archlinux@example.com>
 
@@ -47,7 +48,7 @@ package() {
   true
 }
 """
-	pkgbuild2 = """
+    pkgbuild2 = """
 # Maintainer: Arch Linux <archlinux@example.com>
 # Contributor: Arch Linux <archlinux@example.com>
 
@@ -73,8 +74,8 @@ package() {
 }
 """
 
-	# packages with no sources (FS#23258)
-	pkgbuild_no_sources = """
+    # packages with no sources (FS#23258)
+    pkgbuild_no_sources = """
 # Maintainer: Arch Linux <archlinux@example.com>
 # Contributor: Arch Linux <archlinux@example.com>
 
@@ -102,8 +103,8 @@ make DESTDIR="${pkgdir}" install
 }
 """
 
-	# package using CARCH (FS#32568)
-	pkgbuild_sha512 = """
+    # package using CARCH (FS#32568)
+    pkgbuild_sha512 = """
 pkgname=chromium-libpdf
 pkgver=24.0.1312.5
 pkgrel=1
@@ -126,8 +127,8 @@ build() {
 }
 """
 
-	# package using "SKIP", new in pacman 4.1 (FS#34647)
-	pkgbuild_skip = """
+    # package using "SKIP", new in pacman 4.1 (FS#34647)
+    pkgbuild_skip = """
 pkgname=youtube-dl
 pkgver=2013.02.25
 pkgrel=1
@@ -144,48 +145,42 @@ package() {
 }
 """
 
-	test_valid = PkgbuildTest.valid_tests
+    test_valid = PkgbuildTest.valid_tests
 
-	def preSetUp(self):
-		self.rule = ChecksumsRule
+    def preSetUp(self):
+        self.rule = ChecksumsRule
 
-	def test_example1(self):
-		# Example 1
-		r = self.run_on_pkg(self.pkgbuild1)
-		self.assertEqual(r.errors, [
-			("improper-checksum %s %s", ("md5sums",
-			 "look-this-is-an-invalid-checksum"))
-		])
-		self.assertEqual(r.warnings, [])
-		self.assertEqual(r.infos, [])
+    def test_example1(self):
+        # Example 1
+        r = self.run_on_pkg(self.pkgbuild1)
+        self.assertEqual(r.errors, [("improper-checksum %s %s", ("md5sums", "look-this-is-an-invalid-checksum"))])
+        self.assertEqual(r.warnings, [])
+        self.assertEqual(r.infos, [])
 
-	def test_example2(self):
-		# Example 2
-		r = self.run_on_pkg(self.pkgbuild2)
-		self.assertEqual(r.errors, [
-			("not-enough-checksums %s %i needed", ("md5sums", 2))
-		])
-		self.assertEqual(r.warnings, [])
-		self.assertEqual(r.infos, [])
+    def test_example2(self):
+        # Example 2
+        r = self.run_on_pkg(self.pkgbuild2)
+        self.assertEqual(r.errors, [("not-enough-checksums %s %i needed", ("md5sums", 2))])
+        self.assertEqual(r.warnings, [])
+        self.assertEqual(r.infos, [])
 
-	def test_example_no_sources(self):
-		# Example with no sources (FS #23259)
-		r = self.run_on_pkg(self.pkgbuild_no_sources)
-		self.assertEqual(r.errors, [
-			("too-many-checksums %s %i needed", ("md5sums", 0))
-		])
-		self.assertEqual(r.warnings, [])
-		self.assertEqual(r.infos, [])
+    def test_example_no_sources(self):
+        # Example with no sources (FS #23259)
+        r = self.run_on_pkg(self.pkgbuild_no_sources)
+        self.assertEqual(r.errors, [("too-many-checksums %s %i needed", ("md5sums", 0))])
+        self.assertEqual(r.warnings, [])
+        self.assertEqual(r.infos, [])
 
-	def test_example_valid(self):
-		for p in [self.pkgbuild_sha512, self.pkgbuild_skip]:
-			r = self.run_on_pkg(p)
-			self.assertEqual(r.errors, [])
-			self.assertEqual(r.warnings, [])
-			self.assertEqual(r.infos, [])
+    def test_example_valid(self):
+        for p in [self.pkgbuild_sha512, self.pkgbuild_skip]:
+            r = self.run_on_pkg(p)
+            self.assertEqual(r.errors, [])
+            self.assertEqual(r.warnings, [])
+            self.assertEqual(r.infos, [])
+
 
 class NamcapMaintainerTagTest(PkgbuildTest):
-	pkgbuild1 = """
+    pkgbuild1 = """
 pkgname=mypackage
 pkgver=1.0
 pkgrel=1
@@ -211,16 +206,17 @@ package() {
 }
 """
 
-	test_valid = PkgbuildTest.valid_tests
+    test_valid = PkgbuildTest.valid_tests
 
-	def preSetUp(self):
-		self.rule = TagsRule
+    def preSetUp(self):
+        self.rule = TagsRule
 
-	def test_example1(self):
-		# Example 1
-		r = self.run_on_pkg(self.pkgbuild1)
-		self.assertEqual(r.errors, [])
-		self.assertEqual(r.warnings, [("missing-maintainer", ())])
-		self.assertEqual(r.infos, [("missing-contributor", ())] )
+    def test_example1(self):
+        # Example 1
+        r = self.run_on_pkg(self.pkgbuild1)
+        self.assertEqual(r.errors, [])
+        self.assertEqual(r.warnings, [("missing-maintainer", ())])
+        self.assertEqual(r.infos, [("missing-contributor", ())])
+
 
 # vim: set ts=4 sw=4 noet:

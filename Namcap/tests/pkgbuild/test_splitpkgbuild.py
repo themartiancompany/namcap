@@ -2,7 +2,7 @@
 #
 # namcap tests - sfurl
 # Copyright (C) 2011 Rémy Oudompheng <remy@archlinux.org>
-# 
+#
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation; either version 2 of the License, or
@@ -17,13 +17,14 @@
 #   along with this program; if not, write to the Free Software
 #   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
 #   USA
-# 
+#
 
 from Namcap.tests.pkgbuild_test import PkgbuildTest
 import Namcap.rules.splitpkgbuild as module
 
+
 class NamcapSplitPkgbuildTest(PkgbuildTest):
-	pkgbuild1 = """
+    pkgbuild1 = """
 # Maintainer: Arch Linux <archlinux@example.com>
 # Contributor: Arch Linux <archlinux@example.com>
 
@@ -53,20 +54,21 @@ package_prog1() {
 }
 """
 
-	test_valid = PkgbuildTest.valid_tests
+    test_valid = PkgbuildTest.valid_tests
 
-	def preSetUp(self):
-		self.rule = module.PackageFunctionsRule
+    def preSetUp(self):
+        self.rule = module.PackageFunctionsRule
 
-	def test_example1(self):
-		"Example 1 : missing package_* function"
-		r = self.run_on_pkg(self.pkgbuild1)
-		self.assertEqual(r.errors, [("missing-pkgfunction %s", "prog2")])
-		self.assertEqual(r.warnings, [])
-		self.assertEqual(r.infos, [])
+    def test_example1(self):
+        "Example 1 : missing package_* function"
+        r = self.run_on_pkg(self.pkgbuild1)
+        self.assertEqual(r.errors, [("missing-pkgfunction %s", "prog2")])
+        self.assertEqual(r.warnings, [])
+        self.assertEqual(r.infos, [])
+
 
 class NamcapSplitMakedepsTest(PkgbuildTest):
-	pkgbuild1 = """
+    pkgbuild1 = """
 # Maintainer: Arch Linux <archlinux@example.com>
 # Contributor: Arch Linux <archlinux@example.com>
 
@@ -104,18 +106,17 @@ package_prog2() {
 }
 """
 
-	test_valid = PkgbuildTest.valid_tests
+    test_valid = PkgbuildTest.valid_tests
 
-	def preSetUp(self):
-		self.rule = module.SplitPkgMakedepsRule
+    def preSetUp(self):
+        self.rule = module.SplitPkgMakedepsRule
 
-	def test_example1(self):
-		"Example 1: missing makedepend"
-		r = self.run_on_pkg(self.pkgbuild1)
-		self.assertEqual(r.errors, [("missing-makedeps %s",
-			str(["lib1", "lib2"]))])
-		self.assertEqual(r.warnings, [])
-		self.assertEqual(r.infos, [])
+    def test_example1(self):
+        "Example 1: missing makedepend"
+        r = self.run_on_pkg(self.pkgbuild1)
+        self.assertEqual(r.errors, [("missing-makedeps %s", str(["lib1", "lib2"]))])
+        self.assertEqual(r.warnings, [])
+        self.assertEqual(r.infos, [])
 
 
 # vim: set ts=4 sw=4 noet:

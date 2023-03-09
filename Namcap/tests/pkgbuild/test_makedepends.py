@@ -22,8 +22,9 @@
 from Namcap.tests.pkgbuild_test import PkgbuildTest
 import Namcap.rules.makedepends as module
 
+
 class NamcapRedundantMakedependsTest(PkgbuildTest):
-	pkgbuild1 = """
+    pkgbuild1 = """
 # Maintainer: Arch Linux <archlinux at example.com>
 # Contributor: Arch Linux <archlinux at example.com>
 
@@ -48,21 +49,21 @@ package() {
   true
 }
 """
-	test_valid = PkgbuildTest.valid_tests
+    test_valid = PkgbuildTest.valid_tests
 
-	def preSetUp(self):
-		self.rule = module.RedundantMakedepends
+    def preSetUp(self):
+        self.rule = module.RedundantMakedepends
 
-	def test_example1(self):
-		# Example 1
-		r = self.run_on_pkg(self.pkgbuild1)
-		self.assertEqual(r.errors, [])
-		self.assertEqual(set(r.warnings),
-			set(("redundant-makedep %s", i) for i in ["lib1" ,"lib2"]))
-		self.assertEqual(r.infos, [])
+    def test_example1(self):
+        # Example 1
+        r = self.run_on_pkg(self.pkgbuild1)
+        self.assertEqual(r.errors, [])
+        self.assertEqual(set(r.warnings), set(("redundant-makedep %s", i) for i in ["lib1", "lib2"]))
+        self.assertEqual(r.infos, [])
+
 
 class NamcapVCSMakedependsTest(PkgbuildTest):
-	pkgbuild1 = """
+    pkgbuild1 = """
 # Maintainer: Arch Linux <archlinux at example.com>
 # Contributor: Arch Linux <archlinux at example.com>
 
@@ -90,25 +91,25 @@ package() {
   true
 }
 """
-	test_valid = PkgbuildTest.valid_tests
+    test_valid = PkgbuildTest.valid_tests
 
-	def preSetUp(self):
-		self.rule = module.VCSMakedepends
+    def preSetUp(self):
+        self.rule = module.VCSMakedepends
 
-	def test_example1(self):
-		# Example 1
-		makedeps = ['breezy', 'git', 'mercurial', 'subversion']
-		r = self.run_on_pkg(self.pkgbuild1)
-		self.assertEqual(r.errors, [])
-		self.assertEqual(set(r.warnings),
-			set(("missing-vcs-makedeps %s", i) for i in makedeps))
-		self.assertEqual(r.infos, [])
+    def test_example1(self):
+        # Example 1
+        makedeps = ["breezy", "git", "mercurial", "subversion"]
+        r = self.run_on_pkg(self.pkgbuild1)
+        self.assertEqual(r.errors, [])
+        self.assertEqual(set(r.warnings), set(("missing-vcs-makedeps %s", i) for i in makedeps))
+        self.assertEqual(r.infos, [])
 
-	def test_example2(self):
-		# Example 2
-		r = self.run_on_pkg(self.pkgbuild1 + 'source=(gitsomething)')
-		self.assertEqual(r.errors, [])
-		self.assertEqual(r.warnings, [])
-		self.assertEqual(r.infos, [])
+    def test_example2(self):
+        # Example 2
+        r = self.run_on_pkg(self.pkgbuild1 + "source=(gitsomething)")
+        self.assertEqual(r.errors, [])
+        self.assertEqual(r.warnings, [])
+        self.assertEqual(r.infos, [])
+
 
 # vim: set ts=4 sw=4 noet:
