@@ -1,27 +1,26 @@
-# What Is It?
+# Namcap
 
-Namcap is a tool for pacman checking binary packages and source PKGBUILDs for common packaging errors.
+Namcap is a lint tool [pacman](https://gitlab.archlinux.org/pacman/pacman) packages that checks binary packages and source PKGBUILDs for common packaging errors.
+
+Namcap’s source is available [on Arch Linux’s GitLab instance](https://gitlab.archlinux.org/pacman/namcap).
 
 # How Can I Help?
 
 There are several ways that you can contribute and help namcap’s development.
-You can contribute with code, patches, tests, bugs and feature requests.
+You can contribute with code, patches, tests, bugs, and feature requests.
 
-To report a bug or a feature request for namcap, file a bug in the Packages:Extra section of the Arch Linux bugtracker and the set the importance accordingly.
+To report a bug or a feature request for namcap, file an issue in the [issue tracker](https://gitlab.archlinux.org/pacman/namcap/-/issues).
 If you’re reporting a bug, please give concrete examples of packages where the problem occurs.
 
 Minimal examples (very simple packages forged to exhibit unexpected behaviour from namcap) are also welcome to extend namcap’s test suite.
 
-If you’ve a patch (fixing a bug or a new namcap module), then you can send it to the arch-projects mailing list.
-Namcap development is managed with git, so git-formatted patches are preferred.
-
-Namcap’s source is available on:
-
-http://projects.archlinux.org/?p=namcap.git;a=summary
+If you have a patch (fixing a bug or a new namcap module), then you can open a [merge request](https://gitlab.archlinux.org/pacman/namcap/-/merge_requests).
+One could also send patches to the arch-projects mailing list and hope somebody else opens an MR.
+Namcap development is managed with git, so patches prepared with `git format-patch` are preferred.
 
 # How to Use
 
-To run namcap on a PKGBUILD or a binary pkg.tar.xz:
+To run namcap on a PKGBUILD source or a built binary package:
 
 ``` console
 $ namcap FILENAME
@@ -41,10 +40,10 @@ $ namcap -h
 
 # Understanding the Output
 
-Namcap uses a system of tags to classify the output. Currently, tags are of three types, errors (denoted by E), warnings (denoted by W) and informational
+Namcap uses a system of tags to classify the output. Currently, tags are of three types, errors (denoted by E), warnings (denoted by W), and informational
 (denoted by I).
 
-An error is important and should be fixed immediately; mostly they relate to insufficient security, missing licenses or permission problems.
+An error is important and should be fixed immediately; mostly they relate to insufficient security, missing licenses, or permission problems.
 
 Normally namcap prints a human-readable explanation (sometimes with suggestions on how to fix the problem).
 If you want output which can be easily parsed by a program, then pass the `-m` (machine-readable) flag to namcap.
@@ -145,4 +144,4 @@ class NamcapPkgnameInDescTest(PkgbuildTest):
 
 # More Information
 
-You can find more information about namcap on [namcap’s wiki page](http://wiki.archlinux.org/index.php/Namcap)
+You can find more information about namcap on [namcap’s wiki page](https://wiki.archlinux.org/title/Namcap)
