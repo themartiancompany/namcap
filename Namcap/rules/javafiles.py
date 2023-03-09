@@ -25,7 +25,6 @@ class JavaFiles(TarballRule):
 	name = "javafiles"
 	description = "Check for existence of Java classes or JARs"
 	def analyze(self, pkginfo, tar):
-		has_java_classes = False
 		javas = []
 		for entry in tar:
 			# is it a regular file ?

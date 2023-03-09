@@ -82,7 +82,6 @@ def show_messages(name, key, messages):
 
 def process_realpackage(package, modules):
 	"""Runs namcap checks over a package tarball"""
-	extracted = 0
 	pkgtar = open_package(package)
 
 	if not pkgtar:
@@ -122,7 +121,7 @@ def process_pkginfo(pkginfo, modules):
 	for i in modules:
 		rule = get_modules()[i]()
 		if isinstance(rule, Namcap.ruleclass.PkgInfoRule):
-			ret = rule.analyze(pkginfo, None)
+			rule.analyze(pkginfo, None)
 
 		# Output the messages
 		if "base" in pkginfo:
@@ -141,7 +140,7 @@ def process_pkgbuild(package, modules):
 	# what pacman.load is for?
 	pkginfo = Namcap.package.load_from_pkgbuild(package)
 
-	if pkginfo == None:
+	if pkginfo is None:
 		print("Error: %s is not a valid PKGBUILD" % package)
 		return 1
 
@@ -149,7 +148,7 @@ def process_pkgbuild(package, modules):
 	for i in modules:
 		rule = get_modules()[i]()
 		if isinstance(rule, Namcap.ruleclass.PkgbuildRule):
-			ret = rule.analyze(pkginfo, package)
+			rule.analyze(pkginfo, package)
 		# Output the messages
 		if "base" in pkginfo:
 			name = "PKGBUILD (" + pkginfo["base"] + ")"

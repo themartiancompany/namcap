@@ -28,7 +28,7 @@ class package(PkgbuildRule):
 	def analyze(self, pkginfo, tar):
 		if "backup" in pkginfo:
 			for item in pkginfo["backup"]:
-				if re.match('^/', item) != None:
+				if re.match("^/", item) is not None:
 					self.errors.append(("backups-preceding-slashes", ()))
 
 # vim: set ts=4 sw=4 noet:

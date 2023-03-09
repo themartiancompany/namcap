@@ -21,7 +21,6 @@
 """Checks dependencies resulting from pkg-config files."""
 
 from collections import defaultdict
-import os
 import subprocess
 import Namcap.package
 from Namcap.ruleclass import *
@@ -48,7 +47,7 @@ def scanpcfiles(pkg_pc_files, pclist):
 		for j in var[0].decode('ascii').splitlines():
 			# Remove version numbers
 			pc_pkg = j.split(' ', 1)[0]
-			if pc_pkg != None:
+			if pc_pkg is not None:
 				var = subprocess.Popen([pkgconfig_command, '--maximum-traverse-depth', '1', '--path',  pc_pkg],
 						env = {"LANG": "C"},
 						stdout=subprocess.PIPE,

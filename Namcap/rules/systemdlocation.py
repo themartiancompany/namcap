@@ -35,7 +35,7 @@ class systemdlocationRule(TarballRule):
 		for entry in tar:
 			# ignore the actual directory, as that's handled by emptydirs
 			if entry.isdir():
-				continue;
+				continue
 
 			name = os.path.normpath(entry.name)
 

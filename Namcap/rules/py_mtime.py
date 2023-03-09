@@ -118,7 +118,7 @@ class package(TarballRule):
 	def analyze(self, pkginfo, tar):
 		mtree_status = _try_mtree(tar)
 		tar_status = _try_tar(tar)
-		if mtree_status == False and tar_status:
+		if mtree_status is False and tar_status:
 			# mtree only
 			self.warnings = [('py-mtime-mtree-warning', ())]
 		elif not tar_status:

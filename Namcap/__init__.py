@@ -17,6 +17,5 @@
 #   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 # 
 
-from . import util, rules
 
 # vim: set ts=4 sw=4 noet:

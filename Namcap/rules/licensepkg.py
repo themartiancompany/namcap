@@ -79,7 +79,7 @@ class package(TarballRule):
 
 			filenames = set(name.rstrip('/') for name,_,_ in pkginfo['files'])
 
-			if not 'usr/share/licenses/' + pkginfo['name'] in filenames:
+			if "usr/share/licenses/" + pkginfo["name"] not in filenames:
 				self.errors.append(("missing-custom-license-dir usr/share/licenses/%s", pkginfo['name']))
 			elif not any(filename.startswith('usr/share/licenses/' + pkginfo['name'] + '/') for filename in filenames):
 					self.errors.append(("missing-custom-license-file usr/share/licenses/%s/*", pkginfo['name']))

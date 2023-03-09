@@ -39,7 +39,7 @@ def scanshebangs(fileobj, filename, scripts):
 		return
 	# process shebang line
 	cmd = script_type(fileobj)
-	if cmd != None:
+	if cmd is not None:
 		assert(isinstance(cmd, str))
 		scripts.setdefault(cmd, set()).add(filename)
 
@@ -109,7 +109,7 @@ class ShebangDependsRule(TarballRule):
 		for i in scriptlist:
 			p = Namcap.package.load_testing_package(i)
 			q = Namcap.package.load_from_db(i)
-			if p != None and q != None and p["version"] == q["version"]:
+			if p is not None and q is not None and p["version"] == q["version"]:
 				self.warnings.append(("dependency-is-testing-release %s", i))
 
 # vim: set ts=4 sw=4 noet:

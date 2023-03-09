@@ -24,7 +24,7 @@ class package(TarballRule):
 	name = "hardlinks"
 	description = "Look for cross-directory/partition hard links"
 	def analyze(self, pkginfo, tar):
-		hardlinks = [i for i in tar.getmembers() if i.islnk() == True]
+		hardlinks = [i for i in tar.getmembers() if i.islnk() is True]
 		for hardlink in hardlinks:
 			if dirname(hardlink.name) != dirname(hardlink.linkname):
 				self.errors.append(("cross-dir-hardlink %s %s",

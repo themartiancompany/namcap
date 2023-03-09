@@ -89,7 +89,6 @@ def finddepends(libdepends):
 	libdependlist = {}
 	missing_provides = {}
 
-	somatches = {}
 	actualpath = {}
 
 	knownlibs = set(libdepends)
@@ -134,7 +133,7 @@ def filllibcache():
 	libline = re.compile(r'\s*(.*) \((.*)\) => (.*)')
 	for j in var[0].decode('ascii').splitlines():
 		g = libline.match(j)
-		if g != None:
+		if g is not None:
 			if g.group(2).startswith('libc6,x86-64'):
 				libcache['x86-64'][g.group(1)] = g.group(3)
 			else:

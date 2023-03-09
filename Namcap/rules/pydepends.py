@@ -21,7 +21,6 @@
 from collections import defaultdict
 import ast
 import importlib
-import os
 import sys
 import sysconfig
 import Namcap.package

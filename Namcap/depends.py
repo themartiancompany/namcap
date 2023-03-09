@@ -21,7 +21,6 @@
 
 """Checks dependencies semi-smartly."""
 
-import re
 from Namcap.ruleclass import *
 import Namcap.tags
 from Namcap import package

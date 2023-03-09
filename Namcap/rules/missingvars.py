@@ -63,7 +63,6 @@ class TagsRule(PkgbuildRule):
 	def analyze(self, pkginfo, tar):
 		contributortag = 0
 		maintainertag = 0
-		idtag = 0
 		for i in pkginfo.pkgbuild:
 			if re.match("#\s*Contributor\s*:", i):
 				contributortag = 1

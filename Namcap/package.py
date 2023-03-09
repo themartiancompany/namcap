@@ -95,7 +95,7 @@ class PacmanPackage(collections.abc.MutableMapping):
 		if isinstance(pkginfo, str):
 			for i in pkginfo.splitlines():
 				m = re.match('(.*) = (.*)', i)
-				if m != None:
+				if m is not None:
 					lhs = m.group(1)
 					rhs = m.group(2)
 					if rhs != '':
