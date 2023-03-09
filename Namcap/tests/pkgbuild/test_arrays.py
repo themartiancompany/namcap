@@ -20,7 +20,7 @@
 #
 
 from Namcap.tests.pkgbuild_test import PkgbuildTest
-import Namcap.rules
+import Namcap.rules.arrays
 
 
 class NamcapArraysTest(PkgbuildTest):
