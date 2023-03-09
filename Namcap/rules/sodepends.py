@@ -26,7 +26,7 @@ import re
 import os
 import subprocess
 import Namcap.package
-from Namcap.ruleclass import *
+from Namcap.ruleclass import TarballRule
 from Namcap.util import is_elf
 from Namcap.rules.rpath import get_rpaths
 from Namcap.rules.runpath import get_runpaths

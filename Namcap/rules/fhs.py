@@ -18,7 +18,7 @@
 #
 
 import os, re
-from Namcap.ruleclass import *
+from Namcap.ruleclass import TarballRule
 
 
 class FHSRule(TarballRule):

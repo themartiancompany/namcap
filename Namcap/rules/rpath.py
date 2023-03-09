@@ -18,7 +18,7 @@
 #
 
 from Namcap.util import is_elf
-from Namcap.ruleclass import *
+from Namcap.ruleclass import TarballRule
 
 from elftools.elf.elffile import ELFFile
 from elftools.elf.dynamic import DynamicSection

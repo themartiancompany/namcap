@@ -24,7 +24,7 @@
 special_licenses = ["bsd", "isc", "libpng", "ofl", "mit", "python", "zlib"]
 
 import os.path
-from Namcap.ruleclass import *
+from Namcap.ruleclass import TarballRule
 from Namcap.package import load_from_db
 from Namcap.util import is_debug
 

@@ -23,7 +23,7 @@
 from collections import defaultdict
 import subprocess
 import Namcap.package
-from Namcap.ruleclass import *
+from Namcap.ruleclass import TarballRule
 
 
 def scanpcfiles(pkg_pc_files, pclist):

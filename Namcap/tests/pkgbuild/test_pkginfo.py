@@ -20,7 +20,7 @@
 #
 
 from Namcap.tests.pkgbuild_test import PkgbuildTest
-from Namcap.rules.pkginfo import *
+from Namcap.rules.pkginfo import CapsPkgnameRule, LicenseRule, UrlRule
 
 
 class NamcapInvalidPkgNameTest(PkgbuildTest):

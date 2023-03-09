@@ -25,7 +25,7 @@ import sys
 import sysconfig
 import Namcap.package
 from Namcap.util import is_script, script_type
-from Namcap.ruleclass import *
+from Namcap.ruleclass import TarballRule
 
 
 def finddepends(pkgname, modules, gir_modules, gir_versions):

@@ -20,7 +20,7 @@
 """Verifies that array variables are actually arrays"""
 
 import re
-from Namcap.ruleclass import *
+from Namcap.ruleclass import PkgbuildRule
 
 
 class package(PkgbuildRule):

@@ -17,7 +17,7 @@
 #   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 import os
-from Namcap.ruleclass import *
+from Namcap.ruleclass import TarballRule
 from Namcap.package import load_from_db
 from Namcap.util import is_debug
 

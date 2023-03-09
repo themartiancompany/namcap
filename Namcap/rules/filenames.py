@@ -21,7 +21,7 @@
 """Checks for invalid filenames."""
 
 import string
-from Namcap.ruleclass import *
+from Namcap.ruleclass import TarballRule
 
 VALID_CHARS = string.ascii_letters + string.digits + string.punctuation + " "
 

@@ -18,7 +18,7 @@
 #
 
 from itertools import product
-from Namcap.ruleclass import *
+from Namcap.ruleclass import PkgbuildRule
 
 
 class package(PkgbuildRule):

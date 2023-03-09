@@ -20,7 +20,7 @@
 """Verifies that no specific host type is used"""
 
 import re
-from Namcap.ruleclass import *
+from Namcap.ruleclass import PkgbuildRule
 
 
 class package(PkgbuildRule):

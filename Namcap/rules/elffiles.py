@@ -23,7 +23,7 @@ from elftools.elf.dynamic import DynamicSection
 from elftools.elf.sections import SymbolTableSection
 
 from Namcap.util import is_elf
-from Namcap.ruleclass import *
+from Namcap.ruleclass import TarballRule
 
 # Valid directories for ELF files
 valid_dirs = ["bin/", "sbin/", "usr/bin/", "usr/sbin/", "lib/", "usr/lib/", "usr/lib32/"]

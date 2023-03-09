@@ -18,7 +18,7 @@
 #
 
 from os.path import dirname
-from Namcap.ruleclass import *
+from Namcap.ruleclass import TarballRule
 
 
 class package(TarballRule):

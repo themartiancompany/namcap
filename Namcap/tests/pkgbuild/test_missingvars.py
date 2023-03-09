@@ -20,7 +20,7 @@
 #
 
 from Namcap.tests.pkgbuild_test import PkgbuildTest
-from Namcap.rules.missingvars import *
+from Namcap.rules.missingvars import ChecksumsRule, TagsRule
 
 
 class NamcapChecksumTest(PkgbuildTest):

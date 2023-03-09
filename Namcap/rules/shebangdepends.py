@@ -24,7 +24,7 @@
 import shutil
 import Namcap.package
 from Namcap.util import is_script, script_type
-from Namcap.ruleclass import *
+from Namcap.ruleclass import TarballRule
 
 
 def scanshebangs(fileobj, filename, scripts):

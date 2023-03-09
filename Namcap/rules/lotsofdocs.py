@@ -17,7 +17,7 @@
 #   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 
-from Namcap.ruleclass import *
+from Namcap.ruleclass import TarballRule
 
 
 class package(TarballRule):
