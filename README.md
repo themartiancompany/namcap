@@ -117,6 +117,16 @@ Namcap comes with a test suite covering the classical mistakes or warnings we ar
 The test suite is in `Namcap/tests`.
 The *makepkg* and *pkgbuild_test* submodules provide easy generic methods to test a rule.
 
+To run the test suite, run:
+
+``` console
+env PARSE_PKGBUILD_PATH="$PWD" \
+    PATH="$PWD/scripts:$PATH" \
+    pytest
+```
+
+To run a single test, append the test filename, e.g. `Namecap/tests/packages/test_shebangdepends.py` to the command-line above.
+
 Here is an example testing the rule `pkgnameindesc`:
 
 ``` python
