@@ -28,11 +28,11 @@ import gzip
 
 import pyalpm
 
+import pycman.config
+
 _pyalpm_version_tuple = tuple(int(n) for n in pyalpm.version().split("."))
 if _pyalpm_version_tuple < (0, 5):
     raise DeprecationWarning("pyalpm versions <0.5 are no longer supported")
-
-import pycman.config
 
 pyalpm_handle = pycman.config.init_with_config("/etc/pacman.conf")
 

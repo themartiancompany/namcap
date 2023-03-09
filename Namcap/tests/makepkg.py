@@ -31,10 +31,10 @@ import Namcap.package
 
 makepkg_conf = """
 DLAGENTS=('ftp::/usr/bin/wget -c --passive-ftp -t 3 --waitretry=3 -O %%o %%u'
-		  'http::/usr/bin/wget -c -t 3 --waitretry=3 -O %%o %%u'
-		  'https::/usr/bin/wget -c -t 3 --waitretry=3 --no-check-certificate -O %%o %%u'
-		  'rsync::/usr/bin/rsync -z %%u %%o'
-		  'scp::/usr/bin/scp -C %%u %%o')
+          'http::/usr/bin/wget -c -t 3 --waitretry=3 -O %%o %%u'
+          'https::/usr/bin/wget -c -t 3 --waitretry=3 --no-check-certificate -O %%o %%u'
+          'rsync::/usr/bin/rsync -z %%u %%o'
+          'scp::/usr/bin/scp -C %%u %%o')
 CARCH="%(arch)s"
 CHOST="%(arch)s-pc-linux-gnu"
 CFLAGS="-march=%(arch)s -mtune=generic -O2 -pipe"

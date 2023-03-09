@@ -17,16 +17,16 @@
 #   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 
+import os.path
+from Namcap.ruleclass import TarballRule
+from Namcap.package import load_from_db
+from Namcap.util import is_debug
+
 # List of licenses that are ubiquitous enough to quality as standard instead of
 # custom but still need to have their license files packaged to properly
 # identify their respective copyright or reserved name clauses. See also
 # https://wiki.archlinux.org/title/PKGBUILD#license
 special_licenses = ["bsd", "isc", "libpng", "ofl", "mit", "python", "zlib"]
-
-import os.path
-from Namcap.ruleclass import TarballRule
-from Namcap.package import load_from_db
-from Namcap.util import is_debug
 
 
 class package(TarballRule):
@@ -65,7 +65,8 @@ class package(TarballRule):
                 linkdest = os.path.join(linklead, symlicensedir.linkname)
                 linkdest = os.path.normpath(linkdest).lstrip("/").rstrip("/")
                 linkpkgname = os.path.basename(linkdest)
-                # if the symlink points to licenses dir and the linked package is in depends, then search license file in it
+                # if the symlink points to licenses dir and the linked package is in depends,
+                # then search license file in it
                 if linkdest.startswith("usr/share/licenses/") and linkpkgname in pkginfo["depends"]:
                     linkpkginfo = load_from_db(linkpkgname)
                     if linkpkginfo:

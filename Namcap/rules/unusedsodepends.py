@@ -18,7 +18,9 @@
 #   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 
-import os, subprocess, re
+import os
+import re
+import subprocess
 import tempfile
 from Namcap.util import is_elf
 from Namcap.ruleclass import TarballRule
