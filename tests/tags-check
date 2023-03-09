@@ -23,7 +23,7 @@ basepath = '../Namcap'
 modules = filter(lambda s: s.endswith('.py'), os.listdir(basepath))
 tags = process_tags(tagpath)
 
-tagre = re.compile('.*ret\[.\]\.append\(\(\"([^,]*)\",.*\)\).*')
+tagre = re.compile(r'.*ret\[.\]\.append\(\(\"([^,]*)\",.*\)\).*')
 tags_in_modules = set()
 tags_by_file = {}
 

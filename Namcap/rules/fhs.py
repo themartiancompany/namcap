@@ -52,7 +52,7 @@ class FHSRule(TarballRule):
         ]
         forbidden_paths = ["tmp/", "var/tmp/", "run/", "var/run/", "var/lock/"]
         custom_valid = {
-            "^mingw-": [
+            r"^mingw-": [
                 "usr/x86_64-w64-mingw32/lib/",
                 "usr/x86_64-w64-mingw32/bin/",
                 "usr/x86_64-w64-mingw32/include/",

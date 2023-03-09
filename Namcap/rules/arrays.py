@@ -53,7 +53,7 @@ class package(PkgbuildRule):
             "validpgpkeys",
         ]
         for i in pkginfo.pkgbuild:
-            m = re.match("\s*(.*)\s*=\s*(.*)$", i)
+            m = re.match(r"\s*(.*)\s*=\s*(.*)$", i)
             for j in arrayvars:
                 if m and m.group(1) == j:
                     if not m.group(2).startswith("("):

@@ -27,7 +27,7 @@ class package(PkgbuildRule):
 
     def analyze(self, pkginfo, tar):
         bad_calls = ["msg", "msg2", "warning", "error", "plain"]
-        regex = re.compile("^\s+(%s) " % "|".join(bad_calls))
+        regex = re.compile(r"^\s+(%s) " % "|".join(bad_calls))
         hits = set()
         for i in pkginfo.pkgbuild:
             if regex.match(i):

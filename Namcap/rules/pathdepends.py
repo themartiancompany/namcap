@@ -33,10 +33,10 @@ class PathDependsRule(TarballRule):
     description = "Check for simple implicit path dependencies"
     # list of path regex, dep name, reason tag
     subrules = [
-        {"path": "^usr/share/glib-2\.0/schemas$", "dep": "dconf", "reason": "dconf-needed-for-glib-schemas"},
-        {"path": "^usr/lib/gio/modules/.*\.so$", "dep": "glib2", "reason": "glib2-needed-for-gio-modules"},
+        {"path": r"^usr/share/glib-2\.0/schemas$", "dep": "dconf", "reason": "dconf-needed-for-glib-schemas"},
+        {"path": r"^usr/lib/gio/modules/.*\.so$", "dep": "glib2", "reason": "glib2-needed-for-gio-modules"},
         {
-            "path": "^usr/share/icons/hicolor$",
+            "path": r"^usr/share/icons/hicolor$",
             "dep": "hicolor-icon-theme",
             "reason": "hicolor-icon-theme-needed-for-hicolor-dir",
         },

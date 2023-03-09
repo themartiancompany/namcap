@@ -25,8 +25,8 @@ import tempfile
 from Namcap.util import is_elf
 from Namcap.ruleclass import TarballRule
 
-libre = re.compile("^\t(/.*)")
-lddfail = re.compile("^\tnot a dynamic executable")
+libre = re.compile(r"^\t(/.*)")
+lddfail = re.compile(r"^\tnot a dynamic executable")
 
 
 def get_unused_sodepends(filename):

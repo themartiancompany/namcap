@@ -56,7 +56,7 @@ def script_type(fileobj):
         return None
     if not firstline:
         return None
-    script = re.compile("#!.*/(.*)")
+    script = re.compile(r"#!.*/(.*)")
     m = script.match(firstline)
     if m is None:
         return None

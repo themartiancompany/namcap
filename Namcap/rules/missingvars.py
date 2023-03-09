@@ -24,7 +24,7 @@
 import re
 from Namcap.ruleclass import PkgbuildRule
 
-RE_IS_HEXNUMBER = re.compile("[0-9a-f]+")
+RE_IS_HEXNUMBER = re.compile(r"[0-9a-f]+")
 
 
 class ChecksumsRule(PkgbuildRule):
@@ -74,9 +74,9 @@ class TagsRule(PkgbuildRule):
         contributortag = 0
         maintainertag = 0
         for i in pkginfo.pkgbuild:
-            if re.match("#\s*Contributor\s*:", i):
+            if re.match(r"#\s*Contributor\s*:", i):
                 contributortag = 1
-            if re.match("#\s*Maintainer\s*:", i):
+            if re.match(r"#\s*Maintainer\s*:", i):
                 maintainertag = 1
 
         if contributortag != 1:

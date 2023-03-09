@@ -27,7 +27,7 @@ class package(TarballRule):
 
     def analyze(self, pkginfo, tar):
         for i in tar.getnames():
-            if re.search("\\.la$", i) is not None:
+            if re.search(r"\.la$", i) is not None:
                 self.warnings.append(("libtool-file-present %s", i))
 
 
