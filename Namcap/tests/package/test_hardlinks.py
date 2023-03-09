@@ -55,6 +55,3 @@ package() {
         self.assertEqual(errors, [("cross-dir-hardlink %s %s", set(("usr/bin/prog1", "usr/sbin/prog2")))])
         self.assertEqual(r.warnings, [])
         self.assertEqual(r.infos, [])
-
-
-# vim: set ts=4 sw=4 noet:

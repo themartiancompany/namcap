@@ -31,6 +31,3 @@ class package(TarballRule):
         missing_backups = known_backups - found_files
         for backup in missing_backups:
             self.errors.append(("missing-backup-file %s", backup))
-
-
-# vim: set ts=4 sw=4 noet:

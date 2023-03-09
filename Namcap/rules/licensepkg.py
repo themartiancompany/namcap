@@ -77,6 +77,3 @@ class package(TarballRule):
                 self.errors.append(("missing-custom-license-dir usr/share/licenses/%s", pkginfo["name"]))
             elif not any(filename.startswith("usr/share/licenses/" + pkginfo["name"] + "/") for filename in filenames):
                 self.errors.append(("missing-custom-license-file usr/share/licenses/%s/*", pkginfo["name"]))
-
-
-# vim: set ts=4 sw=4 noet:

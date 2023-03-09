@@ -44,6 +44,3 @@ class JavaFiles(TarballRule):
         if javas:
             reasons = pkginfo.detected_deps.setdefault("java-runtime", [])
             reasons.append(("java-runtime-needed %s", ", ".join(javas)))
-
-
-# vim: set ts=4 sw=4 noet:

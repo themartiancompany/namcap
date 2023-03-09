@@ -44,6 +44,3 @@ class HookDependsRule(TarballRule):
             pattern = re.compile(subrule["path"])
             if any(pattern.search(n) for n in names):
                 self.warnings.append(("external-hooks-unneeded %s", dep))
-
-
-# vim: set ts=4 sw=4 noet:

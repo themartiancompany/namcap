@@ -72,6 +72,3 @@ class PkgbuildLoaderTests(unittest.TestCase):
     def test_provides(self):
         self.assertEqual(self.pkginfo["provides"], ["yourpackage"])
         self.assertEqual(self.pkginfo["orig_provides"], ["yourpackage=0.9"])
-
-
-# vim: set ts=4 sw=4 noet:

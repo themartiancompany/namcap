@@ -28,6 +28,3 @@ class package(TarballRule):
         for i in tar.getnames():
             if re.search("\\.la$", i) is not None:
                 self.warnings.append(("libtool-file-present %s", i))
-
-
-# vim: set ts=4 sw=4 noet:

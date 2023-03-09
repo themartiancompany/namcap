@@ -240,6 +240,3 @@ class NoPIERule(TarballRule):
 
         if nopie_binaries:
             self.warnings = [("elffile-nopie %s", i) for i in nopie_binaries]
-
-
-# vim: set ts=4 sw=4 noet:

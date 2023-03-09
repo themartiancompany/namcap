@@ -51,6 +51,3 @@ package() {
         self.assertEqual(r.errors, [])
         self.assertEqual(r.warnings, [("empty-directory %s", "usr/share/directory")])
         self.assertEqual(r.infos, [])
-
-
-# vim: set ts=4 sw=4 noet:

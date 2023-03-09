@@ -62,6 +62,3 @@ class package(TarballRule):
                         self.warnings.append(("insecure-runpath %s %s", (path, entry.name)))
                     else:
                         self.errors.append(("insecure-runpath %s %s", (path, entry.name)))
-
-
-# vim: set ts=4 sw=4 noet:

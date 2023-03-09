@@ -77,6 +77,3 @@ package() {
         self.assertEqual(r.errors, [])
         self.assertEqual(r.warnings, [("systemd-location %s", "etc/systemd/system/systemdsomething")])
         self.assertEqual(r.infos, [])
-
-
-# vim: set ts=4 sw=4 noet:

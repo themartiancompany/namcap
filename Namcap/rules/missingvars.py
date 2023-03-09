@@ -91,6 +91,3 @@ class DescriptionRule(PkgbuildRule):
     def analyze(self, pkginfo, tar):
         if "desc" not in pkginfo or len(pkginfo["desc"]) == 0:
             self.errors.append(("missing-description", ()))
-
-
-# vim: set ts=4 sw=4 noet:

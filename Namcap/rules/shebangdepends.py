@@ -109,6 +109,3 @@ class ShebangDependsRule(TarballRule):
             q = Namcap.package.load_from_db(i)
             if p is not None and q is not None and p["version"] == q["version"]:
                 self.warnings.append(("dependency-is-testing-release %s", i))
-
-
-# vim: set ts=4 sw=4 noet:

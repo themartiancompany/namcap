@@ -31,6 +31,3 @@ class package(PkgbuildRule):
                     self.warnings.append(("specific-sourceforge-mirror", ()))
                 if re.match("(http://|ftp://)dl.(sourceforge|sf).net", source):
                     self.warnings.append(("using-dl-sourceforge", ()))
-
-
-# vim: set ts=4 sw=4 noet:

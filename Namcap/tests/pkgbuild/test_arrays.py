@@ -61,6 +61,3 @@ package() {
         self.assertEqual(r.errors, [])
         self.assertEqual(set(r.warnings), set(("variable-not-array %s", i) for i in ["depends", "license"]))
         self.assertEqual(r.infos, [])
-
-
-# vim: set ts=4 sw=4 noet:

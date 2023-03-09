@@ -55,6 +55,3 @@ class package(TarballRule):
                 self.infos.append(("hardlink-found %s points to %s", (i.name, i.linkname)))
                 if i.linkname not in filenames:
                     self.errors.append(("dangling-hardlink %s points to %s", (i.name, i.linkname)))
-
-
-# vim: set ts=4 sw=4 noet:

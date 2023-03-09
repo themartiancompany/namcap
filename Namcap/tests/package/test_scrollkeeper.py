@@ -52,6 +52,3 @@ package() {
         self.assertEqual(r.errors, [("scrollkeeper-dir-exists %s", "var/lib/scrollkeeper")])
         self.assertEqual(r.warnings, [])
         self.assertEqual(r.infos, [])
-
-
-# vim: set ts=4 sw=4 noet:

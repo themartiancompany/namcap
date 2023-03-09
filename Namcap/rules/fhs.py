@@ -129,6 +129,3 @@ class RubyPathsRule(TarballRule):
             if i.name.startswith("usr/lib/ruby/site_ruby"):
                 self.warnings.append(("site-ruby", ()))
                 return
-
-
-# vim: set ts=4 sw=4 noet:

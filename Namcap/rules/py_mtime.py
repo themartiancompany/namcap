@@ -135,6 +135,3 @@ class package(TarballRule):
             # tar or both
             self.errors = [("py-mtime-tar-error", ())]
         self.infos = [("py-mtime-file-name %s", f[1:]) for f in _mtime_filter(_generic_timestamps(tar))]
-
-
-# vim: set ts=4 sw=4 noet:

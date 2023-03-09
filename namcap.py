@@ -271,5 +271,3 @@ for package in packages:
         process_pkgbuild(package, active_modules)
     else:
         print("Error: %s not package or PKGBUILD" % package)
-
-# vim: set ts=4 sw=4 noet:

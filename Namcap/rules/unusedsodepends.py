@@ -75,6 +75,3 @@ class package(TarballRule):
                 self.warnings.append(("unused-sodepend %s %s", (lib, entry.name)))
 
             os.unlink(f.name)
-
-
-# vim: set ts=4 sw=4 noet:

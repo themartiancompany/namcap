@@ -60,6 +60,3 @@ if os.path.exists(DEFAULT_TAGS):
     load_tags(DEFAULT_TAGS)
 elif os.path.exists("namcap-tags"):
     load_tags("namcap-tags")
-
-
-# vim: set ts=4 sw=4 noet:

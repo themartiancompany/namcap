@@ -37,6 +37,3 @@ class package(TarballRule):
                     self.warnings.append(("incorrect-library-permissions %s", i.name))
             if i.mode & (stat.S_ISUID | stat.S_ISGID):
                 self.warnings.append(("file-setugid %s", i.name))
-
-
-# vim: set ts=4 sw=4 noet:

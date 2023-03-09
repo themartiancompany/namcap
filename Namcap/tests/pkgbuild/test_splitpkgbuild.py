@@ -115,6 +115,3 @@ package_prog2() {
         self.assertEqual(r.errors, [("missing-makedeps %s", str(["lib1", "lib2"]))])
         self.assertEqual(r.warnings, [])
         self.assertEqual(r.infos, [])
-
-
-# vim: set ts=4 sw=4 noet:

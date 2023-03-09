@@ -40,6 +40,3 @@ class package(TarballRule):
             ratio = docsize / float(size)
             if ratio > 0.50:
                 self.warnings.append(("lots-of-docs %f", ratio * 100))
-
-
-# vim: set ts=4 sw=4 noet:

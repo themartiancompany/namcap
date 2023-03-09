@@ -46,6 +46,3 @@ class PkgbuildRule(AbstractRule):
 class TarballRule(AbstractRule):
     "The parent class of rules that process tarballs"
     pass
-
-
-# vim: set ts=4 sw=4 noet:

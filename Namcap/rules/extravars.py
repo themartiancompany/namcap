@@ -65,6 +65,3 @@ class package(PkgbuildRule):
         for varname in pkginfo["setvars"]:
             if varname.islower() and varname not in stdvars and not varname.startswith("_"):
                 self.warnings.append(("extra-var-begins-without-underscore %s", varname))
-
-
-# vim: set ts=4 sw=4 noet:

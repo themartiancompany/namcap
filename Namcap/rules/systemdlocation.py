@@ -43,6 +43,3 @@ class systemdlocationRule(TarballRule):
             # check for files in /etc/systemd/system/
             if name.startswith("etc/systemd/system/"):
                 self.warnings.append(("systemd-location %s", name))
-
-
-# vim: set ts=4 sw=4 noet:

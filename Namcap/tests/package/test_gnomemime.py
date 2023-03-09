@@ -52,6 +52,3 @@ package() {
         self.assertEqual(r.errors, [("gnome-mime-file %s", "usr/share/applications/mimeinfo.cache")])
         self.assertEqual(r.warnings, [])
         self.assertEqual(r.infos, [])
-
-
-# vim: set ts=4 sw=4 noet:

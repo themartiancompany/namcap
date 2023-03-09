@@ -101,6 +101,3 @@ package() {
                 ("depends-by-namcap-sight depends=(%s)", "hicolor-icon-theme"),
             ],
         )
-
-
-# vim: set ts=4 sw=4 noet:

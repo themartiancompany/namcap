@@ -29,6 +29,3 @@ class package(TarballRule):
         for i in tar.getnames():
             if scroll.search(i):
                 self.errors.append(("scrollkeeper-dir-exists %s", i))
-
-
-# vim: set ts=4 sw=4 noet:

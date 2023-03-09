@@ -328,6 +328,3 @@ def load_mtree(tar):
         attr.update(defaults)
         attr.update(kvs)
         yield head, attr
-
-
-# vim: set ts=4 sw=4 noet:

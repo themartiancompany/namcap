@@ -63,6 +63,3 @@ package() {
         self.assertEqual(r.errors, [("backups-preceding-slashes", ())])
         self.assertEqual(r.warnings, [])
         self.assertEqual(r.infos, [])
-
-
-# vim: set ts=4 sw=4 noet:

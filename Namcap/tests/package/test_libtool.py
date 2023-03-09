@@ -52,6 +52,3 @@ package() {
         self.assertEqual(r.errors, [])
         self.assertEqual(r.warnings, [("libtool-file-present %s", "usr/lib/libsomething.la")])
         self.assertEqual(r.infos, [])
-
-
-# vim: set ts=4 sw=4 noet:

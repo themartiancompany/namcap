@@ -33,6 +33,3 @@ class package(TarballRule):
             entries.append(entry.name.rstrip("/"))
         nonemptydirs = [os.path.dirname(x) for x in entries]
         self.warnings = [("empty-directory %s", d) for d in (set(dirs) - set(nonemptydirs))]
-
-
-# vim: set ts=4 sw=4 noet:

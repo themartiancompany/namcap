@@ -32,6 +32,3 @@ class package(TarballRule):
         for i in tar.getnames():
             if not all(c in VALID_CHARS for c in i):
                 self.warnings.append(("invalid-filename", i))
-
-
-# vim: set ts=4 sw=4 noet:

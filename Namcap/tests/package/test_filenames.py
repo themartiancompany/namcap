@@ -58,6 +58,3 @@ package() {
             set((b"usr/bin/Arch\xc2\xb7Linux", b"usr/bin/Arch\xb7Linux")),
         )
         self.assertEqual(r.infos, [])
-
-
-# vim: set ts=4 sw=4 noet:

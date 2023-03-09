@@ -34,6 +34,3 @@ class package(PkgbuildRule):
                 hits.add(call)
         for i in hits:
             self.warnings.append(("makepkg-function-used %s", i))
-
-
-# vim: set ts=4 sw=4 noet:

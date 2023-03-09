@@ -55,6 +55,3 @@ package() {
         self.assertEqual(tag, "lots-of-docs %f")
         self.assertGreater(value, 50)
         self.assertEqual(r.infos, [])
-
-
-# vim: set ts=4 sw=4 noet:

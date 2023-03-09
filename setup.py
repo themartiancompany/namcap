@@ -21,5 +21,3 @@ setup(
     test_suite="Namcap.tests",
     data_files=DATAFILES,
 )
-
-# vim: set ts=4 sw=4 noet:

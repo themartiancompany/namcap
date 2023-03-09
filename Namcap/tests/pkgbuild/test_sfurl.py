@@ -62,6 +62,3 @@ package() {
         self.assertEqual(r.errors, [])
         self.assertEqual(r.warnings, [("specific-sourceforge-mirror", ())])
         self.assertEqual(r.infos, [])
-
-
-# vim: set ts=4 sw=4 noet:

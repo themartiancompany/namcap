@@ -82,6 +82,3 @@ class VCSMakedepends(PkgbuildRule):
 
         for i in missing:
             self.warnings.append(("missing-vcs-makedeps %s", i))
-
-
-# vim: set ts=4 sw=4 noet:

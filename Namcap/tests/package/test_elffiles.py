@@ -117,6 +117,3 @@ package() {
         self.assertEqual(r.errors, [])
         self.assertEqual(r.warnings, [("elffile-nopie %s", "usr/bin/nopie")])
         self.assertEqual(r.infos, [])
-
-
-# vim: set ts=4 sw=4 noet:

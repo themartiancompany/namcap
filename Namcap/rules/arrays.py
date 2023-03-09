@@ -57,6 +57,3 @@ class package(PkgbuildRule):
                 if m and m.group(1) == j:
                     if not m.group(2).startswith("("):
                         self.warnings.append(("variable-not-array %s", j))
-
-
-# vim: set ts=4 sw=4 noet:

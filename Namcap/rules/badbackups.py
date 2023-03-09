@@ -31,6 +31,3 @@ class package(PkgbuildRule):
             for item in pkginfo["backup"]:
                 if re.match("^/", item) is not None:
                     self.errors.append(("backups-preceding-slashes", ()))
-
-
-# vim: set ts=4 sw=4 noet:

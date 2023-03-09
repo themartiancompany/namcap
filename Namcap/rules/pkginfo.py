@@ -63,6 +63,3 @@ class NonUniqueSourcesRule(PkgbuildRule):
                 r"^[vV]?(([0-9]){8}|([0-9]+\.?)+)\.", os.path.basename(source_file)
             ):
                 self.warnings.append(("non-unique-source-name %s", os.path.basename(source_file)))
-
-
-# vim: set ts=4 sw=4 noet:

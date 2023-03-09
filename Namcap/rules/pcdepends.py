@@ -118,6 +118,3 @@ class PkgConfigDependenciesRule(TarballRule):
                 reasons = pkginfo.detected_deps.setdefault(pkg, [])
                 reasons.append(("pkgconf-needed %s %s", (str(files), str(list(needing)))))
                 self.infos.append(("pkgconf-dependence %s in %s", (pkg, str(files))))
-
-
-# vim: set ts=4 sw=4 noet:

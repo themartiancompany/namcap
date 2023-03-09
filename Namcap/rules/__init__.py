@@ -32,5 +32,3 @@ for name, value in dict(locals()).items():
     for n, v in value.__dict__.items():
         if type(v) == type and issubclass(v, Namcap.ruleclass.AbstractRule) and hasattr(v, "name"):
             all_rules[v.name] = v
-
-# vim: set ts=4 sw=4 noet:

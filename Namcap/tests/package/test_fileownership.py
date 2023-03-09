@@ -52,6 +52,3 @@ package() {
         self.assertEqual(r.errors, [("incorrect-owner %s (%s:%s)", ("usr/bin/program", "root", "storage"))])
         self.assertEqual(r.warnings, [])
         self.assertEqual(r.infos, [])
-
-
-# vim: set ts=4 sw=4 noet:

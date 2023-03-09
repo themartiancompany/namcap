@@ -49,6 +49,3 @@ class PathDependsRule(TarballRule):
                 dep = subrule["dep"]
                 reason = subrule["reason"]
                 pkginfo.detected_deps[dep].append((reason, ()))
-
-
-# vim: set ts=4 sw=4 noet:

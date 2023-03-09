@@ -36,6 +36,3 @@ class package(TarballRule):
         for i in tar.getnames():
             if i in mime_files:
                 self.errors.append(("gnome-mime-file %s", i))
-
-
-# vim: set ts=4 sw=4 noet:

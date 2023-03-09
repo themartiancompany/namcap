@@ -113,6 +113,3 @@ package() {
         self.assertEqual(r.errors, [("not-a-common-license %s", "DWTFYWL")])
         self.assertEqual(r.warnings, [])
         self.assertEqual(r.infos, [])
-
-
-# vim: set ts=4 sw=4 noet:

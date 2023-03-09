@@ -60,6 +60,3 @@ class DependsTests(unittest.TestCase):
         self.assertEqual(e, [])
         self.assertEqual(w, [])
         # info is verbose and beyond scope, skip it
-
-
-# vim: set ts=4 sw=4 noet:

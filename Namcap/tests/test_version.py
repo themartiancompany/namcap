@@ -31,6 +31,3 @@ class VersionTests(unittest.TestCase):
             first_line = f.readline()
         match = re.search('"namcap (.*?)"', first_line)
         self.assertEqual(match.group(1), Namcap.version.get_version())
-
-
-# vim: set ts=4 sw=4 noet:

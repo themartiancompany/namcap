@@ -127,6 +127,3 @@ package() {
         self.assertEqual(r.errors, [("non-fhs-info-page %s", "usr/info/something.gz")])
         self.assertEqual(r.warnings, [])
         self.assertEqual(r.infos, [])
-
-
-# vim: set ts=4 sw=4 noet:

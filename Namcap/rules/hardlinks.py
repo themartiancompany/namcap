@@ -29,6 +29,3 @@ class package(TarballRule):
         for hardlink in hardlinks:
             if dirname(hardlink.name) != dirname(hardlink.linkname):
                 self.errors.append(("cross-dir-hardlink %s %s", (hardlink.name, hardlink.linkname)))
-
-
-# vim: set ts=4 sw=4 noet:

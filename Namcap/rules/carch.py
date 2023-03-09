@@ -44,6 +44,3 @@ class package(PkgbuildRule):
             if "${CARCH}" in line:
                 continue
             self.warnings.append(("specific-host-type-used %s", match.group(1)))
-
-
-# vim: set ts=4 sw=4 noet:

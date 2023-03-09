@@ -215,6 +215,3 @@ package() {
         self.assertEqual(r.errors, [])
         self.assertEqual(r.warnings, [("missing-maintainer", ())])
         self.assertEqual(r.infos, [("missing-contributor", ())])
-
-
-# vim: set ts=4 sw=4 noet:

@@ -27,6 +27,3 @@ class InfodirRule(TarballRule):
         for i in tar.getnames():
             if i == "usr/share/info/dir":
                 self.errors.append(("info-dir-file-present %s", i))
-
-
-# vim: set ts=4 sw=4 noet:

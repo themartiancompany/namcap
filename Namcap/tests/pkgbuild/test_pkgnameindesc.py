@@ -60,6 +60,3 @@ package() {
         self.assertEqual(r.errors, [])
         self.assertEqual(set(r.warnings), set([("pkgname-in-description", ())]))
         self.assertEqual(r.infos, [])
-
-
-# vim: set ts=4 sw=4 noet:

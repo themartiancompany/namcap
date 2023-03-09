@@ -27,6 +27,3 @@ class package(PkgInfoRule):
         if "name" in pkginfo and "desc" in pkginfo:
             if pkginfo["name"].lower() in pkginfo["desc"].lower().split():
                 self.warnings.append(("pkgname-in-description", ()))
-
-
-# vim: set ts=4 sw=4 noet:

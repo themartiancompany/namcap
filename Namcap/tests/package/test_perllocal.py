@@ -52,6 +52,3 @@ package() {
         self.assertEqual(r.errors, [("perllocal-pod-present %s", "usr/lib/perl/5.12/site-local/libmine/perllocal.pod")])
         self.assertEqual(r.warnings, [])
         self.assertEqual(r.infos, [])
-
-
-# vim: set ts=4 sw=4 noet:

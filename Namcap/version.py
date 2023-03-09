@@ -20,6 +20,3 @@
 
 def get_version():
     return "3.4.0"
-
-
-# vim: set ts=4 sw=4 noet:

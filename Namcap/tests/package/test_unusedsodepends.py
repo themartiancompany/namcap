@@ -55,6 +55,3 @@ package() {
         self.assertEqual(r.errors, [])
         self.assertEqual(r.warnings, [("unused-sodepend %s %s", ("/usr/lib/libm.so.6", "usr/bin/evilprogram"))])
         self.assertEqual(r.infos, [])
-
-
-# vim: set ts=4 sw=4 noet:

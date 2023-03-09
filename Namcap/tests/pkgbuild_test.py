@@ -160,5 +160,3 @@ package_mypackage3() {
 """
 
 valid_pkgbuilds = [_basic, _split]
-
-# vim: set ts=4 sw=4 noet:

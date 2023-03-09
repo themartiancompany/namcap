@@ -56,6 +56,3 @@ package() {
         self.assertEqual(r.errors, [("insecure-rpath %s %s", ("/home/evil/lib", "usr/bin/evilprogram"))])
         self.assertEqual(r.warnings, [])
         self.assertEqual(r.infos, [])
-
-
-# vim: set ts=4 sw=4 noet:

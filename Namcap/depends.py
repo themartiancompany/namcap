@@ -139,6 +139,3 @@ def analyze_depends(pkginfo):
     infos.append(("depends-by-namcap-sight depends=(%s)", " ".join(dependlist)))
 
     return errors, warnings, infos
-
-
-# vim: set ts=4 sw=4 noet:

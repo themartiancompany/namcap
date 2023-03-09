@@ -49,6 +49,3 @@ class package(TarballRule):
         else:
             if len(found_elffiles) == 0:
                 self.warnings.append(("no-elffiles-not-any-package", ()))
-
-
-# vim: set ts=4 sw=4 noet:

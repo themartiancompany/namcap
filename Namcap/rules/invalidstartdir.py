@@ -34,6 +34,3 @@ class package(PkgbuildRule):
                     self.errors.append(("use-pkgdir", ()))
                 elif j[:4] == "/src":
                     self.errors.append(("use-srcdir", ()))
-
-
-# vim: set ts=4 sw=4 noet:
