@@ -58,11 +58,10 @@ class package(TarballRule):
                     path_ok = True
 
                 if not path_ok:
-                    self.errors.append(("insecure-runpath %s %s", (path, entry.name)))
-                    break
-
-                if path in warn and entry.name not in insecure_rpaths:
-                    self.warnings.append(("insecure-runpath %s %s", (path, entry.name)))
+                    if path in warn:
+                        self.warnings.append(("insecure-runpath %s %s", (path, entry.name)))
+                    else:
+                        self.errors.append(("insecure-runpath %s %s", (path, entry.name)))
 
 
 # vim: set ts=4 sw=4 noet:
