@@ -144,11 +144,10 @@ provide easy generic methods to test a rule.
 To run the test suite, run:
 
 env PARSE_PKGBUILD_PATH="$PWD" \
-    PATH="$PWD:$PATH" \
-    python setup.py test
+    PATH="$PWD/scripts:$PATH" \
+    pytest
 
-To run a single test, append e.g.
-"-s Namcap.tests.package.test_shebangdepends"
+To run a single test, append the test filename, e.g. Namecap/tests/packages/test_shebangdepends.py
 to the command-line above.
 
 Here is an example testing the rule "pkgnameindesc"
