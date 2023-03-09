@@ -1,4 +1,3 @@
-#
 # namcap tests - externalhooks rule
 # Copyright (C) 2016 Kyle Keen <keenerd@gmail.com>
 #

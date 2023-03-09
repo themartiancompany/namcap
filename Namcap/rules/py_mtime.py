@@ -1,4 +1,3 @@
-#
 # namcap rules - py_mtime
 # Copyright (C) 2013 Kyle Keen <keener@gmail.com>
 #

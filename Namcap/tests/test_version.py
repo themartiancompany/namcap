@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # namcap tests - tests for the version module
 # Copyright (C) 2015 Rikard Falkeborn <rikard.falkeborn@gmail.com>
 #

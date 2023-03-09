@@ -1,4 +1,3 @@
-#
 # namcap rules - hardlinks
 # Copyright (C) 2011 Dan McGee <dan@archlinux.org>
 #

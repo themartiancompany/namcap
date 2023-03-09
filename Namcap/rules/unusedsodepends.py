@@ -1,4 +1,3 @@
-#
 # namcap rules - unusedsodepends
 # Copyright (C) 2009 Abhishek Dasgupta <abhidg@gmail.com>
 # Copyright (C) 2013 Jan Alexander Steffens <jan.steffens@gmail.com>

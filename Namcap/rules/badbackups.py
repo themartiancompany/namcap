@@ -1,4 +1,3 @@
-#
 # namcap rules - badbackups
 # Copyright (C) 2004-2009 Ben Mazer <ben@benmazer.net>
 #

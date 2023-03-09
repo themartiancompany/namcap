@@ -1,4 +1,3 @@
-#
 # namcap rules - pkgname
 # Copyright (C) 2009 Hugo Doria <hugo@archlinux.org>
 #

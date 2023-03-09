@@ -1,4 +1,3 @@
-#
 # namcap rules - infodirectory
 # Copyright (C) 2008-2009 Allan McRae <allan@archlinux.org>
 #

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # namcap tests - systemdlocation
 # Copyright (C) 2011 R?my Oudompheng <remy at archlinux.org>
 #

@@ -1,4 +1,3 @@
-#
 # namcap rules - hookdepends
 # Copyright (C) 2019 Eli Schwartz <eschwartz at archlinux.org>
 # Copyright (C) 2016 Kyle Keen <keenerd at gmail.com>

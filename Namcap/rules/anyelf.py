@@ -1,4 +1,3 @@
-#
 # namcap rules - anyelf
 # Copyright (C) 2010 Dan McGee <dan@archlinux.org>
 #

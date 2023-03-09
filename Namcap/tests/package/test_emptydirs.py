@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # namcap tests - non ascii filenames
 # Copyright (C) 2011 Rémy Oudompheng <remy@archlinux.org>
 #

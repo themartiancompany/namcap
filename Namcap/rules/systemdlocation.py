@@ -1,4 +1,3 @@
-#
 # namcap rules - systemdlocation
 # Copyright (C) 2015 James Harvey <jamespharvey20@gmail.com>
 #

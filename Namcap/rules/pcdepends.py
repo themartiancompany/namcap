@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # namcap rules - pcdepends
 # Copyright (C) 2023 Balló György <bgyorgy at archlinux.org>
 #

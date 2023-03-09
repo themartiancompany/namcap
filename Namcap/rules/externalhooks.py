@@ -1,4 +1,3 @@
-#
 # namcap rules - externalhooks
 # Copyright (C) 2016 Kyle Keen <keenerd@gmail.com>
 #

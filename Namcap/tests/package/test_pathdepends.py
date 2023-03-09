@@ -1,4 +1,3 @@
-#
 # namcap tests - glibfiles
 # Copyright (C) 2011 Rémy Oudompheng <remy@archlinux.org>
 # Copyright (C) 2016 Kyle Keen <keenerd@gmail.com>

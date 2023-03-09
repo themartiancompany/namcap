@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # namcap - version
 # Copyright (c) 2015 Rikard Falkeborn <rikard.falkeborn@gmail.com>
 #

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # namcap tests - unusedsodepends
 # Copyright (C) 2011 Rémy Oudompheng <remy@archlinux.org>
 # Copyright (C) 2013 Jan Alexander Steffens <jan.steffens@gmail.com>

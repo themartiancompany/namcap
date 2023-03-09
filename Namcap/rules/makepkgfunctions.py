@@ -1,4 +1,3 @@
-#
 # namcap rules - makepkgfunctions
 # Copyright (C) 2017 Kyle Keen <keenerd@gmail.com>
 #

@@ -1,4 +1,3 @@
-#
 # namcap rules - rpath
 # Copyright (C) 2009 Abhishek Dasgupta <abhidg@gmail.com>
 #

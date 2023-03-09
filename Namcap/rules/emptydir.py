@@ -1,4 +1,3 @@
-#
 # namcap rules - emptydir
 # Copyright (C) 2004-2009 Jason Chu <jason@archlinux.org>
 #

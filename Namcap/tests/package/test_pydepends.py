@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # namcap tests - pydepends
 # Copyright (C) 2020 Felix Yan <felixonmars at archlinux.org>
 #

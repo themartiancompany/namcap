@@ -1,4 +1,3 @@
-#
 # namcap rules - makedepends
 # Copyright (C) 2018 Michael Straube <michael.straube at posteo.de>
 #

@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # namcap rules - shebangdepends
 # Copyright (C) 2003-2009 Jason Chu <jason@archlinux.org>
 # Copyright (C) 2011 Rémy Oudompheng <remy@archlinux.org>

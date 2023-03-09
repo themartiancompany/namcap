@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # namcap - tags
 # Copyright (C) 2003-2009 Jason Chu <jason@archlinux.org>
 # Copyright (c) 2011 Rémy Oudompheng <remy@archlinux.org>

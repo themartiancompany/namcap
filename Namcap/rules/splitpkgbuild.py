@@ -1,4 +1,3 @@
-#
 # namcap rules - split package checks
 # Copyright (C) 2011 Rémy Oudompheng <remy@archlinux.org>
 #

@@ -1,4 +1,3 @@
-#
 # namcap rules - array
 # Copyright (C) 2003-2009 Jesse Young <jesseyoung@gmail.com>
 #

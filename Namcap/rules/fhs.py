@@ -1,4 +1,3 @@
-#
 # namcap rules - fhs
 # Copyright (C) 2003-2009 Jason Chu <jason@archlinux.org>
 #

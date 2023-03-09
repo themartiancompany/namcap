@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-#
 # namcap tests - missingvars
 # Copyright (C) 2011 Rémy Oudompheng <remy@archlinux.org>
 #

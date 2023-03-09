@@ -1,4 +1,3 @@
-#
 # namcap rules - libtool
 # Copyright (C) 2005-2009 Simo Leone <simo@archlinux.org>
 #

@@ -1,4 +1,3 @@
-#
 # namcap rules - utility functions
 # Copyright (C) 2009 Dan McGee <dan@archlinux.org>
 #
