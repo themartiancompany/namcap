@@ -1,3 +1,16 @@
+namcap (3.4.0)
+    - Overhaul Python dependency handling
+    - Overhaul sodepends including architecture pinning and RPATH handling
+    - Add warning for transitive dependencies
+    - Add color to make errors and warnings easier to parse if output is TTY
+    - Add check for dependencies called out in pkgconfig files
+    - Fix handling of debug packages
+    - Improve error and warning message content
+    - Improve licence handling especially of linked licenses and empty arrays
+    - Drop obsolete KDE specific rules
+    - Refactor Python coding to remove deprecated features, improve readability
+    - Implement CI testing and coverage reporting
+
 namcap (3.3.1)
     - Avoid failure when scanning dependencies in invalid Python files
 
