@@ -19,12 +19,15 @@
 
 from Namcap.ruleclass import *
 
+
 class InfodirRule(TarballRule):
-	name = "infodirectory"
-	description = "Checks for info directory file."
-	def analyze(self, pkginfo, tar):
-		for i in tar.getnames():
-			if i == "usr/share/info/dir":
-				self.errors.append(("info-dir-file-present %s", i))
+    name = "infodirectory"
+    description = "Checks for info directory file."
+
+    def analyze(self, pkginfo, tar):
+        for i in tar.getnames():
+            if i == "usr/share/info/dir":
+                self.errors.append(("info-dir-file-present %s", i))
+
 
 # vim: set ts=4 sw=4 noet:

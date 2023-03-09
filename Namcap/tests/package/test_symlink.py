@@ -2,7 +2,7 @@
 #
 # namcap tests - symlink
 # Copyright (C) 2011 Rémy Oudompheng <remy@archlinux.org>
-# 
+#
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation; either version 2 of the License, or
@@ -17,14 +17,15 @@
 #   along with this program; if not, write to the Free Software
 #   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
 #   USA
-# 
+#
 
 import os
 from Namcap.tests.makepkg import MakepkgTest
 import Namcap.rules.symlink
 
+
 class SymlinkTest(MakepkgTest):
-	pkgbuild = """
+    pkgbuild = """
 pkgname=__namcap_test_symlink
 pkgver=1.0
 pkgrel=1
@@ -49,35 +50,36 @@ package() {
   ln -s /usr/include/math.h "${pkgdir}/usr/share/deplink"
 }
 """
-	def test_symlink_files(self):
-		"Package with a dangling symlink"
-		pkgfile = "__namcap_test_symlink-1.0-1-%(arch)s.pkg.tar" % { "arch": self.arch }
-		with open(os.path.join(self.tmpdir, "PKGBUILD"), "w") as f:
-			f.write(self.pkgbuild)
-		self.run_makepkg()
-		pkg, r = self.run_rule_on_tarball(
-				os.path.join(self.tmpdir, pkgfile),
-				Namcap.rules.symlink.package
-				)
-		self.assertEqual(set(r.errors), set([
-			("dangling-symlink %s points to %s",
-				("usr/share/somelink", "nofile")),
-			("dangling-symlink %s points to %s",
-				("usr/share/somelink2", "../nofile"))
-		]))
-		self.assertEqual(r.warnings, [])
-		self.assertEqual(set(r.infos), set([
-			("symlink-found %s points to %s",
-				("usr/share/somelink", "nofile")),
-			("symlink-found %s points to %s",
-				("usr/share/somelink2", "../nofile")),
-			("symlink-found %s points to %s",
-				("usr/share/validlink", "//usr/share/somedata")),
-			("symlink-found %s points to %s",
-				("usr/share/validlink2", "../share/somedata")),
-			("symlink-found %s points to %s",
-				("usr/share/deplink", "/usr/include/math.h")),
-		]))
+
+    def test_symlink_files(self):
+        "Package with a dangling symlink"
+        pkgfile = "__namcap_test_symlink-1.0-1-%(arch)s.pkg.tar" % {"arch": self.arch}
+        with open(os.path.join(self.tmpdir, "PKGBUILD"), "w") as f:
+            f.write(self.pkgbuild)
+        self.run_makepkg()
+        pkg, r = self.run_rule_on_tarball(os.path.join(self.tmpdir, pkgfile), Namcap.rules.symlink.package)
+        self.assertEqual(
+            set(r.errors),
+            set(
+                [
+                    ("dangling-symlink %s points to %s", ("usr/share/somelink", "nofile")),
+                    ("dangling-symlink %s points to %s", ("usr/share/somelink2", "../nofile")),
+                ]
+            ),
+        )
+        self.assertEqual(r.warnings, [])
+        self.assertEqual(
+            set(r.infos),
+            set(
+                [
+                    ("symlink-found %s points to %s", ("usr/share/somelink", "nofile")),
+                    ("symlink-found %s points to %s", ("usr/share/somelink2", "../nofile")),
+                    ("symlink-found %s points to %s", ("usr/share/validlink", "//usr/share/somedata")),
+                    ("symlink-found %s points to %s", ("usr/share/validlink2", "../share/somedata")),
+                    ("symlink-found %s points to %s", ("usr/share/deplink", "/usr/include/math.h")),
+                ]
+            ),
+        )
+
 
 # vim: set ts=4 sw=4 noet:
-

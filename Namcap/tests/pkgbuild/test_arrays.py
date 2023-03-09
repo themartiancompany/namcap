@@ -2,7 +2,7 @@
 #
 # namcap tests - arrays
 # Copyright (C) 2011 Rémy Oudompheng <remy@archlinux.org>
-# 
+#
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation; either version 2 of the License, or
@@ -17,13 +17,14 @@
 #   along with this program; if not, write to the Free Software
 #   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
 #   USA
-# 
+#
 
 from Namcap.tests.pkgbuild_test import PkgbuildTest
 import Namcap.rules
 
+
 class NamcapArraysTest(PkgbuildTest):
-	pkgbuild1 = """
+    pkgbuild1 = """
 # Maintainer: Arch Linux <archlinux@example.com>
 # Contributor: Arch Linux <archlinux@example.com>
 
@@ -51,17 +52,17 @@ package() {
   make DESTDIR="${pkgdir}" install
 }
 """
-	test_valid = PkgbuildTest.valid_tests
+    test_valid = PkgbuildTest.valid_tests
 
-	def preSetUp(self):
-		self.rule = Namcap.rules.arrays.package
+    def preSetUp(self):
+        self.rule = Namcap.rules.arrays.package
 
-	def test_example1(self):
-		"Variables in PKGBUILD are not an array"
-		r = self.run_on_pkg(self.pkgbuild1)
-		self.assertEqual(r.errors, [])
-		self.assertEqual(set(r.warnings),
-			set(("variable-not-array %s", i) for i in ["depends", "license"]))
-		self.assertEqual(r.infos, [])
+    def test_example1(self):
+        "Variables in PKGBUILD are not an array"
+        r = self.run_on_pkg(self.pkgbuild1)
+        self.assertEqual(r.errors, [])
+        self.assertEqual(set(r.warnings), set(("variable-not-array %s", i) for i in ["depends", "license"]))
+        self.assertEqual(r.infos, [])
+
 
 # vim: set ts=4 sw=4 noet:

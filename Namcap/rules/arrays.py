@@ -22,20 +22,42 @@
 import re
 from Namcap.ruleclass import *
 
+
 class package(PkgbuildRule):
-	name = "array"
-	description = "Verifies that array variables are actually arrays"
-	def analyze(self, pkginfo, tar):
-		arrayvars = ['arch', 'license', 'groups', 'depends', 'makedepends',
-			 'optdepends', 'checkdepends', 'provides', 'conflicts', 'replaces',
-			 'backup', 'options', 'source', 'noextract', 'md5sums', 'sha1sums',
-			 'sha224sums', 'sha256sums', 'sha384sums', 'sha512sums', 'b2sums',
-			 'validpgpkeys']
-		for i in pkginfo.pkgbuild:
-			m = re.match('\s*(.*)\s*=\s*(.*)$', i)
-			for j in arrayvars:
-				if m and m.group(1) == j:
-					if not m.group(2).startswith('('):
-						self.warnings.append(("variable-not-array %s", j))
+    name = "array"
+    description = "Verifies that array variables are actually arrays"
+
+    def analyze(self, pkginfo, tar):
+        arrayvars = [
+            "arch",
+            "license",
+            "groups",
+            "depends",
+            "makedepends",
+            "optdepends",
+            "checkdepends",
+            "provides",
+            "conflicts",
+            "replaces",
+            "backup",
+            "options",
+            "source",
+            "noextract",
+            "md5sums",
+            "sha1sums",
+            "sha224sums",
+            "sha256sums",
+            "sha384sums",
+            "sha512sums",
+            "b2sums",
+            "validpgpkeys",
+        ]
+        for i in pkginfo.pkgbuild:
+            m = re.match("\s*(.*)\s*=\s*(.*)$", i)
+            for j in arrayvars:
+                if m and m.group(1) == j:
+                    if not m.group(2).startswith("("):
+                        self.warnings.append(("variable-not-array %s", j))
+
 
 # vim: set ts=4 sw=4 noet:

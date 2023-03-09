@@ -22,9 +22,9 @@ from Namcap.ruleclass import TarballRule
 from elftools.elf.elffile import ELFFile
 from elftools.elf.dynamic import DynamicSection
 
-allowed = ['/usr/lib', '/usr/lib32', '/lib', '$ORIGIN', '${ORIGIN}']
-allowed_toplevels = [s + '/' for s in allowed]
-warn = ['/usr/local/lib']
+allowed = ["/usr/lib", "/usr/lib32", "/lib", "$ORIGIN", "${ORIGIN}"]
+allowed_toplevels = [s + "/" for s in allowed]
+warn = ["/usr/local/lib"]
 
 
 def get_runpaths(fileobj):
@@ -33,9 +33,9 @@ def get_runpaths(fileobj):
         if not isinstance(section, DynamicSection):
             continue
         for tag in section.iter_tags():
-            if tag.entry.d_tag != 'DT_RUNPATH':
+            if tag.entry.d_tag != "DT_RUNPATH":
                 continue
-            for path in tag.runpath.split(':'):
+            for path in tag.runpath.split(":"):
                 yield path
 
 
@@ -58,13 +58,11 @@ class package(TarballRule):
                     path_ok = True
 
                 if not path_ok:
-                    self.errors.append(("insecure-runpath %s %s",
-                                       (path, entry.name)))
+                    self.errors.append(("insecure-runpath %s %s", (path, entry.name)))
                     break
 
                 if path in warn and entry.name not in insecure_rpaths:
-                    self.warnings.append(("insecure-runpath %s %s",
-                                         (path, entry.name)))
+                    self.warnings.append(("insecure-runpath %s %s", (path, entry.name)))
 
 
 # vim: set ts=4 sw=4 noet:

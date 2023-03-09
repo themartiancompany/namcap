@@ -2,7 +2,7 @@
 #
 # namcap tests - licensepkg
 # Copyright (C) 2011 Rémy Oudompheng <remy@archlinux.org>
-# 
+#
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation; either version 2 of the License, or
@@ -17,14 +17,15 @@
 #   along with this program; if not, write to the Free Software
 #   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
 #   USA
-# 
+#
 
 import os
 from Namcap.tests.makepkg import MakepkgTest
 import Namcap.rules.licensepkg
 
+
 class LicenseFileTest(MakepkgTest):
-	pkgbuild = """
+    pkgbuild = """
 pkgname=__namcap_test_licensepkg
 pkgver=1.0
 pkgrel=1
@@ -43,22 +44,19 @@ package() {
   touch "${pkgdir}/usr/share/somefile"
 }
 """
-	def test_licensepkg_file_exists(self):
-		pkgfile = "__namcap_test_licensepkg-1.0-1-%(arch)s.pkg.tar" % { "arch": self.arch }
-		with open(os.path.join(self.tmpdir, "PKGBUILD"), "w") as f:
-			f.write(self.pkgbuild)
-		self.run_makepkg()
-		pkg, r = self.run_rule_on_tarball(
-				os.path.join(self.tmpdir, pkgfile),
-				Namcap.rules.licensepkg.package
-				)
-		expect = ("missing-custom-license-dir usr/share/licenses/%s",
-				"__namcap_test_licensepkg")
-		self.assertEqual(r.errors, [expect])
-		self.assertEqual(r.warnings, [])
-		self.assertEqual(r.infos, [])
 
-	pkgbuild_creativecommons = """
+    def test_licensepkg_file_exists(self):
+        pkgfile = "__namcap_test_licensepkg-1.0-1-%(arch)s.pkg.tar" % {"arch": self.arch}
+        with open(os.path.join(self.tmpdir, "PKGBUILD"), "w") as f:
+            f.write(self.pkgbuild)
+        self.run_makepkg()
+        pkg, r = self.run_rule_on_tarball(os.path.join(self.tmpdir, pkgfile), Namcap.rules.licensepkg.package)
+        expect = ("missing-custom-license-dir usr/share/licenses/%s", "__namcap_test_licensepkg")
+        self.assertEqual(r.errors, [expect])
+        self.assertEqual(r.warnings, [])
+        self.assertEqual(r.infos, [])
+
+    pkgbuild_creativecommons = """
 pkgname=__namcap_test_licensepkg
 pkgver=1.0
 pkgrel=1
@@ -78,20 +76,17 @@ package() {
 }
 """
 
-	def test_licensepkg_cc(self):
-		pkgfile = "__namcap_test_licensepkg-1.0-1-%(arch)s.pkg.tar" % { "arch": self.arch }
-		with open(os.path.join(self.tmpdir, "PKGBUILD"), "w") as f:
-			f.write(self.pkgbuild_creativecommons)
-		self.run_makepkg()
-		pkg, r = self.run_rule_on_tarball(
-				os.path.join(self.tmpdir, pkgfile),
-				Namcap.rules.licensepkg.package
-				)
-		self.assertEqual(r.errors, [])
-		self.assertEqual(r.warnings, [])
-		self.assertEqual(r.infos, [])
+    def test_licensepkg_cc(self):
+        pkgfile = "__namcap_test_licensepkg-1.0-1-%(arch)s.pkg.tar" % {"arch": self.arch}
+        with open(os.path.join(self.tmpdir, "PKGBUILD"), "w") as f:
+            f.write(self.pkgbuild_creativecommons)
+        self.run_makepkg()
+        pkg, r = self.run_rule_on_tarball(os.path.join(self.tmpdir, pkgfile), Namcap.rules.licensepkg.package)
+        self.assertEqual(r.errors, [])
+        self.assertEqual(r.warnings, [])
+        self.assertEqual(r.infos, [])
 
-	pkgbuild_wronglicense = """
+    pkgbuild_wronglicense = """
 pkgname=__namcap_test_licensepkg
 pkgver=1.0
 pkgrel=1
@@ -111,18 +106,15 @@ package() {
 }
 """
 
-	def test_licensepkg_wrong(self):
-		pkgfile = "__namcap_test_licensepkg-1.0-1-%(arch)s.pkg.tar" % { "arch": self.arch }
-		with open(os.path.join(self.tmpdir, "PKGBUILD"), "w") as f:
-			f.write(self.pkgbuild_wronglicense)
-		self.run_makepkg()
-		pkg, r = self.run_rule_on_tarball(
-				os.path.join(self.tmpdir, pkgfile),
-				Namcap.rules.licensepkg.package
-				)
-		self.assertEqual(r.errors, [('not-a-common-license %s', 'DWTFYWL')])
-		self.assertEqual(r.warnings, [])
-		self.assertEqual(r.infos, [])
+    def test_licensepkg_wrong(self):
+        pkgfile = "__namcap_test_licensepkg-1.0-1-%(arch)s.pkg.tar" % {"arch": self.arch}
+        with open(os.path.join(self.tmpdir, "PKGBUILD"), "w") as f:
+            f.write(self.pkgbuild_wronglicense)
+        self.run_makepkg()
+        pkg, r = self.run_rule_on_tarball(os.path.join(self.tmpdir, pkgfile), Namcap.rules.licensepkg.package)
+        self.assertEqual(r.errors, [("not-a-common-license %s", "DWTFYWL")])
+        self.assertEqual(r.warnings, [])
+        self.assertEqual(r.infos, [])
+
 
 # vim: set ts=4 sw=4 noet:
-

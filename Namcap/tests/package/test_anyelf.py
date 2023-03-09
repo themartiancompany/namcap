@@ -2,7 +2,7 @@
 #
 # namcap tests - anyelf rule
 # Copyright (C) 2011 Rémy Oudompheng <remy@archlinux.org>
-# 
+#
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation; either version 2 of the License, or
@@ -17,14 +17,15 @@
 #   along with this program; if not, write to the Free Software
 #   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
 #   USA
-# 
+#
 
 import os
 from Namcap.tests.makepkg import MakepkgTest
 import Namcap.rules.anyelf
 
+
 class AnyElfTest(MakepkgTest):
-	pkgbuild_any = """
+    pkgbuild_any = """
 pkgname=__namcap_test_anyelf
 pkgver=1.0
 pkgrel=1
@@ -43,7 +44,7 @@ package() {
   touch ${pkgdir}/usr/share/directory_file
 }
 """
-	pkgbuild_elf = """
+    pkgbuild_elf = """
 pkgname=__namcap_test_anyelf
 pkgver=1.0
 pkgrel=1
@@ -62,7 +63,7 @@ package() {
 }
 """
 
-	pkgbuild_static = """
+    pkgbuild_static = """
 pkgname=__namcap_test_anyelf
 pkgver=1.0
 pkgrel=1
@@ -83,47 +84,35 @@ package() {
 }
 """
 
-	def test_not_any_no_elf(self):
-		pkgfile = "__namcap_test_anyelf-1.0-1-%(arch)s.pkg.tar" % { "arch": self.arch }
-		with open(os.path.join(self.tmpdir, "PKGBUILD"), "w") as f:
-			f.write(self.pkgbuild_any)
-		self.run_makepkg()
-		pkg, r = self.run_rule_on_tarball(
-				os.path.join(self.tmpdir, pkgfile),
-				Namcap.rules.anyelf.package
-				)
-		self.assertEqual(r.errors, [])
-		self.assertEqual(r.warnings, [('no-elffiles-not-any-package', ())])
-		self.assertEqual(r.infos, [])
+    def test_not_any_no_elf(self):
+        pkgfile = "__namcap_test_anyelf-1.0-1-%(arch)s.pkg.tar" % {"arch": self.arch}
+        with open(os.path.join(self.tmpdir, "PKGBUILD"), "w") as f:
+            f.write(self.pkgbuild_any)
+        self.run_makepkg()
+        pkg, r = self.run_rule_on_tarball(os.path.join(self.tmpdir, pkgfile), Namcap.rules.anyelf.package)
+        self.assertEqual(r.errors, [])
+        self.assertEqual(r.warnings, [("no-elffiles-not-any-package", ())])
+        self.assertEqual(r.infos, [])
 
-	def test_any_but_elf(self):
-		pkgfile = "__namcap_test_anyelf-1.0-1-any.pkg.tar"
-		with open(os.path.join(self.tmpdir, "PKGBUILD"), "w") as f:
-			f.write(self.pkgbuild_elf)
-		self.run_makepkg()
-		pkg, r = self.run_rule_on_tarball(
-				os.path.join(self.tmpdir, pkgfile),
-				Namcap.rules.anyelf.package
-				)
-		self.assertEqual(r.errors,
-				[("elffile-in-any-package %s", "usr/bin/ls")])
-		self.assertEqual(r.warnings, [])
-		self.assertEqual(r.infos, [])
+    def test_any_but_elf(self):
+        pkgfile = "__namcap_test_anyelf-1.0-1-any.pkg.tar"
+        with open(os.path.join(self.tmpdir, "PKGBUILD"), "w") as f:
+            f.write(self.pkgbuild_elf)
+        self.run_makepkg()
+        pkg, r = self.run_rule_on_tarball(os.path.join(self.tmpdir, pkgfile), Namcap.rules.anyelf.package)
+        self.assertEqual(r.errors, [("elffile-in-any-package %s", "usr/bin/ls")])
+        self.assertEqual(r.warnings, [])
+        self.assertEqual(r.infos, [])
 
-	def test_static(self):
-		pkgfile = "__namcap_test_anyelf-1.0-1-any.pkg.tar"
-		with open(os.path.join(self.tmpdir, "PKGBUILD"), "w") as f:
-			f.write(self.pkgbuild_static)
-		self.run_makepkg()
-		pkg, r = self.run_rule_on_tarball(
-				os.path.join(self.tmpdir, pkgfile),
-				Namcap.rules.anyelf.package
-				)
-		self.assertEqual(r.errors,
-				[("elffile-in-any-package %s", "usr/lib/library.a")])
-		self.assertEqual(r.warnings, [])
-		self.assertEqual(r.infos, [])
+    def test_static(self):
+        pkgfile = "__namcap_test_anyelf-1.0-1-any.pkg.tar"
+        with open(os.path.join(self.tmpdir, "PKGBUILD"), "w") as f:
+            f.write(self.pkgbuild_static)
+        self.run_makepkg()
+        pkg, r = self.run_rule_on_tarball(os.path.join(self.tmpdir, pkgfile), Namcap.rules.anyelf.package)
+        self.assertEqual(r.errors, [("elffile-in-any-package %s", "usr/lib/library.a")])
+        self.assertEqual(r.warnings, [])
+        self.assertEqual(r.infos, [])
 
 
 # vim: set ts=4 sw=4 noet:
-

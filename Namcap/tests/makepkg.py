@@ -2,7 +2,7 @@
 #
 # namcap tests - makepkg launcher
 # Copyright (C) 2011 Rémy Oudompheng <remy@archlinux.org>
-# 
+#
 #   This program is free software; you can redistribute it and/or modify
 #   it under the terms of the GNU General Public License as published by
 #   the Free Software Foundation; either version 2 of the License, or
@@ -17,7 +17,7 @@
 #   along with this program; if not, write to the Free Software
 #   Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307
 #   USA
-# 
+#
 
 import os
 import tempfile
@@ -54,40 +54,39 @@ PKGEXT='.pkg.tar.xz'
 SRCEXT='.src.tar.gz'
 """
 
+
 class MakepkgTest(unittest.TestCase):
-	def setUp(self):
-		self.tmpdir = tempfile.mkdtemp()
-		self.arch = os.uname()[-1]
-		with open(os.path.join(self.tmpdir, "makepkg.conf"), "w") as f:
-			f.write(makepkg_conf % {"arch": self.arch})
+    def setUp(self):
+        self.tmpdir = tempfile.mkdtemp()
+        self.arch = os.uname()[-1]
+        with open(os.path.join(self.tmpdir, "makepkg.conf"), "w") as f:
+            f.write(makepkg_conf % {"arch": self.arch})
 
-	def tearDown(self):
-		shutil.rmtree(self.tmpdir)
+    def tearDown(self):
+        shutil.rmtree(self.tmpdir)
 
-	def run_makepkg(self):
-		pwd = os.getcwd()
-		os.chdir(self.tmpdir)
-		environment = os.environ
-		environment.update({ "MAKEPKG_CONF": os.path.join(self.tmpdir, "makepkg.conf") })
-		p = subprocess.Popen(["makepkg", "-f", "-d"],
-				env = environment,
-				stdout = subprocess.PIPE, stderr = subprocess.PIPE)
-		out1, out2 = p.communicate()
-		if p.returncode != 0:
-			sys.stderr.buffer.write(out1)
-			sys.stderr.buffer.write(out2)
-			raise RuntimeError("makepkg returned an error")
-		os.chdir(pwd)
+    def run_makepkg(self):
+        pwd = os.getcwd()
+        os.chdir(self.tmpdir)
+        environment = os.environ
+        environment.update({"MAKEPKG_CONF": os.path.join(self.tmpdir, "makepkg.conf")})
+        p = subprocess.Popen(["makepkg", "-f", "-d"], env=environment, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        out1, out2 = p.communicate()
+        if p.returncode != 0:
+            sys.stderr.buffer.write(out1)
+            sys.stderr.buffer.write(out2)
+            raise RuntimeError("makepkg returned an error")
+        os.chdir(pwd)
 
-	def run_rule_on_tarball(self, filename, rule):
-		# process PKGINFO
-		pkg = Namcap.package.load_from_tarball(filename + ".xz")
+    def run_rule_on_tarball(self, filename, rule):
+        # process PKGINFO
+        pkg = Namcap.package.load_from_tarball(filename + ".xz")
 
-		tar = tarfile.open(filename + ".xz")
-		r = rule()
-		r.analyze(pkg, tar)
-		tar.close()
-		return pkg, r
+        tar = tarfile.open(filename + ".xz")
+        r = rule()
+        r.analyze(pkg, tar)
+        tar.close()
+        return pkg, r
+
 
 # vim: set ts=4 sw=4 noet:
-

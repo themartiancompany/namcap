@@ -26,12 +26,13 @@ import Namcap.version
 
 
 class VersionTests(unittest.TestCase):
-	def test_manpage(self):
-		''' Test that the manpage and program has the same version.'''
-		here = os.path.dirname(os.path.realpath(__file__))
-		with open(os.path.join(here, '..', '..', 'namcap.1')) as f:
-			first_line = f.readline()
-		match = re.search('"namcap (.*?)"', first_line)
-		self.assertEqual(match.group(1), Namcap.version.get_version())
+    def test_manpage(self):
+        """Test that the manpage and program has the same version."""
+        here = os.path.dirname(os.path.realpath(__file__))
+        with open(os.path.join(here, "..", "..", "namcap.1")) as f:
+            first_line = f.readline()
+        match = re.search('"namcap (.*?)"', first_line)
+        self.assertEqual(match.group(1), Namcap.version.get_version())
+
 
 # vim: set ts=4 sw=4 noet:

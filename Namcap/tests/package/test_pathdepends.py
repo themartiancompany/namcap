@@ -23,8 +23,9 @@ import os
 from Namcap.tests.makepkg import MakepkgTest
 import Namcap.rules.pathdepends
 
+
 class PathDependsTest(MakepkgTest):
-	pkgbuild = """
+    pkgbuild = """
 pkgname=__namcap_test_pathdepends
 pkgver=1.0
 pkgrel=1
@@ -53,23 +54,23 @@ package() {
 }
 """
 
-	def test_pathdepends_exists(self):
-		pkgfile = "__namcap_test_pathdepends-1.0-1-%(arch)s.pkg.tar" % { "arch": self.arch }
-		with open(os.path.join(self.tmpdir, "PKGBUILD"), "w") as f:
-			f.write(self.pkgbuild)
-		self.run_makepkg()
-		pkg, r = self.run_rule_on_tarball(
-				os.path.join(self.tmpdir, pkgfile),
-				Namcap.rules.pathdepends.PathDependsRule
-				)
-		self.assertEqual(pkg.detected_deps,
-				{'dconf': [('dconf-needed-for-glib-schemas', ())],
-				 'glib2': [('glib2-needed-for-gio-modules', ())],
-				 'hicolor-icon-theme': [('hicolor-icon-theme-needed-for-hicolor-dir', ())],
-				})
-		self.assertEqual(r.errors, [])
-		self.assertEqual(r.warnings, [])
-		self.assertEqual(r.infos, [])
+    def test_pathdepends_exists(self):
+        pkgfile = "__namcap_test_pathdepends-1.0-1-%(arch)s.pkg.tar" % {"arch": self.arch}
+        with open(os.path.join(self.tmpdir, "PKGBUILD"), "w") as f:
+            f.write(self.pkgbuild)
+        self.run_makepkg()
+        pkg, r = self.run_rule_on_tarball(os.path.join(self.tmpdir, pkgfile), Namcap.rules.pathdepends.PathDependsRule)
+        self.assertEqual(
+            pkg.detected_deps,
+            {
+                "dconf": [("dconf-needed-for-glib-schemas", ())],
+                "glib2": [("glib2-needed-for-gio-modules", ())],
+                "hicolor-icon-theme": [("hicolor-icon-theme-needed-for-hicolor-dir", ())],
+            },
+        )
+        self.assertEqual(r.errors, [])
+        self.assertEqual(r.warnings, [])
+        self.assertEqual(r.infos, [])
 
 
 # vim: set ts=4 sw=4 noet:

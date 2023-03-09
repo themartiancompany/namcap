@@ -26,60 +26,73 @@ from Namcap.ruleclass import *
 
 RE_IS_HEXNUMBER = re.compile("[0-9a-f]+")
 
+
 class ChecksumsRule(PkgbuildRule):
-	name = "checksums"
-	description = "Verifies checksums are included in a PKGBUILD"
-	def analyze(self, pkginfo, tar):
-		checksums=[('md5', 32), ('sha1', 40), ('sha224', 56), ('sha256', 64), ('sha384', 96), ('sha512', 128), ('b2', 128)]
+    name = "checksums"
+    description = "Verifies checksums are included in a PKGBUILD"
 
-		if "source" in pkginfo:
-			haschecksums = False
-			for sumname, sumlen in checksums:
-				if (sumname + 'sums') in pkginfo:
-					haschecksums = True
-			if not haschecksums:
-				self.errors.append(("missing-checksums", ()))
-		else:
-			pkginfo["source"] = []
+    def analyze(self, pkginfo, tar):
+        checksums = [
+            ("md5", 32),
+            ("sha1", 40),
+            ("sha224", 56),
+            ("sha256", 64),
+            ("sha384", 96),
+            ("sha512", 128),
+            ("b2", 128),
+        ]
 
-		for sumname, sumlen in checksums:
-			sumname += 'sums'
-			if sumname in pkginfo:
-				if len(pkginfo["source"]) > len(pkginfo[sumname]):
-					self.errors.append(("not-enough-checksums %s %i needed",
-						          (sumname, len(pkginfo["source"]))))
-				elif len(pkginfo["source"]) < len(pkginfo[sumname]):
-					self.errors.append(("too-many-checksums %s %i needed",
-						          (sumname, len(pkginfo["source"]))))
-				for csum in pkginfo[sumname]:
-					if csum == "SKIP":
-						continue
-					if len(csum) != sumlen or not RE_IS_HEXNUMBER.match(csum):
-						self.errors.append(("improper-checksum %s %s", (sumname, csum)))
+        if "source" in pkginfo:
+            haschecksums = False
+            for sumname, sumlen in checksums:
+                if (sumname + "sums") in pkginfo:
+                    haschecksums = True
+            if not haschecksums:
+                self.errors.append(("missing-checksums", ()))
+        else:
+            pkginfo["source"] = []
+
+        for sumname, sumlen in checksums:
+            sumname += "sums"
+            if sumname in pkginfo:
+                if len(pkginfo["source"]) > len(pkginfo[sumname]):
+                    self.errors.append(("not-enough-checksums %s %i needed", (sumname, len(pkginfo["source"]))))
+                elif len(pkginfo["source"]) < len(pkginfo[sumname]):
+                    self.errors.append(("too-many-checksums %s %i needed", (sumname, len(pkginfo["source"]))))
+                for csum in pkginfo[sumname]:
+                    if csum == "SKIP":
+                        continue
+                    if len(csum) != sumlen or not RE_IS_HEXNUMBER.match(csum):
+                        self.errors.append(("improper-checksum %s %s", (sumname, csum)))
+
 
 class TagsRule(PkgbuildRule):
-	name = "tags"
-	description = "Looks for Maintainer and Contributor comments"
-	def analyze(self, pkginfo, tar):
-		contributortag = 0
-		maintainertag = 0
-		for i in pkginfo.pkgbuild:
-			if re.match("#\s*Contributor\s*:", i):
-				contributortag = 1
-			if re.match("#\s*Maintainer\s*:", i):
-				maintainertag = 1
+    name = "tags"
+    description = "Looks for Maintainer and Contributor comments"
 
-		if contributortag != 1:
-			self.infos.append(("missing-contributor", ()))
+    def analyze(self, pkginfo, tar):
+        contributortag = 0
+        maintainertag = 0
+        for i in pkginfo.pkgbuild:
+            if re.match("#\s*Contributor\s*:", i):
+                contributortag = 1
+            if re.match("#\s*Maintainer\s*:", i):
+                maintainertag = 1
 
-		if maintainertag != 1:
-			self.warnings.append(("missing-maintainer", ()))
+        if contributortag != 1:
+            self.infos.append(("missing-contributor", ()))
+
+        if maintainertag != 1:
+            self.warnings.append(("missing-maintainer", ()))
+
 
 class DescriptionRule(PkgbuildRule):
-	name = "description"
-	description = "Verifies that the description is set in a PKGBUILD"
-	def analyze(self, pkginfo, tar):
-		if "desc" not in pkginfo or len(pkginfo["desc"]) == 0:
-			self.errors.append(("missing-description", ()))
+    name = "description"
+    description = "Verifies that the description is set in a PKGBUILD"
+
+    def analyze(self, pkginfo, tar):
+        if "desc" not in pkginfo or len(pkginfo["desc"]) == 0:
+            self.errors.append(("missing-description", ()))
+
 
 # vim: set ts=4 sw=4 noet:

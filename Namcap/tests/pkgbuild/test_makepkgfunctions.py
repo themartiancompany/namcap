@@ -22,8 +22,9 @@
 from Namcap.tests.pkgbuild_test import PkgbuildTest
 import Namcap.rules.makepkgfunctions as module
 
+
 class NamcapMakepkgfunctionsTest(PkgbuildTest):
-	pkgbuild1 = """
+    pkgbuild1 = """
 # Maintainer: Arch Linux <archlinux at example.com>
 # Contributor: Arch Linux <archlinux at example.com>
 
@@ -51,17 +52,17 @@ package() {
   true
 }
 """
-	test_valid = PkgbuildTest.valid_tests
+    test_valid = PkgbuildTest.valid_tests
 
-	def preSetUp(self):
-		self.rule = module.package
+    def preSetUp(self):
+        self.rule = module.package
 
-	def test_example1(self):
-		bad_calls = ['msg', 'msg2', 'warning', 'error', 'plain']
-		r = self.run_on_pkg(self.pkgbuild1)
-		self.assertEqual(r.errors, [])
-		self.assertEqual(set(r.warnings),
-			set(("makepkg-function-used %s", i) for i in bad_calls))
-		self.assertEqual(r.infos, [])
+    def test_example1(self):
+        bad_calls = ["msg", "msg2", "warning", "error", "plain"]
+        r = self.run_on_pkg(self.pkgbuild1)
+        self.assertEqual(r.errors, [])
+        self.assertEqual(set(r.warnings), set(("makepkg-function-used %s", i) for i in bad_calls))
+        self.assertEqual(r.infos, [])
+
 
 # vim: set ts=4 sw=4 noet:
