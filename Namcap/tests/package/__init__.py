@@ -1,3 +1,6 @@
+# Copyright (C) 2003-2023 Namcap contributors, see AUTHORS for details.
+# SPDX-License-Identifier: GPL-2.0-or-later
+
 import os
 import unittest
 
@@ -10,5 +13,3 @@ def getTestSuite():
 if __name__ == "__main__":
     runner = unittest.TextTestRunner()
     runner.run(getTestSuite())
-
-# vim: set ts=4 sw=4 noet:

@@ -62,5 +62,3 @@ if [ "${#pkgname[@]}" -gt 1 ]; then
 else
 	pkginfo
 fi
-
-# vim: set noet ts=4 sw=4:

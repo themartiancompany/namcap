@@ -251,5 +251,3 @@ namcap (2.3)
     - Script detection generalised, supports more scripts (FS#15160)
     - Documentation updates (manual page, AUTHORS, README)
     - Add a option to exclude some rules from the checks
-
-# vim: set ts=4 sw=4 noet:
