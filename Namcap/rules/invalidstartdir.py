@@ -27,7 +27,7 @@ class package(PkgbuildRule):
 
     def analyze(self, pkginfo, tar):
         for i in pkginfo.pkgbuild:
-            startdirs = re.split('\${?startdir}?"?', i)
+            startdirs = re.split(r'\${?startdir}?"?', i)
             for j in startdirs[1:]:
                 if j[:4] != "/pkg" and j[:4] != "/src":
                     self.errors.append(("file-referred-in-startdir", ()))

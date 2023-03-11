@@ -36,8 +36,8 @@ if _pyalpm_version_tuple < (0, 5):
 
 pyalpm_handle = pycman.config.init_with_config("/etc/pacman.conf")
 
-DEPENDS_RE = re.compile("([^<>=:]+)([<>]?=.*)?(: .*)?")
-SODEPENDS_RE = re.compile("([^:]+)(: .*)?")
+DEPENDS_RE = re.compile(r"([^<>=:]+)([<>]?=.*)?(: .*)?")
+SODEPENDS_RE = re.compile(r"([^:]+)(: .*)?")
 
 
 def strip_depend_info(value):
@@ -109,7 +109,7 @@ class PacmanPackage(collections.abc.MutableMapping):
         # Parsing of .PKGINFO files from tarballs
         if isinstance(pkginfo, str):
             for i in pkginfo.splitlines():
-                m = re.match("(.*) = (.*)", i)
+                m = re.match(r"(.*) = (.*)", i)
                 if m is not None:
                     lhs = m.group(1)
                     rhs = m.group(2)

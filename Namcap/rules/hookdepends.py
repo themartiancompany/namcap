@@ -27,11 +27,11 @@ class HookDependsRule(TarballRule):
     description = "Check for redundant hook dependencies"
     subrules = [
         {
-            "path": "^usr/share/applications/.*\.desktop$",
+            "path": r"^usr/share/applications/.*\.desktop$",
             "dep": "desktop-file-utils",
         },
         {
-            "path": "^usr/share/mime$",
+            "path": r"^usr/share/mime$",
             "dep": "shared-mime-info",
         },
     ]

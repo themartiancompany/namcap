@@ -26,7 +26,7 @@ class package(TarballRule):
     description = "Verifies that there aren't any scrollkeeper directories."
 
     def analyze(self, pkginfo, tar):
-        scroll = re.compile("var.*/scrollkeeper/?$")
+        scroll = re.compile(r"var.*/scrollkeeper/?$")
         for i in tar.getnames():
             if scroll.search(i):
                 self.errors.append(("scrollkeeper-dir-exists %s", i))

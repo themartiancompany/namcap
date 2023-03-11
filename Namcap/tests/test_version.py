@@ -31,7 +31,7 @@ class VersionTests(unittest.TestCase):
         here = os.path.dirname(os.path.realpath(__file__))
         with open(os.path.join(here, "..", "..", "namcap.1")) as f:
             first_line = f.readline()
-        match = re.search('"namcap (.*?)"', first_line)
+        match = re.search(r'"namcap (.*?)"', first_line)
         self.assertEqual(match.group(1), Namcap.version.get_version())
 
 

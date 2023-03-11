@@ -30,7 +30,7 @@ class package(PkgbuildRule):
     def analyze(self, pkginfo, tar):
         if "backup" in pkginfo:
             for item in pkginfo["backup"]:
-                if re.match("^/", item) is not None:
+                if re.match(r"^/", item) is not None:
                     self.errors.append(("backups-preceding-slashes", ()))
 
 
