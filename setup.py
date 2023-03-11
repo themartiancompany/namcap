@@ -5,7 +5,7 @@ import Namcap.version
 DATAFILES = [
     ("/usr/share/man/man1", ["namcap.1"]),
     ("/usr/share/namcap", ["namcap-tags", "parsepkgbuild.sh"]),
-    ("/usr/share/doc/namcap", ["README", "AUTHORS", "TODO"]),
+    ("/usr/share/doc/namcap", ["README.md", "AUTHORS"]),
 ]
 
 setup(
