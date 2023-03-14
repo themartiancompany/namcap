@@ -8,6 +8,7 @@ import sys
 import tarfile
 
 import Namcap.depends
+import Namcap.rules
 import Namcap.tags
 import Namcap.version
 
