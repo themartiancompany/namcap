@@ -4,16 +4,20 @@
 """Checks dependencies resulting from pkg-config files."""
 
 from collections import defaultdict
+import os
+import shutil
 import subprocess
+import tempfile
 import Namcap.package
 from Namcap.ruleclass import TarballRule
 
 
-def scanpcfiles(pkg_pc_files, pclist):
+def scanpcfiles(tar, pclist):
     """
     Find dependencies of pkg-config files
     """
 
+    pkg_pc_files = [f for f in tar.getnames() if ".pc" in f]
     for f in pkg_pc_files:
         if f.startswith("usr/lib/pkgconfig") or f.startswith("usr/share/pkgconfig"):
             pcname = f.replace("usr/lib/pkgconfig/", "").replace("usr/share/pkgconfig/", "").replace(".pc", "")
@@ -24,6 +28,8 @@ def scanpcfiles(pkg_pc_files, pclist):
         else:
             continue
 
+        tmpdir = tempfile.mkdtemp()
+        tar.extract(f, tmpdir)
         var = subprocess.Popen(
             [
                 pkgconfig_command,
@@ -33,10 +39,11 @@ def scanpcfiles(pkg_pc_files, pclist):
                 "--print-requires-private",
                 pcname,
             ],
-            env={"LANG": "C"},
+            env={"LANG": "C", "PKG_CONFIG_LIBDIR": tmpdir + "/" + os.path.dirname(f)},
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         ).communicate()
+        shutil.rmtree(tmpdir)
         for j in var[0].decode("ascii").splitlines():
             # Remove version numbers
             pc_pkg = j.split(" ", 1)[0]
@@ -84,10 +91,9 @@ class PkgConfigDependenciesRule(TarballRule):
     def analyze(self, pkginfo, tar):
         pclist = defaultdict(set)
         dependlist = {}
-        pkg_pc_files = [f for f in tar.getnames() if ".pc" in f]
 
         # Detect dependencies from pkg-config files
-        scanpcfiles(pkg_pc_files, pclist)
+        scanpcfiles(tar, pclist)
 
         # Find the packages wich contain the pkg-config files
         dependlist, orphans = finddepends(pclist)
