@@ -47,7 +47,7 @@ libdepends-detected-but-optional %s %s (%s) :: Soname dependency '%s' provided b
 libdepends-detected-not-included %s %s (%s) :: Soname dependency '%s' provided by %s detected and not included (needed in files %s)
 libdepends-detected-satisfied %s %s (%s) :: Soname dependency '%s' provided by %s is satisfied (needed in files %s)
 libdepends-missing-provides %s %s (%s) :: Soname '%s' is not specified as provides by %s yet (needed in files %s)
-libdepends-not-needed %s :: Soname dependency included, but may not needed ('%s')
+libdepends-not-needed %s :: Soname dependency included, but may not be needed ('%s')
 libdepends-without-version %s :: Soname dependency %s specified without version number
 libprovides-by-namcap-sight provides=(%s) :: Provides as namcap sees them: provides=(%s)
 libprovides-missing %s :: Specified library '%s' is not found in public libdirs of package
@@ -113,7 +113,7 @@ dependency-duplicated-optdepend %s :: Dependency %s specified in both depends an
 dependency-implicitly-satisfied %s (%s) :: Dependency %s detected and implicitly satisfied (%s)
 dependency-implicitly-satisfied-optional %s (%s) :: Dependency %s detected and implicitly satisfied but optional (%s)
 dependency-is-testing-release %s :: Dependency '%s' on your system is a testing release
-dependency-not-needed %s :: Dependency included, but may not needed ('%s')
+dependency-not-needed %s :: Dependency included, but may not be needed ('%s')
 dependency-satisfied-optdepend %s :: Dependency %s specified in optdepends but implicitly satisfied by depends
 depends-by-namcap-sight depends=(%s) :: Depends as namcap sees them: depends=(%s)
 
