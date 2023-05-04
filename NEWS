@@ -1,3 +1,11 @@
+namcap (3.4.1)
+    - Use .pc files from packages not matching ones from host system
+    - Use raw strings to disambiguate regular expressions
+    - Copy-edit wording of tags
+    - Fix import path scopeing in tests
+    - Refresh licensing, author lists, testing tips, and other info in docs
+    - Reformat and lint entire codebase (via black & ruff)
+
 namcap (3.4.0)
     - Overhaul Python dependency handling
     - Overhaul sodepends including architecture pinning and RPATH handling
