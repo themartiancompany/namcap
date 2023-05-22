@@ -1,3 +1,6 @@
+namcap (3.4.2)
+    - Revert incorrectly dropped rule imports
+
 namcap (3.4.1)
     - Use .pc files from packages not matching ones from host system
     - Use raw strings to disambiguate regular expressions
