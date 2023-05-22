@@ -5,8 +5,54 @@ from types import ModuleType
 import Namcap.ruleclass
 
 # Tarball rules
+from . import (  # noqa: ignore=F401
+    anyelf,
+    elffiles,
+    emptydir,
+    externalhooks,
+    fhs,
+    filenames,
+    fileownership,
+    gnomemime,
+    hardlinks,
+    hookdepends,
+    infodirectory,
+    javafiles,
+    libtool,
+    licensepkg,
+    lotsofdocs,
+    missingbackups,
+    pathdepends,
+    perllocal,
+    pcdepends,
+    permissions,
+    py_mtime,
+    pydepends,
+    rpath,
+    runpath,
+    scrollkeeper,
+    shebangdepends,
+    sodepends,
+    symlink,
+    systemdlocation,
+    unusedsodepends,
+)
 
 # PKGBUILD and metadata rules
+from . import (  # noqa: ignore=F401
+    arrays,
+    badbackups,
+    carch,
+    extravars,
+    invalidstartdir,
+    makedepends,
+    makepkgfunctions,
+    missingvars,
+    pkginfo,
+    pkgnameindesc,
+    sfurl,
+    splitpkgbuild,
+)
 
 all_rules = {}
 for name, value in dict(locals()).items():
