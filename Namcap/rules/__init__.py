@@ -5,7 +5,7 @@ from types import ModuleType
 import Namcap.ruleclass
 
 # Tarball rules
-from . import (  # noqa: ignore=F401
+from . import (  # noqa: F401
     anyelf,
     elffiles,
     emptydir,
@@ -39,7 +39,7 @@ from . import (  # noqa: ignore=F401
 )
 
 # PKGBUILD and metadata rules
-from . import (  # noqa: ignore=F401
+from . import (  # noqa: F401
     arrays,
     badbackups,
     carch,
