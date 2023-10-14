@@ -41,7 +41,7 @@ def get_imports(string, filename, modules):
     imports = re.findall(import_pattern, string, re.MULTILINE)
 
     for m in imports:
-        m = m.replace("import ", "")
+        m = m.strip().replace("import ", "")
         modules[m].add(filename)
     return
 
