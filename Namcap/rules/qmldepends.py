@@ -3,7 +3,6 @@
 
 from collections import defaultdict
 import re
-import subprocess
 import Namcap.package
 from Namcap.ruleclass import TarballRule
 from Namcap.util import is_elf
