@@ -65,7 +65,7 @@ class QmlDependencyRule(TarballRule):
             if not entry.name.endswith('.qml') and not is_elf(f):
                 continue
             s = f.read().decode(errors='ignore')
-            if is_elf(f) and not 'QtQuick' in s:
+            if is_elf(f) and 'QtQuick' not in s:
             # Does not embed QML, prevent false positives
                 continue
             get_imports(f.read().decode(errors='ignore'), entry.name, modules)
