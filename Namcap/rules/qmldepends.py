@@ -7,7 +7,8 @@ import Namcap.package
 from Namcap.ruleclass import TarballRule
 from Namcap.util import is_elf
 
-qml_path = 'usr/lib/qt6/qml/'
+qml_path = "usr/lib/qt6/qml/"
+
 
 def finddepends(modules):
     """
@@ -22,8 +23,8 @@ def finddepends(modules):
 
     for pkg in Namcap.package.get_installed_packages():
         for j, fsize, fmode in pkg.files:
-            if j.startswith(qml_path) and j.endswith('/qmldir'):
-                k = j.replace(qml_path, '').replace('/qmldir', '').replace('/', '.')
+            if j.startswith(qml_path) and j.endswith("/qmldir"):
+                k = j.replace(qml_path, "").replace("/qmldir", "").replace("/", ".")
                 if k in modules:
                     dependlist[pkg.name].add(k)
                     foundlibs.add(k)
@@ -40,7 +41,7 @@ def get_imports(string, filename, modules):
     imports = re.findall(import_pattern, string, re.MULTILINE)
 
     for m in imports:
-        m = m.replace('import ', '')
+        m = m.replace("import ", "")
         modules[m].add(filename)
     return
 
@@ -56,21 +57,21 @@ class QmlDependencyRule(TarballRule):
         for entry in tar:
             if not entry.isfile():
                 continue
-            if entry.name.startswith(qml_path) and entry.name.endswith('/qmldir'):
-                included_modules += [entry.name.replace(qml_path, '').replace('/qmldir', '').replace('/', '.')]
+            if entry.name.startswith(qml_path) and entry.name.endswith("/qmldir"):
+                included_modules += [entry.name.replace(qml_path, "").replace("/qmldir", "").replace("/", ".")]
                 continue
-            if not entry.name.endswith('.qml') and not any(entry.name.startswith(d) for d in ['usr/bin', 'usr/lib']):
+            if not entry.name.endswith(".qml") and not any(entry.name.startswith(d) for d in ["usr/bin", "usr/lib"]):
                 continue
             f = tar.extractfile(entry)
-            if not entry.name.endswith('.qml') and not is_elf(f):
+            if not entry.name.endswith(".qml") and not is_elf(f):
                 continue
-            s = f.read().decode(errors='ignore')
-            if is_elf(f) and 'QtQuick' not in s:
-            # Does not embed QML, prevent false positives
+            s = f.read().decode(errors="ignore")
+            if is_elf(f) and "QtQuick" not in s:
+                # Does not embed QML, prevent false positives
                 continue
-            get_imports(f.read().decode(errors='ignore'), entry.name, modules)
+            get_imports(f.read().decode(errors="ignore"), entry.name, modules)
             f.close()
-            
+
         for m in included_modules:
             modules.pop(m, None)
 
@@ -78,9 +79,7 @@ class QmlDependencyRule(TarballRule):
         liblist = modules
 
         # Handle "no package associated" errors
-        self.warnings.extend(
-            [("qml-module-no-package-associated %s %s", (i, str(list(liblist[i])))) for i in orphans]
-        )
+        self.warnings.extend([("qml-module-no-package-associated %s %s", (i, str(list(liblist[i])))) for i in orphans])
 
         # Print QML module deps
         for pkg, libraries in dependlist.items():

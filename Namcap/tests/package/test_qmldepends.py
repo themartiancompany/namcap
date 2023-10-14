@@ -32,16 +32,9 @@ package() {
         with open(os.path.join(self.tmpdir, "PKGBUILD"), "w") as f:
             f.write(self.pkgbuild)
         self.run_makepkg()
-        pkg, r = self.run_rule_on_tarball(
-            os.path.join(self.tmpdir, pkgfile), Namcap.rules.qmldepends.QmlDependencyRule
-        )
+        pkg, r = self.run_rule_on_tarball(os.path.join(self.tmpdir, pkgfile), Namcap.rules.qmldepends.QmlDependencyRule)
         self.assertEqual(
             r.warnings,
-            [
-                (
-                    'qml-module-no-package-associated %s %s',
-                    ('QtQuick.Window', "['usr/bin/main.qml']")
-                )
-            ],
+            [("qml-module-no-package-associated %s %s", ("QtQuick.Window", "['usr/bin/main.qml']"))],
         )
         self.assertEqual(r.errors, [])
