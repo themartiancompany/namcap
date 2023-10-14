@@ -69,7 +69,7 @@ class QmlDependencyRule(TarballRule):
             if is_elf(f) and "QtQuick" not in s:
                 # Does not embed QML, prevent false positives
                 continue
-            get_imports(f.read().decode(errors="ignore"), entry.name, modules)
+            get_imports(s, entry.name, modules)
             f.close()
 
         for m in included_modules:
