@@ -89,6 +89,8 @@ py-mtime-mtree-warning :: Found .py file unnoticeably newer than associated .pyc
 py-mtime-tar-error :: Found .py file newer than associated .pyc/pyo.
 python-module-dependence %s in %s :: Python dependence (%s) on module %s
 python-module-no-package-associated %s %s :: Referenced python module '%s' is an uninstalled dependency (needed in files %s)
+qml-module-dependence %s in %s :: QML dependency (%s) on module %s
+qml-module-no-package-associated %s %s :: Referenced QML module '%s' is an uninstalled dependency (needed in files %s)
 redundant-makedep %s :: Make dependency (%s) already included as dependency
 script-link-detected %s in %s :: Script link detected (%s) in file %s
 scrollkeeper-dir-exists %s :: Scrollkeeper directory exists (%s). Remember to not run scrollkeeper till post_{install,upgrade,remove}.
@@ -126,3 +128,4 @@ libraries-needed %s %s :: libraries %s needed in files %s
 pkgconf-needed %s %s :: pkg-config files %s needed in files %s
 programs-needed %s %s :: programs %s needed in scripts %s
 python-modules-needed %s %s :: python modules %s needed in files %s
+qml-modules-needed %s %s :: QML modules %s needed in files %s

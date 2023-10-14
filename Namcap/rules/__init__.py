@@ -28,6 +28,7 @@ from . import (  # noqa: F401
     permissions,
     py_mtime,
     pydepends,
+    qmldepends,
     rpath,
     runpath,
     scrollkeeper,
