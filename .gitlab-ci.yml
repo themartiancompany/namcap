@@ -13,17 +13,17 @@ ruff:
   before_script:
     - pacman -Syu --needed --noconfirm ruff
   script:
-    - ruff -q .
+    - ruff check -q .
 
-black:
+ruff-format:
   stage: lint
   needs: []
   only:
     - merge_requests
   before_script:
-    - pacman -Syu --needed --noconfirm python-black
+    - pacman -Syu --needed --noconfirm ruff
   script:
-    - black --check .
+    - ruff format --check -q .
 
 pytest:
   stage: test
