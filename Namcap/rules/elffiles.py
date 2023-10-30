@@ -3,7 +3,8 @@
 
 from elftools.elf.elffile import ELFFile
 from elftools.elf.dynamic import DynamicSection
-from elftools.elf.sections import SymbolTableSection
+from elftools.elf.enums import ENUM_GNU_PROPERTY_X86_FEATURE_1_FLAGS
+from elftools.elf.sections import NoteSection, SymbolTableSection
 
 from Namcap.util import is_elf
 from Namcap.ruleclass import TarballRule
@@ -205,3 +206,43 @@ class NoPIERule(TarballRule):
 
         if nopie_binaries:
             self.warnings = [("elffile-nopie %s", i) for i in nopie_binaries]
+
+
+def _note_props(elffile, note_type, prop_type):
+    for section in elffile.iter_sections():
+        if not isinstance(section, NoteSection):
+            continue
+        for note in section.iter_notes():
+            if note["n_type"] != note_type:
+                continue
+            for prop in note["n_desc"]:
+                if prop["pr_type"] == prop_type:
+                    yield prop
+
+
+class ELFSHSTKRule(TarballRule):
+    """
+    Check shadow stack support in ELF files.
+    """
+
+    name = "elfnoshstk"
+    description = "Check for shadow stack support in ELF files."
+
+    def analyze(self, pkginfo, tar):
+        noshstk_binaries = []
+
+        for elffile, entry_name in elf_files_from_tar(tar):
+            if ".debug" in entry_name:
+                continue
+            for prop in _note_props(
+                elffile,
+                note_type="NT_GNU_PROPERTY_TYPE_0",
+                prop_type="GNU_PROPERTY_X86_FEATURE_1_AND",
+            ):
+                if prop["pr_data"] & ENUM_GNU_PROPERTY_X86_FEATURE_1_FLAGS["GNU_PROPERTY_X86_FEATURE_1_SHSTK"]:
+                    break
+
+            else:
+                noshstk_binaries.append(entry_name)
+        if noshstk_binaries:
+            self.warnings = [("elffile-noshstk %s", i) for i in noshstk_binaries]
