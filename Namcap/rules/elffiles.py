@@ -3,7 +3,8 @@
 
 from elftools.elf.elffile import ELFFile
 from elftools.elf.dynamic import DynamicSection
-from elftools.elf.sections import SymbolTableSection
+from elftools.elf.enums import ENUM_GNU_PROPERTY_X86_FEATURE_1_FLAGS
+from elftools.elf.sections import NoteSection, SymbolTableSection
 
 from Namcap.util import is_elf
 from Namcap.ruleclass import TarballRule
@@ -13,6 +14,16 @@ valid_dirs = ["bin/", "sbin/", "usr/bin/", "usr/sbin/", "lib/", "usr/lib/", "usr
 # Questionable directories for ELF files
 # (Suppresses some output spam.)
 questionable_dirs = ["opt/"]
+
+
+def elf_files_from_tar(tar):
+    for entry in tar:
+        if not entry.isfile():
+            continue
+        fileobj = tar.extractfile(entry)
+        if not fileobj or not is_elf(fileobj):
+            continue
+        yield ELFFile(fileobj), entry.name
 
 
 class ELFPaths(TarballRule):
@@ -58,19 +69,13 @@ class ELFTextRelocationRule(TarballRule):
     def analyze(self, pkginfo, tar):
         files_with_textrel = []
 
-        for entry in tar:
-            if not entry.isfile():
-                continue
-            fp = tar.extractfile(entry)
-            if not is_elf(fp):
-                continue
-            elffile = ELFFile(fp)
+        for elffile, entry_name in elf_files_from_tar(tar):
             for section in elffile.iter_sections():
                 if not isinstance(section, DynamicSection):
                     continue
                 for tag in section.iter_tags():
                     if tag.entry.d_tag == "DT_TEXTREL":
-                        files_with_textrel.append(entry.name)
+                        files_with_textrel.append(entry_name)
 
         if files_with_textrel:
             self.warnings = [("elffile-with-textrel %s", i) for i in files_with_textrel]
@@ -91,20 +96,14 @@ class ELFExecStackRule(TarballRule):
     def analyze(self, pkginfo, tar):
         exec_stacks = []
 
-        for entry in tar:
-            if not entry.isfile():
-                continue
-            fp = tar.extractfile(entry)
-            if not is_elf(fp):
-                continue
-            elffile = ELFFile(fp)
+        for elffile, entry_name in elf_files_from_tar(tar):
             for segment in elffile.iter_segments():
                 if segment["p_type"] != "PT_GNU_STACK":
                     continue
 
                 mode = segment["p_flags"]
                 if mode & 1:
-                    exec_stacks.append(entry.name)
+                    exec_stacks.append(entry_name)
 
         if exec_stacks:
             self.warnings = [("elffile-with-execstack %s", i) for i in exec_stacks]
@@ -136,20 +135,15 @@ class ELFGnuRelroRule(TarballRule):
     def analyze(self, pkginfo, tar):
         missing_relro = []
 
-        for entry in tar:
-            if not entry.isfile():
+        for elffile, entry_name in elf_files_from_tar(tar):
+            if ".debug" in entry_name:
                 continue
-            fp = tar.extractfile(entry)
-            if not is_elf(fp):
-                continue
-            if ".debug" in entry.name:
-                continue
-            elffile = ELFFile(fp)
+
             if any(seg["p_type"] == "PT_GNU_RELRO" for seg in elffile.iter_segments()):
                 if self.has_bind_now(elffile):
                     continue
 
-            missing_relro.append(entry.name)
+            missing_relro.append(entry_name)
 
         if missing_relro:
             self.warnings = [("elffile-without-relro %s", i) for i in missing_relro]
@@ -169,15 +163,9 @@ class ELFUnstrippedRule(TarballRule):
     def analyze(self, pkginfo, tar):
         unstripped_binaries = []
 
-        for entry in tar:
-            if not entry.isfile():
+        for elffile, entry_name in elf_files_from_tar(tar):
+            if ".debug" in entry_name:
                 continue
-            if ".debug" in entry.name:
-                continue
-            fp = tar.extractfile(entry)
-            if not is_elf(fp):
-                continue
-            elffile = ELFFile(fp)
             for section in elffile.iter_sections():
                 if not isinstance(section, SymbolTableSection):
                     continue
@@ -186,7 +174,7 @@ class ELFUnstrippedRule(TarballRule):
                     continue
 
                 if section.name == ".symtab":
-                    unstripped_binaries.append(entry.name)
+                    unstripped_binaries.append(entry_name)
         if unstripped_binaries:
             self.warnings = [("elffile-unstripped %s", i) for i in unstripped_binaries]
 
@@ -210,17 +198,51 @@ class NoPIERule(TarballRule):
     def analyze(self, pkginfo, tar):
         nopie_binaries = []
 
-        for entry in tar:
-            if not entry.isfile():
+        for elffile, entry_name in elf_files_from_tar(tar):
+            if any(x in entry_name for x in [".so", ".debug"]):
                 continue
-            if any(x in entry.name for x in [".so", ".debug"]):
-                continue
-            fp = tar.extractfile(entry)
-            if not is_elf(fp):
-                continue
-            elffile = ELFFile(fp)
             if elffile.header["e_type"] != "ET_DYN" or not self.has_dt_debug(elffile):
-                nopie_binaries.append(entry.name)
+                nopie_binaries.append(entry_name)
 
         if nopie_binaries:
             self.warnings = [("elffile-nopie %s", i) for i in nopie_binaries]
+
+
+def _note_props(elffile, note_type, prop_type):
+    for section in elffile.iter_sections():
+        if not isinstance(section, NoteSection):
+            continue
+        for note in section.iter_notes():
+            if note["n_type"] != note_type:
+                continue
+            for prop in note["n_desc"]:
+                if prop["pr_type"] == prop_type:
+                    yield prop
+
+
+class ELFSHSTKRule(TarballRule):
+    """
+    Check shadow stack support in ELF files.
+    """
+
+    name = "elfnoshstk"
+    description = "Check for shadow stack support in ELF files."
+
+    def analyze(self, pkginfo, tar):
+        noshstk_binaries = []
+
+        for elffile, entry_name in elf_files_from_tar(tar):
+            if ".debug" in entry_name:
+                continue
+            for prop in _note_props(
+                elffile,
+                note_type="NT_GNU_PROPERTY_TYPE_0",
+                prop_type="GNU_PROPERTY_X86_FEATURE_1_AND",
+            ):
+                if prop["pr_data"] & ENUM_GNU_PROPERTY_X86_FEATURE_1_FLAGS["GNU_PROPERTY_X86_FEATURE_1_SHSTK"]:
+                    break
+
+            else:
+                noshstk_binaries.append(entry_name)
+        if noshstk_binaries:
+            self.warnings = [("elffile-noshstk %s", i) for i in noshstk_binaries]
