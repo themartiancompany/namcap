@@ -2,8 +2,33 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 import os
+from unittest.mock import patch
+
+from Namcap.package import pyalpm_handle
 from Namcap.tests.makepkg import MakepkgTest
 import Namcap.rules.qmldepends
+
+
+class _DbWithout:
+    """Test double of the local package database which pretends that
+    a given package is not installed locally, even if it really is."""
+
+    def __init__(self, pkgname):
+        self.pkgcache = [
+            alpmPackage for alpmPackage in pyalpm_handle.get_localdb().pkgcache if alpmPackage.name != pkgname
+        ]
+
+
+class _AlpmWithout:
+    """Test double of the PyAlpm handle which pretends that a given
+    package is not installed locally, even if it really is."""
+
+    def __init__(self, pkgname):
+        self.load_pkg = pyalpm_handle.load_pkg
+        self.localdb = _DbWithout(pkgname)
+
+    def get_localdb(self):
+        return self.localdb
 
 
 class QmlDependsTest(MakepkgTest):
@@ -26,6 +51,10 @@ package() {
 }
 """
 
+    # This test assumes that the `qt6-declarative` package is not installed.
+    # Temporarily stub the local package database to ensure that condition
+    # even if the host system really has the package installed.
+    @patch.object(Namcap.package, "pyalpm_handle", _AlpmWithout("qt6-declarative"))
     def test_qmldepends(self):
         "Package with missing pacman dependency"
         pkgfile = "__namcap_test_qmldepends-1.0-1-any.pkg.tar"
