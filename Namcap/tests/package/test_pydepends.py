@@ -14,7 +14,7 @@ pkgrel=1
 pkgdesc="A package"
 arch=('any')
 url="http://www.example.com/"
-license=('GPL')
+license=('GPL-3.0-or-later')
 depends=('python-six')
 source=()
 build() {

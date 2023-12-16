@@ -18,7 +18,7 @@ url="http://www.example.com/"
 arch=('i686' 'x86_64')
 depends=('lib1' 'lib2' 'lib3')
 makedepends=('lib1' 'lib2' 'lib4')
-license=('GPL')
+license=('GPL-3.0-or-later')
 options=('!libtool')
 source=(ftp://ftp.example.com/pub/mypackage-0.1.tar.gz)
 md5sums=('abcdefabcdef12345678901234567890')
@@ -57,7 +57,7 @@ url="http://www.example.com/"
 arch=('i686' 'x86_64')
 depends=()
 makedepends=()
-license=('GPL')
+license=('GPL-3.0-or-later')
 options=('!libtool')
 source=(name::bzr+https://example.com/pub/mypackage
         name::git://example.com/pub/mypackage
