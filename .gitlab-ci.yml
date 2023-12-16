@@ -32,7 +32,7 @@ pytest:
     - branches
     - merge_requests
   before_script:
-    - pacman -Syu --needed --noconfirm python-pytest python-pytest-cov pyalpm python-pyelftools python-six
+    - pacman -Syu --needed --noconfirm python-pytest python-pytest-cov pyalpm python-pyelftools python-six python-license-expression
     # makepkg does not like running as root
     - useradd --home-dir / --no-create-home builduser
   script:
