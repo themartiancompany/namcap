@@ -112,42 +112,41 @@ def package_license_files(tar: TarFile | None, pkgname: str) -> tuple[dict[str, 
     if not tar:
         return (files, license_dir_symlink)
 
-    with tar as tarfile:
-        for member in tarfile.getmembers():
-            # check if entire /usr/share/license/{pkgname}/ dir is a symlink
-            if member.issym() and member.name == f"usr/share/licenses/{pkgname}":
-                try:
-                    license_dir_symlink = get_symlink_target(member)
-                except ValueError:
-                    continue
-                else:
-                    break
-            # the license is a file
-            if (
-                member.isfile()
-                and not member.issym()
-                and member.name.startswith(f"usr/share/licenses/{pkgname}/")
-                and member.name != f"usr/share/licenses/{pkgname}"
-            ):
+    for member in tar.getmembers():
+        # check if entire /usr/share/license/{pkgname}/ dir is a symlink
+        if member.issym() and member.name == f"usr/share/licenses/{pkgname}":
+            try:
+                license_dir_symlink = get_symlink_target(member)
+            except ValueError:
+                continue
+            else:
+                break
+        # the license is a file
+        if (
+            member.isfile()
+            and not member.issym()
+            and member.name.startswith(f"usr/share/licenses/{pkgname}/")
+            and member.name != f"usr/share/licenses/{pkgname}"
+        ):
+            files[member.name] = True
+        # the license is a symlink, we'll check later
+        if member.issym() and member.name.startswith(f"usr/share/licenses/{pkgname}/"):
+            try:
+                files[get_symlink_target(member)] = False
+            except ValueError:
+                continue
+
+    # check existence of all symlinked files
+    for file, exists in [(file, exists) for (file, exists) in files.items() if not exists]:
+        for member in tar.getmembers():
+            if member.isfile() and not member.issym() and member.name == file:
+                files[file] = True
+
+    # if license dir is a symlink, add all files below the targeted license dir to files dict
+    if license_dir_symlink:
+        for member in tar.getmembers():
+            if member.isfile() and not member.issym() and member.name.startswith(license_dir_symlink):
                 files[member.name] = True
-            # the license is a symlink, we'll check later
-            if member.issym() and member.name.startswith(f"usr/share/licenses/{pkgname}/"):
-                try:
-                    files[get_symlink_target(member)] = False
-                except ValueError:
-                    continue
-
-        # check existence of all symlinked files
-        for file, exists in [(file, exists) for (file, exists) in files.items() if not exists]:
-            for member in tarfile.getmembers():
-                if member.isfile() and not member.issym() and member.name == file:
-                    files[file] = True
-
-        # if license dir is a symlink, add all files below the targeted license dir to files dict
-        if license_dir_symlink:
-            for member in tarfile.getmembers():
-                if member.isfile() and not member.issym() and member.name.startswith(license_dir_symlink):
-                    files[member.name] = True
 
     return (files, license_dir_symlink)
 
