@@ -1,6 +1,8 @@
 # Copyright (C) 2003-2023 Namcap contributors, see AUTHORS for details.
 # SPDX-License-Identifier: GPL-2.0-or-later
 
+from typing import Any
+
 """
 This module defines the base classes from which Namcap rules are derived
 and how they are meant to be used.
@@ -12,9 +14,9 @@ class AbstractRule(object):
     "The parent class of all rules"
 
     def __init__(self):
-        self.errors = []
-        self.warnings = []
-        self.infos = []
+        self.errors: list[tuple[str, tuple[Any, ...]]] = []
+        self.warnings: list[tuple[str, tuple[Any, ...]]] = []
+        self.infos: list[tuple[str, tuple[Any, ...]]] = []
 
 
 class PkgInfoRule(AbstractRule):
