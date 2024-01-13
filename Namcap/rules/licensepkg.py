@@ -174,7 +174,7 @@ class package(TarballRule):
                 pass
             else:
                 if license != canonicalized_license:
-                    self.errors.append(("license-statement-formatting %s %s", license, canonicalized_license))
+                    self.errors.append(("license-statement-formatting %s %s", (license, canonicalized_license)))
 
         # get a combined set of all license symbols from all license strings
         # the license symbols may be of type LicenseSymbol (license) or LicenseWithExceptionSymbol (license + exception)
@@ -183,14 +183,14 @@ class package(TarballRule):
             try:
                 new_license_symbols = get_license_symbols(license)
             except Exception:
-                self.errors.append(("invalid-license-string %s", license))
+                self.errors.append(("invalid-license-string %s", tuple([license])))
             else:
                 license_symbols.update(new_license_symbols)
 
         # check if any license (ignoring exception) symbols are unknown (and add errors for them, if they are not prefixed with LicenseRef-)
         for license in get_unknown_license_symbols(license_symbols):
             if not str(license).startswith("LicenseRef-"):
-                self.errors.append(("unknown-spdx-license-identifier %s", str(license)))
+                self.errors.append(("unknown-spdx-license-identifier %s", tuple([str(license)])))
 
         # check whether there is a discrepancy between uncommon license symbols and license files found in the package
         uncommon_license_symbols = get_uncommon_license_symbols(license_symbols)
@@ -206,16 +206,18 @@ class package(TarballRule):
             self.errors.append(
                 (
                     "license-file-missing %s %s %s",
-                    str(", ".join([str(id) for id in list(uncommon_license_symbols)])),
-                    pkginfo["name"],
-                    f"{licenses_in_pkg}/{len(uncommon_license_symbols)}",
+                    (
+                        str(", ".join([str(id) for id in list(uncommon_license_symbols)])),
+                        pkginfo["name"],
+                        f"{licenses_in_pkg}/{len(uncommon_license_symbols)}",
+                    ),
                 )
             )
 
         # there are symlinks for license files that point to files in external packages
         if licenses_in_pkg == 0 and licenses_outside_pkg > 0 and not license_dir_symlink:
             outbound_licenses = [license for (license, exists) in pkg_licenses.items() if not exists]
-            self.warnings.append(("license-file-in-external-pkg %s", ", ".join(outbound_licenses)))
+            self.warnings.append(("license-file-in-external-pkg %s", tuple([", ".join(outbound_licenses)])))
 
             for other_pkg in [load_from_db(name) for name in pkginfo["depends"]]:
                 for outbound_license in outbound_licenses:
@@ -231,13 +233,13 @@ class package(TarballRule):
                 self.errors.append(
                     (
                         "license-file-missing-in-other-pkg %s",
-                        outbound_license,
+                        tuple([outbound_license]),
                     )
                 )
 
         # the license dir is a symlink which points to another package
         if licenses_in_pkg == 0 and licenses_outside_pkg == 0 and license_dir_symlink:
-            self.warnings.append(("license-dir-in-external-pkg %s", license_dir_symlink))
+            self.warnings.append(("license-dir-in-external-pkg %s", tuple([license_dir_symlink])))
 
             # try to figure out which other package contains the actual files
             other_pkg = (
@@ -250,9 +252,11 @@ class package(TarballRule):
                     self.errors.append(
                         (
                             "license-dir-target-pkg-not-in-depends %s %s %s",
-                            other_pkg,
-                            str(", ".join([str(id) for id in list(uncommon_license_symbols)])),
-                            f"0/{len(uncommon_license_symbols)}",
+                            (
+                                other_pkg,
+                                str(", ".join([str(id) for id in list(uncommon_license_symbols)])),
+                                f"0/{len(uncommon_license_symbols)}",
+                            ),
                         )
                     )
                     return
@@ -272,8 +276,10 @@ class package(TarballRule):
                 self.errors.append(
                     (
                         "license-dir-is-symlink-and-license-files-missing %s %s %s",
-                        str(", ".join([str(id) for id in list(uncommon_license_symbols)])),
-                        license_dir_symlink,
-                        f"{licenses_outside_pkg}/{len(uncommon_license_symbols)}",
+                        (
+                            str(", ".join([str(id) for id in list(uncommon_license_symbols)])),
+                            license_dir_symlink,
+                            f"{licenses_outside_pkg}/{len(uncommon_license_symbols)}",
+                        ),
                     )
                 )

@@ -255,12 +255,10 @@ class LicenseFileTest(MakepkgTest):
         self.assertEqual(
             r.errors,
             [
-                ("unknown-spdx-license-identifier %s", "DWTFYWL"),
+                ("unknown-spdx-license-identifier %s", ("DWTFYWL",)),
                 (
                     "license-file-missing %s %s %s",
-                    "DWTFYWL",
-                    "__namcap_test_licensepkg",
-                    "0/1",
+                    ("DWTFYWL", "__namcap_test_licensepkg", "0/1"),
                 ),
             ],
         )
@@ -329,9 +327,7 @@ class LicenseFileTest(MakepkgTest):
             [
                 (
                     "license-file-missing %s %s %s",
-                    "LicenseRef-DWTFYWL",
-                    "__namcap_test_licensepkg",
-                    "0/1",
+                    ("LicenseRef-DWTFYWL", "__namcap_test_licensepkg", "0/1"),
                 ),
             ],
         )
@@ -368,14 +364,11 @@ class LicenseFileTest(MakepkgTest):
             [
                 (
                     "license-statement-formatting %s %s",
-                    "GPL-3.0-or-later with Bootloader-exception",
-                    "GPL-3.0-or-later WITH Bootloader-exception",
+                    ("GPL-3.0-or-later with Bootloader-exception", "GPL-3.0-or-later WITH Bootloader-exception"),
                 ),
                 (
                     "license-file-missing %s %s %s",
-                    "Bootloader-exception",
-                    "__namcap_test_licensepkg",
-                    "0/1",
+                    ("Bootloader-exception", "__namcap_test_licensepkg", "0/1"),
                 ),
             ],
         )
@@ -412,7 +405,7 @@ class LicenseFileTest(MakepkgTest):
             [
                 (
                     "invalid-license-string %s",
-                    "() broken",
+                    ("() broken",),
                 ),
             ],
         )
@@ -449,11 +442,11 @@ class LicenseFileTest(MakepkgTest):
             [
                 (
                     "license-file-missing-in-other-pkg %s",
-                    "usr/share/licenses/other_pkg/LICENSE",
+                    ("usr/share/licenses/other_pkg/LICENSE",),
                 ),
             ],
         )
-        self.assertEqual(r.warnings, [("license-file-in-external-pkg %s", "usr/share/licenses/other_pkg/LICENSE")])
+        self.assertEqual(r.warnings, [("license-file-in-external-pkg %s", ("usr/share/licenses/other_pkg/LICENSE",))])
         self.assertEqual(r.infos, [])
 
     def test_license_dir_is_symlink_and_target_pkg_not_in_depends(self):
@@ -484,10 +477,10 @@ class LicenseFileTest(MakepkgTest):
         self.assertEqual(
             r.errors,
             [
-                ("license-dir-target-pkg-not-in-depends %s %s %s", "other_pkg", "MIT", "0/1"),
+                ("license-dir-target-pkg-not-in-depends %s %s %s", ("other_pkg", "MIT", "0/1")),
             ],
         )
-        self.assertEqual(r.warnings, [("license-dir-in-external-pkg %s", "usr/share/licenses/other_pkg")])
+        self.assertEqual(r.warnings, [("license-dir-in-external-pkg %s", ("usr/share/licenses/other_pkg",))])
         self.assertEqual(r.infos, [])
 
     def test_license_dir_is_symlink_and_dependencies_do_not_provide_files(self):
@@ -520,11 +513,9 @@ class LicenseFileTest(MakepkgTest):
             [
                 (
                     "license-dir-is-symlink-and-license-files-missing %s %s %s",
-                    "MIT",
-                    "usr/share/foo",
-                    "0/1",
+                    ("MIT", "usr/share/foo", "0/1"),
                 ),
             ],
         )
-        self.assertEqual(r.warnings, [("license-dir-in-external-pkg %s", "usr/share/foo")])
+        self.assertEqual(r.warnings, [("license-dir-in-external-pkg %s", ("usr/share/foo",))])
         self.assertEqual(r.infos, [])
