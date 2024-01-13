@@ -1,3 +1,8 @@
+namcap (3.5.0)
+    - Validate license field using SPDX identifiers
+    - Check for shadow stack support
+    - And QML dependency checks
+
 namcap (3.4.2)
     - Revert incorrectly dropped rule imports
 
