@@ -75,7 +75,13 @@ def test_get_license_symbols(input: str, result: set[LicenseSymbol], expectation
     ],
 )
 def test_get_uncommon_license_symbols(input: set[BaseSymbol], result: set[BaseSymbol]) -> None:
-    assert result == licensepkg.get_uncommon_license_symbols(input)
+    assert result == licensepkg.get_uncommon_license_symbols(
+        input,
+        licensepkg.get_known_spdx_license_identifiers(),
+        licensepkg.get_known_spdx_license_exceptions(),
+        licensepkg.get_common_spdx_license_identifiers(),
+        licensepkg.get_common_spdx_license_exceptions(),
+    )
 
 
 @mark.parametrize(
@@ -94,7 +100,9 @@ def test_get_uncommon_license_symbols(input: set[BaseSymbol], result: set[BaseSy
     ],
 )
 def test_get_unknown_license_symbols(input: set[BaseSymbol], result: set[BaseSymbol]) -> None:
-    assert result == licensepkg.get_unknown_license_symbols(input)
+    assert result == licensepkg.get_unknown_license_symbols(
+        input, licensepkg.get_known_spdx_license_identifiers(), licensepkg.get_known_spdx_license_exceptions()
+    )
 
 
 @mark.parametrize(
@@ -256,10 +264,6 @@ class LicenseFileTest(MakepkgTest):
             r.errors,
             [
                 ("unknown-spdx-license-identifier %s", ("DWTFYWL",)),
-                (
-                    "license-file-missing %s %s %s",
-                    ("DWTFYWL", "__namcap_test_licensepkg", "0/1"),
-                ),
             ],
         )
         self.assertEqual(r.warnings, [])
@@ -366,10 +370,7 @@ class LicenseFileTest(MakepkgTest):
                     "license-statement-formatting %s %s",
                     ("GPL-3.0-or-later with Bootloader-exception", "GPL-3.0-or-later WITH Bootloader-exception"),
                 ),
-                (
-                    "license-file-missing %s %s %s",
-                    ("Bootloader-exception", "__namcap_test_licensepkg", "0/1"),
-                ),
+                ("license-file-missing %s %s %s", ("Bootloader-exception", "__namcap_test_licensepkg", "0/1")),
             ],
         )
         self.assertEqual(r.warnings, [])

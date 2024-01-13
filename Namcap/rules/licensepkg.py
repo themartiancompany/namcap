@@ -30,49 +30,96 @@ def get_license_symbols(license: str) -> set[BaseSymbol]:
     return symbols.symbols
 
 
-def get_uncommon_license_symbols(licenses: set[BaseSymbol]) -> set[BaseSymbol]:
-    """Get a set of all uncommon license symbols (those that require a custom file)
-
-    This function compares against all common SPDX license files.
-    When encountering LicenseWithExceptionSymbols, both the LicenseSymbol and the exception are checked.
-    """
-    common_spdx_licenses = [f"{x.stem}" for x in sorted(Path("/usr/share/licenses/spdx/").glob("*.txt")) if x.is_file()]
-
-    uncommon_symbols: list[BaseSymbol] = []
-    for symbol in licenses:
-        # if the symbol also carries an exception only match against the license symbol
-        if isinstance(symbol, LicenseWithExceptionSymbol):
-            if str(list(symbol.decompose())[0]) not in common_spdx_licenses:
-                uncommon_symbols.append(list(symbol.decompose())[0])
-            if str(list(symbol.decompose())[1]) not in common_spdx_licenses:
-                uncommon_symbols.append(list(symbol.decompose())[1])
-        else:
-            if str(symbol) not in common_spdx_licenses:
-                uncommon_symbols.append(symbol)
-
-    return set(uncommon_symbols)
+def get_common_spdx_license_identifiers() -> set[BaseSymbol]:
+    """Get all common license identifiers (those that are provided system-wide and can be shared)"""
+    common: list[BaseSymbol] = [
+        LicenseSymbol(f"{x.stem}") for x in sorted(Path("/usr/share/licenses/spdx/").glob("*.txt")) if x.is_file()
+    ]
+    return set(common)
 
 
-def get_unknown_license_symbols(licenses: set[BaseSymbol]) -> set[BaseSymbol]:
-    """Get a set of all unknown license symbols
+def get_common_spdx_license_exceptions() -> set[BaseSymbol]:
+    """Get all common license exceptions (those that are provided system-wide and can be shared)"""
+    common: list[BaseSymbol] = [
+        LicenseSymbol(f"{x.stem}", is_exception=True)
+        for x in sorted(Path("/usr/share/licenses/spdx/exceptions/").glob("*.txt"))
+        if x.is_file()
+    ]
+    return set(common)
 
-    This function ignores LicenseSymbols that describe a license exception, when comparing against all known SPDX
-    license identifiers.
-    """
-    all_spdx_licenses: list[str] = []
+
+def get_known_spdx_license_identifiers() -> set[BaseSymbol]:
+    """Get all known SPDX license identifiers"""
+    all_spdx_licenses: list[BaseSymbol] = []
 
     with open("/usr/share/licenses/known_spdx_license_identifiers.txt") as file:
         while line := file.readline():
             all_spdx_licenses.append(LicenseSymbol(line.rstrip("\n")))
 
+    return set(all_spdx_licenses)
+
+
+def get_known_spdx_license_exceptions() -> set[BaseSymbol]:
+    """Get all known SPDX license exceptions"""
+    all_spdx_licenses: list[BaseSymbol] = []
+
+    with open("/usr/share/licenses/known_spdx_license_exceptions.txt") as file:
+        while line := file.readline():
+            all_spdx_licenses.append(LicenseSymbol(line.rstrip("\n"), is_exception=True))
+
+    return set(all_spdx_licenses)
+
+
+def get_uncommon_license_symbols(
+    licenses: set[BaseSymbol],
+    known_licenses: set[BaseSymbol],
+    known_exceptions: set[BaseSymbol],
+    common_licenses: set[BaseSymbol],
+    common_exceptions: set[BaseSymbol],
+) -> set[BaseSymbol]:
+    """Get the set of all uncommon licenses from a set of licenses
+
+    This function compares against all uncommon, but known SPDX license symbols (those that require a custom file) or
+    those prefixed with "LicenseRef-".
+    When encountering LicenseWithExceptionSymbols, both the LicenseSymbol and the exception are checked.
+    """
+    uncommon_licenses = known_licenses - common_licenses
+    uncommon_exceptions = known_exceptions - common_exceptions
+
+    uncommon_symbols: list[BaseSymbol] = []
+    for symbol in licenses:
+        # if the symbol also carries an exception match license symbol and exception symbol separately
+        if isinstance(symbol, LicenseWithExceptionSymbol):
+            license, exception = list(symbol.decompose())
+            if license in uncommon_licenses or str(license).startswith("LicenseRef-"):
+                uncommon_symbols.append(license)
+            if exception in uncommon_exceptions or str(exception).startswith("LicenseRef-"):
+                uncommon_symbols.append(exception)
+        else:
+            if symbol in uncommon_licenses or str(list(symbol.decompose())[0]).startswith("LicenseRef-"):
+                uncommon_symbols.append(symbol)
+
+    return set(uncommon_symbols)
+
+
+def get_unknown_license_symbols(
+    licenses: set[BaseSymbol], known_licenses: set[BaseSymbol], known_exceptions: set[BaseSymbol]
+) -> set[BaseSymbol]:
+    """Get the set of all unknown license symbols from a set of licenses
+
+    This function also evaluates LicenseWithExceptionSymbols and considers licenses and exceptions separately.
+    """
     unknown_symbols: list[BaseSymbol] = []
     for symbol in licenses:
-        # if the symbol also carries an exception only match against the license symbol
+        # if the symbol also carries an exception match license symbol and exception symbol separately
         if isinstance(symbol, LicenseWithExceptionSymbol):
-            if str(list(symbol.decompose())[0]) not in [str(license) for license in all_spdx_licenses]:
+            license, exception = list(symbol.decompose())
+            if license not in known_licenses:
+                unknown_symbols.append(symbol)
+            if exception not in known_exceptions:
                 unknown_symbols.append(symbol)
         else:
-            if str(symbol) not in [str(license) for license in all_spdx_licenses]:
+            if symbol not in known_licenses:
                 unknown_symbols.append(symbol)
 
     return set(unknown_symbols)
@@ -187,13 +234,21 @@ class package(TarballRule):
             else:
                 license_symbols.update(new_license_symbols)
 
+        known_licenses = get_known_spdx_license_identifiers()
+        known_exceptions = get_known_spdx_license_exceptions()
+
         # check if any license (ignoring exception) symbols are unknown (and add errors for them, if they are not prefixed with LicenseRef-)
-        for license in get_unknown_license_symbols(license_symbols):
+        for license in get_unknown_license_symbols(license_symbols, known_licenses, known_exceptions):
             if not str(license).startswith("LicenseRef-"):
                 self.errors.append(("unknown-spdx-license-identifier %s", (str(license),)))
 
+        common_licenses = get_common_spdx_license_identifiers()
+        common_exceptions = get_common_spdx_license_exceptions()
+
         # check whether there is a discrepancy between uncommon license symbols and license files found in the package
-        uncommon_license_symbols = get_uncommon_license_symbols(license_symbols)
+        uncommon_license_symbols = get_uncommon_license_symbols(
+            license_symbols, known_licenses, known_exceptions, common_licenses, common_exceptions
+        )
         if len(uncommon_license_symbols) == 0:
             return
 
