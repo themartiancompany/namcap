@@ -1,3 +1,10 @@
+namcap (3.5.1)
+    - Fix message handling from license detection
+    - Fix unpacking of packages to check symlinked licenses
+    - Add missing info to license file missing message
+    - Add type annotations detect issues when adding messages
+    - Fix crash while parsing invalid shebang lines
+
 namcap (3.5.0)
     - Validate license field using SPDX identifiers
     - Check for shadow stack support
