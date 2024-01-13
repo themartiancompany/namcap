@@ -183,14 +183,14 @@ class package(TarballRule):
             try:
                 new_license_symbols = get_license_symbols(license)
             except Exception:
-                self.errors.append(("invalid-license-string %s", tuple([license])))
+                self.errors.append(("invalid-license-string %s", (license,)))
             else:
                 license_symbols.update(new_license_symbols)
 
         # check if any license (ignoring exception) symbols are unknown (and add errors for them, if they are not prefixed with LicenseRef-)
         for license in get_unknown_license_symbols(license_symbols):
             if not str(license).startswith("LicenseRef-"):
-                self.errors.append(("unknown-spdx-license-identifier %s", tuple([str(license)])))
+                self.errors.append(("unknown-spdx-license-identifier %s", (str(license),)))
 
         # check whether there is a discrepancy between uncommon license symbols and license files found in the package
         uncommon_license_symbols = get_uncommon_license_symbols(license_symbols)
@@ -217,7 +217,7 @@ class package(TarballRule):
         # there are symlinks for license files that point to files in external packages
         if licenses_in_pkg == 0 and licenses_outside_pkg > 0 and not license_dir_symlink:
             outbound_licenses = [license for (license, exists) in pkg_licenses.items() if not exists]
-            self.warnings.append(("license-file-in-external-pkg %s", tuple([", ".join(outbound_licenses)])))
+            self.warnings.append(("license-file-in-external-pkg %s", (", ".join(outbound_licenses),)))
 
             for other_pkg in [load_from_db(name) for name in pkginfo["depends"]]:
                 for outbound_license in outbound_licenses:
@@ -233,13 +233,13 @@ class package(TarballRule):
                 self.errors.append(
                     (
                         "license-file-missing-in-other-pkg %s",
-                        tuple([outbound_license]),
+                        (outbound_license,),
                     )
                 )
 
         # the license dir is a symlink which points to another package
         if licenses_in_pkg == 0 and licenses_outside_pkg == 0 and license_dir_symlink:
-            self.warnings.append(("license-dir-in-external-pkg %s", tuple([license_dir_symlink])))
+            self.warnings.append(("license-dir-in-external-pkg %s", (license_dir_symlink,)))
 
             # try to figure out which other package contains the actual files
             other_pkg = (
