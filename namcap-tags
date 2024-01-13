@@ -109,7 +109,7 @@ missing-license :: Missing license
 invalid-license-string %s :: %s is an invalid license string.
 unknown-spdx-license-identifier %s :: %s is not a valid SPDX license identifier. See https://spdx.org/licenses/ for valid identifiers, or prefix the identifier with 'LicenseRef-', if it is custom.
 license-statement-formatting %s %s :: The SPDX license statement '%s' should be formatted as '%s' instead
-license-file-missing %s %s %s :: Uncommon license identifiers such as '%s' require license files below /usr/share/licenses/%s/. Found %s
+license-file-missing %s %s %s :: Uncommon license identifiers such as '%s' require license files below /usr/share/licenses/%s/ or switching to common license identifiers. Found %s required license files.
 license-file-missing-in-other-pkg %s :: Symlink to license file '%s' points to an external package, but either the file is missing or the package is not a dependency
 license-dir-target-pkg-not-in-depends %s %s %s :: The license dir is symlinked to a directory in the '%s' package, but it is not a dependency. Uncommon license identifiers such as '%s' require license files. Found %s
 license-dir-is-symlink-and-license-files-missing %s %s %s :: Custom license identifier such as '%s' require license files, but the license dir is a symlink to '%s' and license files are missing. Found %s
