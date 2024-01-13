@@ -262,7 +262,7 @@ class package(TarballRule):
                     return
 
                 other_pkg_info = load_from_db(other_pkg)
-                for file in other_pkg_info["files"]:
+                for file, _, _ in other_pkg_info["files"]:
                     if file.startswith(license_dir_symlink) and file != license_dir_symlink:
                         licenses_outside_pkg += 1
             else:
