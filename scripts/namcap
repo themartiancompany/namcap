@@ -1,14 +1,14 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-args=''
+args=()
 tmp=$(mktemp -d --tmpdir namcap.XXXXXXXXXX)
 cleanup() {
-	rm -rf "${tmp}"
+	rm -rf "$tmp"
 }
 trap 'cleanup' 0
 
 for arg in "${@}"; do
-	if echo "${arg}" | grep -q -E "^.+\.pkg\.tar\..+$" && [ -f "${arg}" ]; then
+	if echo "$arg" | grep -q -E "^.+\.pkg\.tar\..+$" && [ -f "$arg" ]; then
 
 		extra_opts=''
 		case "${arg##*.}" in
@@ -17,23 +17,23 @@ for arg in "${@}"; do
 			xz)     cmd='xz' ;;
 			lzo)    cmd='lzop' ;;
 			lrz)    cmd='lrzip'
-				extra_opts="-q -o -" ;;
+				extra_opts=(-q -o -);;
 			lz4)    cmd='lz4'
-				extra_opts="-q" ;;
+				extra_opts=(-q) ;;
 			lz)     cmd='lzip'
-				extra_opts="-q" ;;
+				extra_opts=(-q) ;;
 			zst)    cmd='zstd'
-				extra_opts="-q" ;;
+				extra_opts=(-q) ;;
 			*)      echo 'Unsupported compression'; exit 1;;
 		esac
 
 		tar="${tmp}/$(basename "${arg%.*}")"
-		$cmd -dcf $extra_opts "${arg}" > "${tar}"
+		"$cmd" -dcf "${extra_opts[@]}" "$arg" > "$tar"
 
-		args="${args} ${tar}"
+		args+=("$tar")
 	else
-		args="${args} ${arg}"
+		args+=("$arg")
 	fi
 done
 
-/usr/bin/env python3 -m namcap ${args}
+/usr/bin/env python3 -m namcap "${args[@]}"

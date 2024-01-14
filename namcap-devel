@@ -1,9 +1,10 @@
-#!/bin/sh
-PATH="$(pwd):$PATH"
-PARSE_PKGBUILD_PATH="$(pwd)"
+#!/usr/bin/env bash
+
+PATH="$PWD:$PATH"
+PARSE_PKGBUILD_PATH="$PWD"
 export PARSE_PKGBUILD_PATH
 
-PYTHONPATH="$(pwd)"
+PYTHONPATH="$PWD"
 export PYTHONPATH
 
-./scripts/namcap -t namcap-tags $@
+./scripts/namcap -t namcap-tags "$@"
