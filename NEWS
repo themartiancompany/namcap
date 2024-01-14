@@ -1,3 +1,6 @@
+namcap (3.5.2)
+    - Improve and streamline license issue related messages
+
 namcap (3.5.1)
     - Fix message handling from license detection
     - Fix unpacking of packages to check symlinked licenses
