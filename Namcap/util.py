@@ -53,4 +53,4 @@ def script_type(fileobj):
 
 def is_debug(pkginfo):
     "Take pkginfo, checks if it's a debug package"
-    return pkginfo["pkgdesc"].startswith("Detached debugging symbols for ")
+    return "pkgdesc" in pkginfo and pkginfo["pkgdesc"].startswith("Detached debugging symbols for ")
