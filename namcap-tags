@@ -17,7 +17,7 @@ directory-not-world-executable %s :: Directory (%s) does not have the world exec
 elffile-in-any-package %s :: ELF file ('%s') found in an 'any' package.
 elffile-in-questionable-dirs %s :: ELF files outside of a valid path ('%s').
 elffile-nopie %s :: ELF file ('%s') lacks PIE.
-elffile-noshstk %s :: ELF file ('%s') lacks GNU_PROPERTY_X86_FEATURE_1_SHSTK.
+elffile-noshstk %s :: ELF file ('%s') lacks GNU_PROPERTY_X86_FEATURE_1_SHSTK, check CFLAGS/CXXFLAGS.
 elffile-not-in-allowed-dirs %s :: ELF file ('%s') outside of a valid path.
 elffile-unstripped %s :: ELF file ('%s') is unstripped.
 elffile-with-execstack %s :: ELF file ('%s') has executable stack.
