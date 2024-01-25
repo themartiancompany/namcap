@@ -63,10 +63,11 @@ class QmlDependencyRule(TarballRule):
             if not entry.name.endswith(".qml") and not any(entry.name.startswith(d) for d in ["usr/bin", "usr/lib"]):
                 continue
             f = tar.extractfile(entry)
-            if not entry.name.endswith(".qml") and not is_elf(f):
+            elf = is_elf(f)
+            if not entry.name.endswith(".qml") and not elf:
                 continue
             s = f.read().decode(errors="ignore")
-            if is_elf(f) and "libQt6Qml.so" not in s:
+            if elf and "libQt6Qml.so" not in s:
                 # Does not embed QML, prevent false positives
                 continue
             get_imports(s, entry.name, modules)
