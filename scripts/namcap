@@ -8,7 +8,7 @@ cleanup() {
 trap 'cleanup' 0
 
 for arg in "${@}"; do
-	if echo "$arg" | grep -q -E "^.+\.pkg\.tar\..+$" && [ -f "$arg" ]; then
+	if grep -q -E "^.+\.pkg\.tar\..+$" <<< "$arg" && [[ -f "$arg" ]]; then
 
 		extra_opts=''
 		case "${arg##*.}" in

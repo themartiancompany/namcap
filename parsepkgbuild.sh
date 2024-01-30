@@ -5,16 +5,16 @@
 source "$1"
 
 # Ensure $pkgname, $pkgver, and $pkgrel variables were found
-if [ -z "$pkgname" ] || [ -z "$pkgver" ] || [ -z "$pkgrel" ]; then
+if [[ -z "$pkgname" ]] || [[ -z "$pkgver" ]] || [[ -z "$pkgrel" ]]; then
 	echo "error: invalid package file"
 	exit 1
 fi
 
 function pkginfo() {
 	# Manually handle keys whose section headers differ from the variable name
-	if [ -n "$pkgname" ]; then
-		echo -e "%NAME%\n$pkgname\n"
-		echo -e "%VERSION%\n$pkgver-$pkgrel\n"
+	if [[ -n "$pkgname" ]]; then
+		printf "%%NAME%%\n%s\n" "$pkgname"
+		printf "%%VERSION%%\n%s\n" "$pkgver-$pkgrel"
 	fi
 	if [ -n "$pkgdesc" ]; then
 		echo -e "%DESC%\n$pkgdesc\n"
@@ -38,7 +38,7 @@ function pkginfo() {
 }
 
 # is it a split pkgbuild ?
-if [ "${#pkgname[@]}" -gt 1 ]; then
+if [[ "${#pkgname[@]}" -gt 1 ]]; then
 	pkgbase=${pkgbase:-${pkgname[0]}}
 	_namcap_pkgnames=("${pkgname[@]}")
 	unset pkgname
