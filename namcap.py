@@ -19,6 +19,11 @@ def get_modules():
     return Namcap.rules.all_rules
 
 
+def get_enabled_modules():
+    """Return modules (rules) that should be used by default"""
+    return dict(filter(lambda x: x[1].enable, get_modules().items()))
+
+
 def usage():
     """Display usage information"""
     print("")
@@ -239,9 +244,9 @@ Namcap.tags.load_tags(filename=filename, machine=machine_readable)
 
 packages = args
 
-# No rules selected?  Then select them all!
+# No rules selected?  Then use default selection
 if len(active_modules) == 0:
-    active_modules = modules
+    active_modules = get_enabled_modules()
 
 # Go through each package, get the info, and apply the rules
 for package in packages:

@@ -13,6 +13,8 @@ and how they are meant to be used.
 class AbstractRule(object):
     "The parent class of all rules"
 
+    enable: bool = True
+
     def __init__(self):
         self.errors: list[tuple[str, tuple[Any, ...]]] = []
         self.warnings: list[tuple[str, tuple[Any, ...]]] = []
