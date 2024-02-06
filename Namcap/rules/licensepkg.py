@@ -237,7 +237,8 @@ class package(TarballRule):
         known_licenses = get_known_spdx_license_identifiers()
         known_exceptions = get_known_spdx_license_exceptions()
 
-        # check if any license (ignoring exception) symbols are unknown (and add errors for them, if they are not prefixed with LicenseRef-)
+        # check if any license (ignoring exception) symbols are unknown
+        # (and add errors for them, if they are not prefixed with LicenseRef-)
         for license in get_unknown_license_symbols(license_symbols, known_licenses, known_exceptions):
             if not str(license).startswith("LicenseRef-"):
                 self.errors.append(("unknown-spdx-license-identifier %s", (str(license),)))
@@ -283,7 +284,8 @@ class package(TarballRule):
                             break
 
             outbound_licenses = [license for (license, exists) in pkg_licenses.items() if not exists]
-            # there are symlinks to license files in other pkgs, but those files are missing (or the package in question is not a dependency)
+            # there are symlinks to license files in other pkgs, but those files are missing
+            # (or the package in question is not a dependency)
             for outbound_license in outbound_licenses:
                 self.errors.append(
                     (
