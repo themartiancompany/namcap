@@ -20,5 +20,5 @@ setup(
     scripts=["scripts/namcap", "scripts/parsepkgbuild"],
     test_suite="Namcap.tests",
     data_files=DATAFILES,
-    install_requires=["license-expression"],
+    install_requires=["pyalpm", "pyelftools", "license-expression"],
 )
