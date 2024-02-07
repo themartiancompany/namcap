@@ -7,8 +7,6 @@ import os
 import sys
 import tarfile
 
-from textwrap import dedent
-
 import Namcap.depends
 import Namcap.rules
 import Namcap.tags
@@ -142,57 +140,64 @@ version = Namcap.version.get_version()
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-L", "--list", action="store_true", help="List available rules")
-parser.add_argument(
-    "-i", "--info", action="store_const", const=1, default=0, help="Prints information (debug) responses from rules"
-)
+parser.add_argument("-i", "--info", action="store_true", help="Prints information (debug) responses from rules")
 parser.add_argument(
     "-m", "--machine-readable", action="store_true", help="Makes the output parseable (machine-readable)"
 )
 parser.add_argument("-t", "--tags", action="store", help="Use a custom tag file")
-parser.add_argument("packages", nargs="+")
+parser.add_argument("packages", nargs="*")
 pargroup = parser.add_mutually_exclusive_group()
 pargroup.add_argument(
-    "-e", "--exclude", action="store", metavar="RULELIST", help="Don't apply RULELIST rules to the package"
+    "-e",
+    "--exclude",
+    action="store",
+    metavar="RULELIST",
+    help="Don't apply RULELIST rules to the package (comma-separated)",
 )
 pargroup.add_argument(
-    "-r", "--rules", action="store", metavar="RULELIST", help="Only apply RULELIST rules to the packag"
+    "-r",
+    "--rules",
+    action="store",
+    metavar="RULELIST",
+    help="Only apply RULELIST rules to the package (comma-separated)",
 )
 parser.add_argument("-v", "--version", action="version", version=version)
 args = parser.parse_args()
 
-# Do something with all these options
 if args.list:
     print("-" * 20 + " Namcap rule list " + "-" * 20)
+    print(modules)
     for j in sorted(modules):
         print("%-20s: %s" % (j, modules[j].description))
-        parser.exit(2)
+    parser.exit(0)
+
+if len(args.packages) == 0:
+    print("Missing required argument packages", file=sys.stderr)
+    parser.exit(2)
 
 info_reporting = args.info
 machine_readable = args.machine_readable
 filename = args.tags
-
 packages = args.packages
 
 active_modules = {}
 
 if args.rules:
-    module_list = args.rules
-    for j in module_list:
-        if j in modules:
-            active_modules[j] = modules[j]
-else:
-    print("Error: Rule '%s' does not exist" % j)
-    parser.exit(2)
+    for rule in args.rules.split(","):
+        if rule in modules:
+            active_modules[rule] = modules[rule]
+        else:
+            print(f"Error: Rule '{rule}' does not exist")
+            parser.exit(2)
 
 if args.exclude:
-    module_list = args.exclude
-    active_modules.update(modules)
-    for j in module_list:
-        if j in modules:
-            active_modules.pop(j)
-else:
-    print("Error: Rule '%s' does not exist" % j)
-    parser.exit(2)
+    for rule in args.exclude.split(","):
+        active_modules.update(modules)
+        if rule in modules:
+            active_modules.pop(rule)
+        else:
+            print(f"Error: Rule '{rule}' does not exist")
+            parser.exit(2)
 
 Namcap.tags.load_tags(filename=filename, machine=machine_readable)
 
