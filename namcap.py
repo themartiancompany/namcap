@@ -56,7 +56,7 @@ def open_package(filename):
 
 def check_rules_exclude(optlist):
     """Check if the -r (--rules) and the -r (--exclude) options
-    are being used at same time"""
+    are being used at the same time"""
     args_used = 0
     for i in optlist:
         if "-r" in i or "-e" in i:
