@@ -225,6 +225,12 @@ class ELFSHSTKRule(TarballRule):
     Check shadow stack support in ELF files.
     """
 
+    #  This lint functions properly, but given that many/most language
+    #  ecosystems don't have support yet this turns up more too many false
+    #  positives to be useful. Enable at a later date when tooling supports it
+    #  and our warning message points in the right direction to make it work.
+    enable = False
+
     name = "elfnoshstk"
     description = "Check for shadow stack support in ELF files."
 
