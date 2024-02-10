@@ -5,6 +5,10 @@ line-length = 120
 select = [
     "E",       # pycodestyle
     "F",       # pyflakes
+    "ISC",     # flake8-implicit-str-concat
+]
+ignore = [
+    "ISC001",  # incompatible with ruff format
 ]
 
 [tool.black]
