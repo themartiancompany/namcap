@@ -24,16 +24,10 @@ class AbstractRule(object):
 class PkgInfoRule(AbstractRule):
     "The parent class of rules that process package metadata"
 
-    pass
-
 
 class PkgbuildRule(AbstractRule):
     "The parent class of rules that process PKGBUILDs"
 
-    pass
-
 
 class TarballRule(AbstractRule):
     "The parent class of rules that process tarballs"
-
-    pass

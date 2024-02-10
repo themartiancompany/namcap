@@ -19,7 +19,7 @@ def scanpcfiles(tar, pclist):
 
     pkg_pc_files = [f for f in tar.getnames() if ".pc" in f]
     for f in pkg_pc_files:
-        if f.startswith("usr/lib/pkgconfig") or f.startswith("usr/share/pkgconfig"):
+        if f.startswith(("usr/lib/pkgconfig", "usr/share/pkgconfig")):
             pcname = f.replace("usr/lib/pkgconfig/", "").replace("usr/share/pkgconfig/", "").replace(".pc", "")
             pkgconfig_command = "pkg-config"
         elif f.startswith("usr/lib32/pkgconfig"):
