@@ -96,6 +96,7 @@ scrollkeeper-dir-exists %s :: Scrollkeeper directory exists (%s). Remember to no
 site-ruby :: Found usr/lib/ruby/site_ruby in package, usr/lib/ruby/vendor_ruby should be used instead.
 specific-host-type-used %s :: Reference to %s should be changed to $CARCH
 specific-sourceforge-mirror :: Attempting to use specific sourceforge mirror, use downloads.sourceforge.net instead
+sphinx-build-cache-files :: unreproducible sphinx cache files found, run 'sphinx-build' with '-d /tmp' to prevent these files ending up in packaging
 symlink-found %s points to %s :: Symlink (%s) found that points to %s
 systemd-location %s :: File %s should be in /usr/lib/systemd/system/
 too-many-checksums %s %i needed :: Too many %s: %i needed

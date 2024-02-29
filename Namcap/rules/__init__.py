@@ -34,6 +34,7 @@ from . import (  # noqa: F401
     runpath,
     scrollkeeper,
     shebangdepends,
+    sphinxbuildcachefiles,
     sodepends,
     symlink,
     systemdlocation,
