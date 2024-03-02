@@ -28,7 +28,7 @@ def is_script(fileobj):
 
 def is_java(fileobj):
     "Take file object, peek at the magic bytes to check if class file."
-    return _file_has_magic(fileobj, b"\xCA\xFE\xBA\xBE")
+    return _file_has_magic(fileobj, b"\xca\xfe\xba\xbe")
 
 
 def script_type(fileobj):
