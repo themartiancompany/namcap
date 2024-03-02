@@ -7,6 +7,7 @@ import Namcap.ruleclass
 # Tarball rules
 from . import (  # noqa: F401
     anyelf,
+    dbus1location,
     elffiles,
     emptydir,
     externalhooks,
