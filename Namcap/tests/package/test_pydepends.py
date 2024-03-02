@@ -24,6 +24,7 @@ build() {
 }
 package() {
   install -D -m 755 "$srcdir/main.py" "$pkgdir/usr/bin/main.py"
+  install -D -m 755 "$srcdir/invalid.py" "$pkgdir/usr/bin/invalid.py"
 }
 """
 
