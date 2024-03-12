@@ -300,7 +300,7 @@ class package(TarballRule):
 
             # try to figure out which other package contains the actual files
             other_pkg = (
-                list(Path(license_dir_symlink.lstrip("usr/share/licenses/")).parts)[0]
+                list(Path(license_dir_symlink.removeprefix("usr/share/licenses/")).parts)[0]
                 if license_dir_symlink.startswith("usr/share/licenses/")
                 else None
             )
