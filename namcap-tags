@@ -65,6 +65,7 @@ missing-backup-file %s :: File in backup array (%s) not found in package
 missing-checksums :: Missing checksums
 missing-contributor :: Missing Contributor tag
 missing-description :: Missing description in PKGBUILD
+missing-description %s :: Missing description in split package '%s' in PKGBUILD
 missing-maintainer :: Missing Maintainer tag
 missing-makedeps %s :: Split PKGBUILD needs additional makedepends %s to work properly
 missing-pkgfunction %s :: Child package %s does not have a valid package() function

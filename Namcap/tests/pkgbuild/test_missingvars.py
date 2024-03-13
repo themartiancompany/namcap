@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
 
 from Namcap.tests.pkgbuild_test import PkgbuildTest
-from Namcap.rules.missingvars import ChecksumsRule, TagsRule
+from Namcap.rules.missingvars import ChecksumsRule, DescriptionRule, TagsRule
 
 
 class NamcapChecksumTest(PkgbuildTest):
@@ -199,3 +199,120 @@ package() {
         self.assertEqual(r.errors, [])
         self.assertEqual(r.warnings, [("missing-maintainer", ())])
         self.assertEqual(r.infos, [("missing-contributor", ())])
+
+
+class NamcapPkgdesc(PkgbuildTest):
+    pkgbuild1 = """
+# Maintainer: Arch Linux <archlinux@example.com>
+# Contributor: Arch Linux <archlinux@example.com>
+
+pkgbase=base
+pkgname=(foo bar)
+pkgver=1.0
+pkgrel=1
+arch=('i686' 'x86_64')
+depends=('glibc')
+license=('GPL-3.0-or-later')
+url="https://archlinux.org"
+source=(ftp://ftp.example.com/pub/mypackage-0.1.tar.gz)
+md5sums=('abcdefabcdef12345678901234567890')
+
+build() {
+  cd "${srcdir}"/${pkgname}-${pkgver}
+  ./configure --prefix=/usr
+  make
+}
+
+package_foo() {
+  depends=(glibc)
+
+  cd "${srcdir}"/${pkgname}-${pkgver}
+  make DESTDIR="${pkgdir}" install
+}
+
+package_bar() {
+  depends=(glibc)
+
+  cd "${srcdir}"/${pkgname}-${pkgver}
+  make DESTDIR="${pkgdir}" install
+}
+"""
+
+    pkgbuild2 = """
+# Maintainer: Arch Linux <archlinux@example.com>
+# Contributor: Arch Linux <archlinux@example.com>
+
+pkgname=foo
+pkgver=1.0
+pkgrel=1
+arch=('i686' 'x86_64')
+depends=('glibc')
+license=('GPL-3.0-or-later')
+url="https://archlinux.org"
+source=(ftp://ftp.example.com/pub/mypackage-0.1.tar.gz)
+md5sums=('abcdefabcdef12345678901234567890')
+
+build() {
+  cd "${srcdir}"/${pkgname}-${pkgver}
+  ./configure --prefix=/usr
+  make
+}
+
+package() {
+
+  cd "${srcdir}"/${pkgname}-${pkgver}
+  make DESTDIR="${pkgdir}" install
+}
+"""
+
+    pkgbuild3 = """
+# Maintainer: Arch Linux <archlinux@example.com>
+# Contributor: Arch Linux <archlinux@example.com>
+
+pkgname=foo
+pkgver=1.0
+pkgrel=1
+arch=('i686' 'x86_64')
+depends=('glibc')
+pkgdesc='this is the package foo'
+license=('GPL-3.0-or-later')
+url="https://archlinux.org"
+source=(ftp://ftp.example.com/pub/mypackage-0.1.tar.gz)
+md5sums=('abcdefabcdef12345678901234567890')
+
+build() {
+  cd "${srcdir}"/${pkgname}-${pkgver}
+  ./configure --prefix=/usr
+  make
+}
+
+package() {
+
+  cd "${srcdir}"/${pkgname}-${pkgver}
+  make DESTDIR="${pkgdir}" install
+}
+"""
+
+    test_valid = PkgbuildTest.valid_tests
+
+    def preSetUp(self):
+        self.rule = DescriptionRule
+
+    def test_example1(self):
+        # Example 1
+        r = self.run_on_pkg(self.pkgbuild1)
+        self.assertEqual(r.errors, [("missing-description %s", ("foo",)), ("missing-description %s", ("bar",))])
+        self.assertEqual(r.warnings, [])
+        self.assertEqual(r.infos, [])
+
+    def test_example2(self):
+        r = self.run_on_pkg(self.pkgbuild2)
+        self.assertEqual(r.errors, [("missing-description", ())])
+        self.assertEqual(r.warnings, [])
+        self.assertEqual(r.infos, [])
+
+    def test_example3(self):
+        r = self.run_on_pkg(self.pkgbuild3)
+        self.assertEqual(r.errors, [])
+        self.assertEqual(r.warnings, [])
+        self.assertEqual(r.infos, [])

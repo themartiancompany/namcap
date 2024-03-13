@@ -73,5 +73,10 @@ class DescriptionRule(PkgbuildRule):
     description = "Verifies that the description is set in a PKGBUILD"
 
     def analyze(self, pkginfo, tar):
-        if "desc" not in pkginfo or len(pkginfo["desc"]) == 0:
-            self.errors.append(("missing-description", ()))
+        if pkginfo.is_split:
+            for split_pkginfo in pkginfo.subpackages:
+                if "desc" not in split_pkginfo or len(split_pkginfo["desc"]) == 0:
+                    self.errors.append(("missing-description %s", (split_pkginfo["name"],)))
+        else:
+            if "desc" not in pkginfo or len(pkginfo["desc"]) == 0:
+                self.errors.append(("missing-description", ()))
