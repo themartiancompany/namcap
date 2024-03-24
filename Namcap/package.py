@@ -22,7 +22,7 @@ def _get_root():
     _bin = os.path.dirname(_sh)
     _usr = os.path.dirname(_bin)
     _root = os.path.dirname(_usr)
-    print(_root)
+    return _root
 
 
 _pacman_conf = os.path.join(_get_root(),
