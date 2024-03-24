@@ -7,6 +7,7 @@ import subprocess
 import re
 import collections
 import gzip
+import shutil
 
 import pyalpm
 
