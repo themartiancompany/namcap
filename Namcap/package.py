@@ -16,7 +16,17 @@ _pyalpm_version_tuple = tuple(int(n) for n in pyalpm.version().split("."))
 if _pyalpm_version_tuple < (0, 5):
     raise DeprecationWarning("pyalpm versions <0.5 are no longer supported")
 
-pyalpm_handle = pycman.config.init_with_config("/etc/pacman.conf")
+def _get_root():
+    _sh = shutil.which("sh")
+    _bin = os.path.dirname(_sh)
+    _usr = os.path.dirname(_bin)
+    _root = os.path.dirname(_usr)
+    print(_root)
+
+
+_pacman_conf = os.path.join(_get_root(),
+                            "etc/pacman.conf")
+pyalpm_handle = pycman.config.init_with_config(_pacman_conf)
 
 DEPENDS_RE = re.compile(r"([^<>=:]+)([<>]?=.*)?(: .*)?")
 SODEPENDS_RE = re.compile(r"([^:]+)(: .*)?")
